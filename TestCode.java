@@ -5,8 +5,6 @@
  * This class is for testing code
  */
 
-import titan.Vector3dInterface;
-
 public class TestCode
 {
   public static void main(String[] args)
