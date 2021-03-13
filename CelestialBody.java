@@ -81,7 +81,7 @@ public class CelestialBody implements FunctionInterface, SolverInterface
       if(bodies[i] != this)
       {
         System.out.println(bodies[i].getCoord());
-        F[i] = (x.sub(bodies[i].getCoord())).mul(1/(Math.pow(x.sub(bodies[i].getCoord()).norm(), 3))).mul(G * m * bodies[i].getMass());
+        F[i] = (x.sub(bodies[i].getCoord())).mul(1/x.sub(bodies[i].getCoord()).norm()).mul(G * m * bodies[i].getMass());
         System.out.println(F[i]);
       }
     }
