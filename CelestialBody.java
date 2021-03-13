@@ -149,4 +149,19 @@ public class CelestialBody implements FunctionInterface, SolverInterface
   {
     return s.add(new Vector3d(v.getX()*t, v.getY()*t, v.getZ()*t));
   }
+
+  /*
+   *Calculates the Gravity force between two Celestial Bodys
+   *
+   *
+   *
+   */
+  public double gravityAcceleration(CelestialBody u, CelestialBody v)
+  {
+    double distance = u.x.dist(v.x);
+    System.out.println("Distance: "+distance);
+    double force;
+    force = G*((u.m)*(v.m))/Math.pow(distance,2);
+    return force;
+  }
 }
