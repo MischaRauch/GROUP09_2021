@@ -12,6 +12,7 @@ import java.lang.Math;
 
 public class CelestialBody implements FunctionInterface, SolverInterface
 {
+  private static final double G = 6.674*Math.pow(10,-11);
   private double m;
   private Vector3d x;
   private Vector3d v;
@@ -126,5 +127,20 @@ public class CelestialBody implements FunctionInterface, SolverInterface
   public Vector3dInterface call(double t, Vector3dInterface s)
   {
     return s.add(new Vector3d(v.getX()*t, v.getY()*t, v.getZ()*t));
+  }
+
+  /*
+   *Calculates the Gravity force between two Celestial Bodys
+   * 
+   * 
+   * 
+   */
+  public double gravityAcceleration(CelestialBody u, CelestialBody v) 
+  {
+    double distance = u.x.dist(v.x);
+    System.out.println("Distance: "+distance);
+    double force;
+    force = G*((u.m)*(v.m))/Math.pow(distance,2);
+    return force;
   }
 }
