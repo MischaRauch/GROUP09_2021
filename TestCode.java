@@ -15,19 +15,19 @@ public class TestCode
 
 
     Vector3d ball1X = new Vector3d(2, 5, 0);
-    Vector3d ball1V = new Vector3d(1, 2, 1);
+    Vector3d ball1V = new Vector3d(0, 0, 0);
 
     CelestialBody ball1 = new CelestialBody(1000, ball1X, ball1V);
 
-    Vector3d ball2X = new Vector3d(10, 8, 4);
-    Vector3d ball2V = new Vector3d(1, 2, 1);
+    Vector3d ball2X = new Vector3d(10, 1, 4);
+    Vector3d ball2V = new Vector3d(0, 0, 0);
 
-    CelestialBody ball2 = new CelestialBody(1000, ball2X, ball2V);
+    CelestialBody ball2 = new CelestialBody(10000, ball2X, ball2V);
 
     Vector3d ball3X = new Vector3d(9, 8, 5);
-    Vector3d ball3V = new Vector3d(5, 4, 3);
+    Vector3d ball3V = new Vector3d(0, 0, 0);
 
-    CelestialBody ball3 = new CelestialBody(1000, ball3X, ball3V);
+    CelestialBody ball3 = new CelestialBody(10000, ball3X, ball3V);
 
     System.out.println();
 

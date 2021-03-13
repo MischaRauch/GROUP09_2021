@@ -86,12 +86,8 @@ public class CelestialBody implements FunctionInterface, SolverInterface
       if(bodies[i] != this)
       {
         System.out.println(bodies[i].getCoord());
-        //did you forgot the ^3 in the denominator or was it on purpose?
-        //F[i] = (x.sub(bodies[i].getCoord())).mul(1/x.sub(bodies[i].getCoord()).norm()).mul(G * m * bodies[i].getMass());
         F[i] = (x.sub(bodies[i].getCoord())).mul(1/(Math.pow(x.sub(bodies[i].getCoord()).norm(), 3))).mul(G * m * bodies[i].getMass());
-        System.out.println("Subtraction: "+(x.sub(bodies[i].getCoord())));
-        System.out.println("Norm: "+(x.sub(bodies[i].getCoord()).norm()));
-        System.out.println("Norm^3: "+Math.pow(x.sub(bodies[i].getCoord()).norm(), 3));
+        //F[i] = (x.sub(bodies[i].getCoord())).mul(1/Math.abs(Math.pow(x.dist(bodies[i].getCoord()), 3))).mul(-G * m * bodies[i].getMass());
         System.out.println(F[i]);
       }
     }
