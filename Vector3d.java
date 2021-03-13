@@ -78,10 +78,10 @@ public class Vector3d implements Vector3dInterface
   /**
    * Scalar x vector multiplication, followed by an addition
    *
-  * @param scalar the double used in the multiplication step
-  * @param other  the vector used in the multiplication step
-  * @return the result of the multiplication step added to this vector,
-  */
+   * @param scalar the double used in the multiplication step
+   * @param other  the vector used in the multiplication step
+   * @return the result of the multiplication step added to this vector,
+   */
   public Vector3dInterface addMul(double scalar, Vector3dInterface other)
   {
     this.add(other.mul(scalar));
@@ -89,8 +89,8 @@ public class Vector3d implements Vector3dInterface
   }
 
   /**
-  * @return the Euclidean norm of a vector
-  */
+   * @return the Euclidean norm of a vector
+   */
   public double norm()
   {
     return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
@@ -105,9 +105,9 @@ public class Vector3d implements Vector3dInterface
   }
 
   /**
-  * @return A string in this format:
-  * Vector3d(-1.0, 2, -3.0) should print out (-1.0,2.0,-3.0)
-  */
+   * @return A string in this format:
+   * Vector3d(-1.0, 2, -3.0) should print out (-1.0,2.0,-3.0)
+   */
   public String toString()
   {
     return "(" + x + "," + y + "," + z + ")";

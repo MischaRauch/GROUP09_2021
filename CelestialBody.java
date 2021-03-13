@@ -12,10 +12,12 @@ import java.lang.Math;
 
 public class CelestialBody implements FunctionInterface, SolverInterface
 {
-  private double m;
-  private Vector3d x;
-  private Vector3d v;
-  private Vector3dInterface[] movement;
+  private double m;                       // mass of the body
+  private Vector3d x;                     // xyz coordinates of the body
+  private Vector3d v;                     // xyz velocity of the body
+  private Vector3d F;                     // Gravitational force on the body
+  private Vector3dInterface[] movement;   // Place to store coordinates for testing
+  private final double G = 6.674 * Math.pow(10, -11);
 
   public CelestialBody(double mass, Vector3d x0, Vector3d v0)
   {
@@ -33,6 +35,11 @@ public class CelestialBody implements FunctionInterface, SolverInterface
   public Vector3d getCoord()
   {
     return x;
+  }
+
+  public double getMass()
+  {
+    return m;
   }
 
   public double getX()
@@ -63,6 +70,21 @@ public class CelestialBody implements FunctionInterface, SolverInterface
   public double getVelZ()
   {
     return v.getZ();
+  }
+
+  public void calculateF(CelestialBody[] bodies)
+  {
+    Vector3dInterface[] F = new Vector3d[bodies.length];
+
+    for(int i = 0; i < bodies.length; i++)
+    {
+      if(bodies[i] != this)
+      {
+        System.out.println(bodies[i].getCoord());
+        F[i] = (x.sub(bodies[i].getCoord())).mul(1/(Math.pow(x.sub(bodies[i].getCoord()).norm(), 3))).mul(G * m * bodies[i].getMass());
+        System.out.println(F[i]);
+      }
+    }
   }
 
   /*
