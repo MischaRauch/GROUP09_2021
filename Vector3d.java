@@ -51,28 +51,37 @@ public class Vector3d implements Vector3dInterface
     this.z = z;
   }
 
+  /*
+   * Vector addition. !WARNING! does not actually add the vector to the vector
+   * it's being called on, just returns the result of this addition.
+   *
+   * @return the result of the addition to this vector
+   */
   public Vector3dInterface add(Vector3dInterface other)
   {
-    x += other.getX();
-    y += other.getY();
-    z += other.getZ();
-    return this;
+    return new Vector3d(x + other.getX(), y + other.getY(), z + other.getZ());
   }
 
+  /*
+   * Vector subtraction. !WARNING! does not actually subtract the vector from the vector
+   * it's being called on, just returns the result of this subtraction.
+   *
+   * @return the result of the subtraction from this vector
+   */
   public Vector3dInterface sub(Vector3dInterface other)
   {
-    x -= other.getX();
-    y -= other.getY();
-    z -= other.getZ();
-    return this;
+    return new Vector3d(x - other.getX(), y - other.getY(), z - other.getZ());
   }
 
+  /*
+   * Vector multiplication by a scalar. !WARNING! does not actually multiply the vector
+   * it's being called on, just returns the result of this multiplication.
+   *
+   * @return the result of the multiplication of this vector
+   */
   public Vector3dInterface mul(double scalar)
   {
-    x *= scalar;
-    y *= scalar;
-    z *= scalar;
-    return this;
+    return new Vector3d(x*scalar, y*scalar, z*scalar);
   }
 
   /**
@@ -84,8 +93,7 @@ public class Vector3d implements Vector3dInterface
    */
   public Vector3dInterface addMul(double scalar, Vector3dInterface other)
   {
-    this.add(other.mul(scalar));
-    return this;
+    return this.add(other.mul(scalar));
   }
 
   /**
