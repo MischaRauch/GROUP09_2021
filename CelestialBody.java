@@ -13,7 +13,8 @@ import java.lang.Math;
 public class CelestialBody implements FunctionInterface, SolverInterface
 {
   private double m;                       // mass of the body
-  private Vector3d x;                     // xyz coordinates of the body
+  //changed it to Vector3dInterface --> where's the difference between Vector3d and Vector3dInterface?
+  private Vector3dInterface x;            // xyz coordinates of the body
   private Vector3d v;                     // xyz velocity of the body
   private Vector3d F;                     // Gravitational force on the body
   private Vector3dInterface[] movement;   // Place to store coordinates for testing
@@ -32,9 +33,13 @@ public class CelestialBody implements FunctionInterface, SolverInterface
     return movement;
   }
 
-  public Vector3d getCoord()
+  public Vector3dInterface getCoord()
   {
     return x;
+  }
+  public void setCoord(Vector3dInterface x)
+  {
+    this.x = x;
   }
 
   public double getMass()
@@ -81,7 +86,12 @@ public class CelestialBody implements FunctionInterface, SolverInterface
       if(bodies[i] != this)
       {
         System.out.println(bodies[i].getCoord());
-        F[i] = (x.sub(bodies[i].getCoord())).mul(1/x.sub(bodies[i].getCoord()).norm()).mul(G * m * bodies[i].getMass());
+        //did you forgot the ^3 in the denominator or was it on purpose?
+        //F[i] = (x.sub(bodies[i].getCoord())).mul(1/x.sub(bodies[i].getCoord()).norm()).mul(G * m * bodies[i].getMass());
+        F[i] = (x.sub(bodies[i].getCoord())).mul(1/(Math.pow(x.sub(bodies[i].getCoord()).norm(), 3))).mul(G * m * bodies[i].getMass());
+        System.out.println("Subtraction: "+(x.sub(bodies[i].getCoord())));
+        System.out.println("Norm: "+(x.sub(bodies[i].getCoord()).norm()));
+        System.out.println("Norm^3: "+Math.pow(x.sub(bodies[i].getCoord()).norm(), 3));
         System.out.println(F[i]);
       }
     }
@@ -110,6 +120,9 @@ public class CelestialBody implements FunctionInterface, SolverInterface
       t += h;
       System.out.println("Location after step " + (i+1) + ": " + x0);
     }
+    //@Matthijs maybe I'm wrong but I would say to update the position at this point with the new location
+    //otherwise the object keeps staying on the same position forever
+    this.setCoord(locations[locations.length-1]);
     return locations;
   }
 
@@ -163,5 +176,6 @@ public class CelestialBody implements FunctionInterface, SolverInterface
     double force;
     force = G*((u.m)*(v.m))/Math.pow(distance,2);
     return force;
+
   }
 }
