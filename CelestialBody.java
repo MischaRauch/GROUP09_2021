@@ -1,5 +1,5 @@
 /*
- * @author Matthijs Vossen
+ * @author Group09
  * @version 0.99.0
  *
  * This class is an implementation of the Vector3dInterface, used to represent vectors.
@@ -15,17 +15,19 @@ public class CelestialBody implements FunctionInterface, SolverInterface
   private double m;                       // mass of the body
   //changed it to Vector3dInterface --> where's the difference between Vector3d and Vector3dInterface?
   private Vector3dInterface x;            // xyz coordinates of the body
-  private Vector3d v;                     // xyz velocity of the body
+  private Vector3dInterface v;                     // xyz velocity of the body
   private Vector3d F;                     // Gravitational force on the body
   private Vector3dInterface[] movement;   // Place to store coordinates for testing
   private final double G = 6.674 * Math.pow(10, -11);
+  private String name;
 
-  public CelestialBody(double mass, Vector3d x0, Vector3d v0)
+  public CelestialBody(String name, double mass, Vector3d x0, Vector3d v0)
   {
     m = mass;
     x = x0;
     v = v0;
-    movement = solve(this, x, 0.1, 10);
+    this.name = name;
+    //movement = solve(this, x, 0.1, 10);
   }
 
   public Vector3dInterface[] getMovement()
@@ -37,6 +39,17 @@ public class CelestialBody implements FunctionInterface, SolverInterface
   {
     return x;
   }
+
+  public Vector3dInterface getVel()
+  {
+    return v;
+  }
+
+  public void setVel(Vector3dInterface v)
+  {
+    this.v = v;
+  }
+
   public void setCoord(Vector3dInterface x)
   {
     this.x = x;
@@ -173,5 +186,10 @@ public class CelestialBody implements FunctionInterface, SolverInterface
     force = G*((u.m)*(v.m))/Math.pow(distance,2);
     return force;
 
+  }
+
+  public String toString()
+  {
+    return name;
   }
 }
