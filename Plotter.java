@@ -11,7 +11,7 @@ public class Plotter
     private int height = 800;
     Vector3dInterface[] one;
     Vector3dInterface[] two;
-    int C = 1;
+    int C = 10;
 
     public Plotter(Vector3dInterface[] one, Vector3dInterface[] two) 
     {
@@ -34,29 +34,26 @@ public class Plotter
           super.paintComponent(g);
       
           Graphics2D g2d = (Graphics2D) g;
-          Graphics2D gg2d = (Graphics2D) g;
       
           g2d.setColor(Color.red);
           g2d.setStroke(new BasicStroke(5));
 
-          gg2d.setColor(Color.blue);
-          gg2d.setStroke(new BasicStroke(5));
-
-      
           for (int i = 0; i < one.length; i++) 
           {
-    
-    
             g2d.drawLine((int) (one[i].getX())*C,(int) (one[i].getY())*C,(int) (one[i].getX())*C,(int) (one[i].getY())*C);
-            //g2d.setStroke(new BasicStroke(5));
 
-            gg2d.drawLine((int) (two[i].getX())*C,(int) (two[i].getY())*C,(int) (two[i].getX())*C,(int) (two[i].getY())*C);
-            //gg2d.setStroke(new BasicStroke(5));
             System.out.println("i "+i);
             System.out.println("COOR-One "+one[i].getX()+" "+one[i].getY());
             System.out.println("COOR-Two "+two[i].getX()+" "+two[i].getY());
             System.out.println("Draw1 "+((int) one[i].getX())*C +" "+(int) (one[i].getY())*C);
             System.out.println("Draw2 "+((int) two[i].getX())*C +" "+(int) (two[i].getY())*C);
+          }
+          g2d.setColor(Color.blue);
+          g2d.setStroke(new BasicStroke(5));
+
+          for (int i = 0; i<two.length; i++) 
+          {
+            g2d.drawLine((int) (two[i].getX())*C,(int) (two[i].getY())*C,(int) (two[i].getX())*C,(int) (two[i].getY())*C);
           }
         }
     }

@@ -32,7 +32,7 @@ public class SolarSystem implements SolverInterface
   {
     System.out.println("Start sun coordinates: " + sun.getCoord());
     System.out.println("Start earth coordinates: " + earth.getCoord());
-    newSolve(1, 50);
+    newSolve(1, 10);
     System.out.println("End sun coordinates: " + sun.getCoord());
     System.out.println("End earth coordinates: " + earth.getCoord());
   }
