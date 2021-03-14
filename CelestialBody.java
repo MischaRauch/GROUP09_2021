@@ -20,6 +20,8 @@ public class CelestialBody implements FunctionInterface, SolverInterface
   private Vector3dInterface[] movement;   // Place to store coordinates for testing
   private final double G = 6.674 * Math.pow(10, -11);
   private String name;
+  private double h = 0.1;                 // Step size in seconds
+  private int nSteps = 10;                // total number of time steps
 
   public CelestialBody(String name, double mass, Vector3d x0, Vector3d v0)
   {
@@ -27,7 +29,7 @@ public class CelestialBody implements FunctionInterface, SolverInterface
     x = x0;
     v = v0;
     this.name = name;
-    //movement = solve(this, x, 0.1, 10);
+    //movement = solve(this, x, h, nSteps);
   }
 
   public Vector3dInterface[] getMovement()
@@ -178,14 +180,34 @@ public class CelestialBody implements FunctionInterface, SolverInterface
    *
    *
    */
-  public double gravityAcceleration(CelestialBody u, CelestialBody v)
+  public Vector3dInterface gForce(CelestialBody u, CelestialBody v)
   {
-    double distance = u.x.dist(v.x);
-    System.out.println("Distance: "+distance);
-    double force;
-    force = G*((u.m)*(v.m))/Math.pow(distance,2);
-    return force;
-
+    //Calculate distance vector 
+    Vector3dInterface r_vec3d = u.x.sub(v.x);
+    //Caclulate magnitude of distance vector 
+    double r_mag = r_vec3d.norm();
+    //Calculate unit vector of distance vector - Direction vector 
+    Vector3dInterface r_hat = r_vec3d.mul(Math.pow(r_mag, -1));
+    //Caclulate force magnitude
+    double force_mag = G*u.m*v.m / Math.pow(r_mag,2);
+    //Calculate force Vector
+    Vector3dInterface force_vec = r_hat.mul(-force_mag);
+    return force_vec;
+  }
+  public Vector3dInterface gPosition(CelestialBody x, CelestialBody y)
+  {
+    //Calculate forces
+    Vector3dInterface x_Force = gForce(x, y);
+    Vector3dInterface y_Force = gForce(y, x);
+    //Calculate momentum - momentum = mass * velocity
+    Vector3dInterface x_Momentum = x.v.mul(x.m);
+    Vector3dInterface y_Momentum = y.v.mul(y.m);
+    //Calculate momentum
+    x_Momentum = x_Momentum.add(x_Force.mul(h));
+    y_Momentum = y_Momentum.add(y_Force.mul(h));
+    //Update position
+    Vector3dInterface x_position = x.getCoord().add(x_Momentum.mul((Math.pow(x.m*h,-1)))); 
+    return x_position;
   }
 
   public String toString()

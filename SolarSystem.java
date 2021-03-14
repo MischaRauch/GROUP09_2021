@@ -12,10 +12,10 @@ import java.lang.Math;
 
 public class SolarSystem implements SolverInterface
 {
-  private static final boolean DEBUG = false;
+  private static final boolean DEBUG = true;
 
   private CelestialBody earth = new CelestialBody("Earth", 100, new Vector3d(3, 6, 4), new Vector3d(2, 2, 2));
-  private CelestialBody sun = new CelestialBody("Sun", 1000000000, new Vector3d(7, 3, 8), new Vector3d(1, 4, 1));
+  private CelestialBody sun = new CelestialBody("Sun", 1000000000, new Vector3d(7, 3, 8), new Vector3d(0, 0, 0));
 
 
   /*
@@ -25,14 +25,24 @@ public class SolarSystem implements SolverInterface
 
   private CelestialBody[] bodies = {earth, sun};
   private final double G = 6.674 * Math.pow(10, -11);
+  private Vector3dInterface[] positionearth;
+  private Vector3dInterface[] positionsun;
 
   public SolarSystem()
   {
     System.out.println("Start sun coordinates: " + sun.getCoord());
     System.out.println("Start earth coordinates: " + earth.getCoord());
-    newSolve(1, 1);
+    newSolve(1, 50);
     System.out.println("End sun coordinates: " + sun.getCoord());
     System.out.println("End earth coordinates: " + earth.getCoord());
+  }
+  public Vector3dInterface[] getSunPosition() 
+  {
+    return positionsun;
+  }
+  public Vector3dInterface[] getEarthPosition() 
+  {
+    return positionearth;
   }
 
 
@@ -64,6 +74,8 @@ public class SolarSystem implements SolverInterface
   // Method for calculating the steps
   public void newSolve(double h, int nSteps)
   {
+    positionearth = new Vector3d[nSteps];
+    positionsun = new Vector3d[nSteps];
     // For loop for each step
     for(int i = 0; i < nSteps; i++)
     {
@@ -83,6 +95,15 @@ public class SolarSystem implements SolverInterface
       {
         bodies[j].setCoord(step(bodies[j], 0, bodies[j].getCoord(), h));
         if(DEBUG) System.out.println("New coord for " + bodies[j] + ": " + bodies[j].getCoord());
+        if(bodies[j].getMass() == 100)
+        {
+          positionearth[i] = bodies[j].getCoord();
+          System.out.println("GOT HERE");
+        }
+        else 
+        {
+          positionsun[i] = bodies[j].getCoord();
+        }
       }
     }
   }

@@ -43,8 +43,14 @@ public class TestCode
     */
 
     SolarSystem sol = new SolarSystem();
+    Vector3dInterface[] sun = sol.getSunPosition();
+    Vector3dInterface[] earth = sol.getEarthPosition();
+    //System.out.println("TEST "+sun.length);
+    //System.out.println("TEST2 "+sun[0]);
+    Plotter plt = new Plotter(sun,earth);
 
 
     System.out.println("\n--------------------\n");
+
   }
 }
