@@ -18,6 +18,7 @@ public class CelestialBody implements FunctionInterface
   private Vector3dInterface v;                     // xyz velocity of the body
   private final double G = 6.674 * Math.pow(10, -11);
   private String name;
+  private double h = 0.1;     //step size
 
   public CelestialBody(String name, double mass, Vector3d x0, Vector3d v0)
   {
@@ -105,5 +106,34 @@ public class CelestialBody implements FunctionInterface
   public String toString()
   {
     return name;
+  }
+
+  public Vector3dInterface gForce(CelestialBody u, CelestialBody v)
+  {
+    //Calculate distance vector 
+    Vector3dInterface r_vec3d = u.x.sub(v.x);
+    //Caclulate magnitude of distance vector 
+    double r_mag = r_vec3d.norm();
+    //Calculate unit vector of distance vector - Direction vector 
+    Vector3dInterface r_hat = r_vec3d.mul(Math.pow(r_mag, -1));
+    //Caclulate force magnitude
+    double force_mag = G*u.m*v.m / Math.pow(r_mag,2);
+    //Calculate force Vector
+    Vector3dInterface force_vec = r_hat.mul(-force_mag);
+    return force_vec;
+  }
+  public Vector3dInterface gPosition(CelestialBody x)
+  {
+    //Calculate forces
+    Vector3dInterface this_Force = gForce(this, x);
+    //Calculate momentum - momentum = mass * velocity
+    Vector3dInterface this_Momentum = this.v.mul(this.m);
+    //Calculate momentum
+    this_Momentum = this_Momentum.add(this_Force.mul(h));
+    //Update velocity 
+    this.setVel(this_Momentum.mul(Math.pow(this.m, -1)));
+    //Update position
+    Vector3dInterface x_position = x.getCoord().add(this_Momentum.mul((Math.pow(x.m*h,-1)))); 
+    return x_position;
   }
 }
