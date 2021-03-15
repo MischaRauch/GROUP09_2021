@@ -42,12 +42,7 @@ public class TestCode
     System.out.println(v1.norm());
     */
 
-    SolarSystem sol = new SolarSystem();
-    Vector3dInterface[] sun = sol.getSunPosition();
-    Vector3dInterface[] earth = sol.getEarthPosition();
-    //System.out.println("TEST "+sun.length);
-    //System.out.println("TEST2 "+sun[0]);
-    Plotter plt = new Plotter(sun,earth);
+    SolarSystem sol = new SolarSystem(600, 5256);
 
 
     System.out.println("\n--------------------\n");
