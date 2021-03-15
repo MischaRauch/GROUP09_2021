@@ -12,10 +12,10 @@ import java.lang.Math;
 
 public class SolarSystem implements SolverInterface
 {
-  private static final boolean DEBUG = true;
+  private static final boolean DEBUG = false;
 
-  private CelestialBody earth = new CelestialBody("Earth", 100, new Vector3d(3, 6, 4), new Vector3d(2, 2, 2));
-  private CelestialBody sun = new CelestialBody("Sun", 1000000000, new Vector3d(7, 3, 8), new Vector3d(0, 0, 0));
+  private CelestialBody earth = new CelestialBody("Earth", 10000, new Vector3d(15, 25, 0), new Vector3d(1, -1, 0));
+  private CelestialBody sun = new CelestialBody("Sun", 1.988500e11, new Vector3d(15, 20, 0), new Vector3d(0, 0, 0));
 
 
   /*
@@ -32,15 +32,15 @@ public class SolarSystem implements SolverInterface
   {
     System.out.println("Start sun coordinates: " + sun.getCoord());
     System.out.println("Start earth coordinates: " + earth.getCoord());
-    newSolve(1, 10);
+    newSolve(1, 20);
     System.out.println("End sun coordinates: " + sun.getCoord());
     System.out.println("End earth coordinates: " + earth.getCoord());
   }
-  public Vector3dInterface[] getSunPosition() 
+  public Vector3dInterface[] getSunPosition()
   {
     return positionsun;
   }
-  public Vector3dInterface[] getEarthPosition() 
+  public Vector3dInterface[] getEarthPosition()
   {
     return positionearth;
   }
@@ -95,12 +95,11 @@ public class SolarSystem implements SolverInterface
       {
         bodies[j].setCoord(step(bodies[j], 0, bodies[j].getCoord(), h));
         if(DEBUG) System.out.println("New coord for " + bodies[j] + ": " + bodies[j].getCoord());
-        if(bodies[j].getMass() == 100)
+        if(bodies[j].getMass() == 10000)
         {
           positionearth[i] = bodies[j].getCoord();
-          System.out.println("GOT HERE");
         }
-        else 
+        else
         {
           positionsun[i] = bodies[j].getCoord();
         }
