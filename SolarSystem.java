@@ -14,7 +14,7 @@ public class SolarSystem implements SolverInterface
 {
   private static final boolean DEBUG = false;
 
-  private CelestialBody earth = new CelestialBody("Earth", 10000, new Vector3d(15, 25, 0), new Vector3d(1, -1, 0));
+  private CelestialBody earth = new CelestialBody("Earth", 10000, new Vector3d(14, 24.5, 0), new Vector3d(1.2, -0.4, 0));
   private CelestialBody sun = new CelestialBody("Sun", 1.988500e11, new Vector3d(15, 20, 0), new Vector3d(0, 0, 0));
 
 
@@ -32,7 +32,7 @@ public class SolarSystem implements SolverInterface
   {
     System.out.println("Start sun coordinates: " + sun.getCoord());
     System.out.println("Start earth coordinates: " + earth.getCoord());
-    newSolve(1, 20);
+    newSolve(0.5, 100);
     System.out.println("End sun coordinates: " + sun.getCoord());
     System.out.println("End earth coordinates: " + earth.getCoord());
   }
