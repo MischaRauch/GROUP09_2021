@@ -1,3 +1,4 @@
+package physics;
 /*
  * @author Group09
  * @version 0.99.0
@@ -101,5 +102,9 @@ public class SolarSystem implements SolverInterface
   public Vector3dInterface step(FunctionInterface f, double t, Vector3dInterface x, double h)
   {
     return f.call(h, x);
+  }
+  public Vector3dInterface[][] getLocations() 
+  {
+    return locations;
   }
 }
