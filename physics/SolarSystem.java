@@ -15,7 +15,7 @@ public class SolarSystem implements SolverInterface
 {
   private static final boolean DEBUG = true;
 
-  private CelestialBody sun = new CelestialBody("Sun", 1.988500e11, new Vector3d(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06), new Vector3d(-1.420511669610689e+01, -4.954714716629277e+00, 3.994237625449041e-01));
+  private CelestialBody sun = new CelestialBody("Sun", 1.988500e30, new Vector3d(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06), new Vector3d(-1.420511669610689e+01, -4.954714716629277e+00, 3.994237625449041e-01));
   private CelestialBody mercury = new CelestialBody("Mercury", 3.302e23, new Vector3d(6.047855986424127e+06, -6.801800047868888e+10, -5.702742359714534e+09), new Vector3d(3.892585189044652e+04, 2.978342247012996e+03, -3.327964151414740e+03));
   private CelestialBody venus = new CelestialBody("Venus", 4.8685e24, new Vector3d(-9.435345478592035e+10, 5.350359551033670e+10, 6.131453014410347e+09), new Vector3d(-1.726404287724406e+04, -3.073432518238123e+04, 5.741783385280979e-04));
   private CelestialBody earth = new CelestialBody("Earth", 5.97219e24, new Vector3d(-1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06), new Vector3d(5.427193405797901e+03, -2.931056622265021e+04, 6.575428158157592e-01));

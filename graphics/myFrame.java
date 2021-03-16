@@ -12,25 +12,37 @@ public class myFrame extends Frame {
 	private static boolean zoomOrNot;
 	private static double zoomFactor = 1;
 	Vector3dInterface[][] locations;
-	double stepSize = 0.1;
+	double stepSize = 90000;
 	int step = 1;
 	SolarSystem sol;
 
 	Image b;
 	Star sun;
+	Planet mercury;
+	Planet venus;
 	Planet earth;
 	Planet moon;
+	Planet mars;
+	Planet jupiter;
 	Planet saturn;
 	Planet titan;
-
+	Planet uranus;
+	Planet neptune;
+	
 	public void initV()
 	{
 		b = Planet.getImage("I//bg.jpg");
-		sun = new Star("I//sun.png",400,300,"sun",locations[0][step-2]);
-		earth = new Planet(sun, "I//earth.png", 150, 93, 0.0108,"earth",locations[1][step-2]);
-		moon = new Planet(earth, "I//moon.png", 15, 10, 0.1332,"moon", locations[2][step-2]);
-		saturn = new Planet(sun,"I//saturn.png",270, 180, 0.0004,"saturn", locations[3][step-2]);
-		titan = new Planet(saturn,"I//titan.png",15, 10, 0.1332,"titan", locations[4][step-2]);
+		sun = new Star("I//sun.png","sun",locations[0][step-2]);
+		mercury = new Planet(sun, "I//moon.png", "mercury", locations[1][step-2]);
+		venus = new Planet(sun, "I//moon.png", "venus", locations[2][step-2]);
+		earth = new Planet(sun, "I//earth.png","earth",locations[3][step-2]);
+		moon = new Planet(sun, "I//moon.png","moon", locations[4][step-2]);
+		mars = new Planet(sun, "I//moon.png", "mars", locations[5][step-2]);
+		jupiter = new Planet(sun, "I//moon.png", "jupiter", locations[6][step-2]);
+		saturn = new Planet(sun,"I//saturn.png","saturn", locations[7][step-2]);
+		titan = new Planet(saturn,"I//titan.png","titan", locations[8][step-2]);
+		uranus = new Planet(sun, "I//moon.png", "uranus", locations[9][step-2]);
+		neptune = new Planet(sun, "I//moon.png", "neptune", locations[10][step-2]);
 	}
 
 	public myFrame(String s){
@@ -76,11 +88,16 @@ public class myFrame extends Frame {
 			zoomFactor = 0.8;
 		}
 		sun.resize(zoomFactor);
+		mercury.resize(zoomFactor);
+		venus.resize(zoomFactor);
 		earth.resize(zoomFactor);
 		moon.resize(zoomFactor);
+		mars.resize(zoomFactor);
+		jupiter.resize(zoomFactor);
 		saturn.resize(zoomFactor);
 		titan.resize(zoomFactor);
-
+		uranus.resize(zoomFactor);
+		neptune.resize(zoomFactor);
 
 	}
 
@@ -96,9 +113,15 @@ public class myFrame extends Frame {
 	public void paint(Graphics g) {
 		g.drawImage(b,0,0,null);
 		sun.draw(g);
+		mercury.draw(g);
+		venus.draw(g);
 		earth.draw(g);
 		moon.draw(g);
+		mars.draw(g);
+		jupiter.draw(g);
 		saturn.draw(g);
+		titan.draw(g);
+		uranus.draw(g);
 		titan.draw(g);
 		calculation();
 	}
@@ -123,13 +146,21 @@ public class myFrame extends Frame {
 		if (step != 1) 
 		{
 			sun.setPosition(locations[0][step-1]);
-			earth.setPosition(locations[1][step-1]);
-			moon.setPosition(locations[2][step-1]);
-			saturn.setPosition(locations[3][step-1]);
-			titan.setPosition(locations[4][step-1]);
-			//System.out.println("HERE22");
+			mercury.setPosition(locations[1][step-1]);
+			venus.setPosition(locations[2][step-1]);
+			earth.setPosition(locations[3][step-1]);
+			moon.setPosition(locations[4][step-1]);
+			mars.setPosition(locations[5][step-1]);
+			jupiter.setPosition(locations[6][step-1]);
+			saturn.setPosition(locations[7][step-1]);
+			titan.setPosition(locations[8][step-1]);
+			uranus.setPosition(locations[9][step-1]);
+			neptune.setPosition(locations[10][step-1]);
+			//System.out.println("HERE22: "+step);
+			//System.out.println("EARTH POSITION: "+earth.getPosition());
 		}
-		
+
+
 		step++;
 		//System.out.println("Step"+step);
 		//System.out.println("GOT HERE"+locations.length);

@@ -5,8 +5,6 @@ import javax.swing.ImageIcon;
 
 import titan.Vector3dInterface;
 
-//import jdk.internal.org.xml.sax.InputSource;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -16,8 +14,8 @@ import java.net.URL;
 public class Star {
 	Image image;
 	String name;
-	double x;
-	double y;
+	//double x;
+	//double y;
 	int width;
 	int height;
 
@@ -26,21 +24,30 @@ public class Star {
 
 	public Star() {}
 
-	public Star(String imagePath, double x, double y,String name, Vector3dInterface position)
+	public Star(String imagePath,String name, Vector3dInterface position)
 	{
 		this.image = getImage(imagePath);
 		this.width=image.getWidth(null);
 		this.height=image.getHeight(null);
-		this.x = x;
-		this.y = y;
+		//this.x = x;
+		//this.y = y;
 		this.name=name;
 		this.position = position;
 	}
 	public void draw(Graphics g) {
-
-		g.drawImage(image, (int) position.mul(0.000000001).getX()+700, (int) position.mul(0.000000001).getY()+400, null);
+		//System.out.println("POSITIONW: "+(int) position.mul(0.000000001).getX()+700 + " "+ (int) position.mul(0.000000001).getY()+400);
+		g.drawImage(image, (int) position.mul(0.0000000001).getX()+400, (int) position.mul(0.0000000001).getY()+300, null);
 		g.setColor(Color.white);
-		g.drawString(this.name, (int) position.mul(0.000000001).getX()+700, (int) position.mul(0.000000001).getY()+400);
+		g.drawString(this.name, (int) position.mul(0.0000000001).getX()+400, (int) position.mul(0.0000000001).getY()+300);
+
+		if (this.name == "earth" )
+		{
+			System.out.println("Earth Position: "+(int) position.mul(0.0000000001).getX()+400+ " "+ (int) position.mul(0.0000000001).getY()+300);
+		}
+		if (this.name == "moon" )
+		{
+			System.out.println("Moon Position: "+(int) position.mul(0.0000000001).getX()+400+ " "+ (int) position.mul(0.0000000001).getY()+300);
+		}
 	}
 	public static Image getImage(String path) {
 		BufferedImage image = null;

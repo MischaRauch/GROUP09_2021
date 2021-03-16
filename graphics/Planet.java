@@ -5,22 +5,22 @@ import java.awt.*;
 import titan.Vector3dInterface;
 
 public class Planet extends Star {
-	double longAxis;
-	double shortAxis;
-	double speed;
+	//double longAxis;
+	//double shortAxis;
+	//double speed;
 	double degree;
 	Star center;
 	
 
-	public Planet(Star center, String imagePath, double longAxis, double shortAxis, double speed, String name, Vector3dInterface location) 
+	public Planet(Star center, String imagePath, String name, Vector3dInterface location) 
 	{
 		this.image = super.getImage(imagePath);
 		this.center = center;
-		this.longAxis = longAxis;
-		this.shortAxis = shortAxis;
-		this.x = center.x + longAxis;
-		this.y = center.y;
-		this.speed = speed;
+		//this.longAxis = longAxis;
+		//this.shortAxis = shortAxis;
+		//this.x = center.x + longAxis;
+		//this.y = center.y;
+		//this.speed = speed;
 		this.name = name;
 		super.setPosition(location);
 		
