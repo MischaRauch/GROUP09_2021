@@ -5,15 +5,16 @@ import java.awt.event.*;
 
 public class myFrame extends Frame {
 	private Image offScreenImage = null;
+
 	private static boolean zoomOrNot;
-	private static int zoomFactor = 0;
+	private static double zoomFactor = 1;
 
 	Image b = Planet.getImage("I//bg.jpg");
 	Star sun = new Star("I//sun.png",400,300,"sun");
-	Planet earth = new Planet(sun, "I//earth.png", 150, 100, 0.01,"earth");
-	Planet moon = new Planet(earth, "I//moon.png", 30, 20, 0.1,"moon");
-	Planet saturn = new Planet(sun,"I//saturn.png",270, 180, 0.0001,"saturn");
-	Planet titan = new Planet(saturn,"I//titan.png",30, 20, 0.1,"titan");
+	Planet earth = new Planet(sun, "I//earth.png", 150, 93, 0.0108,"earth");
+	Planet moon = new Planet(earth, "I//moon.png", 15, 10, 0.1332,"moon");
+	Planet saturn = new Planet(sun,"I//saturn.png",270, 180, 0.0004,"saturn");
+	Planet titan = new Planet(saturn,"I//titan.png",15, 10, 0.1332,"titan");
 
 	public myFrame(String s){
 		setSize(800, 600);
@@ -25,21 +26,20 @@ public class myFrame extends Frame {
 		addMouseWheelListener(new MouseWheelListener() {
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				zoomOrNot = true;
-				//Zoom out
+
 				if (e.getWheelRotation() > 0) {
-					zoomFactor -=1;
+					zoomFactor *= 0.8;
 					sizeToZoom();
 					repaint();
 				}
-				//Zoom in
+
 				if (e.getWheelRotation() < 0) {
-					zoomFactor +=1 ;
+					zoomFactor *= 1.2 ;
 					sizeToZoom();
 					repaint();
 				}
 			}
 		});
-
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -51,16 +51,18 @@ public class myFrame extends Frame {
 	protected void sizeToZoom() {
 		zoomOrNot = false;
 
-		if(zoomFactor>3 || zoomFactor <-2) {
-			zoomFactor = 0;
-			return;
-		}else {
-			sun.resize(zoomFactor);
-			earth.resize(zoomFactor);
-			moon.resize(zoomFactor);
-			saturn.resize(zoomFactor);
-			titan.resize(zoomFactor);
+		if(zoomFactor>1.3) {
+			zoomFactor = 1.3;
+		}else if (zoomFactor < 0.8) {
+			zoomFactor = 0.8;
 		}
+		sun.resize(zoomFactor);
+		earth.resize(zoomFactor);
+		moon.resize(zoomFactor);
+		saturn.resize(zoomFactor);
+		titan.resize(zoomFactor);
+
+
 	}
 
 	public void update(Graphics g) {

@@ -2,6 +2,7 @@ package TestP1;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -25,13 +26,11 @@ public class Star {
 		this.y = y;
 		this.name=name;
 	}
-
 	public void draw(Graphics g) {
 		g.drawImage(image, (int) x, (int) y, null);
 		g.setColor(Color.white);
 		g.drawString(this.name, (int) x, (int) y);
 	}
-
 	public static Image getImage(String path) {
 		BufferedImage image = null;
 		try {
@@ -43,19 +42,13 @@ public class Star {
 		return image;
 	}
 
-	public void resize(int factor) {
+	public void resize(double factor) {
 		ImageIcon icon = new ImageIcon(this.image);
 
-		if(icon.getIconWidth()+10*factor == 0 || icon.getIconHeight()+10*factor == 0) {
+		if((int)(icon.getIconWidth()*factor) == 0 || (int)(icon.getIconHeight()*factor) == 0) {
 			return;
-		}else if(icon.getIconWidth()> 60) {
-			Image scaleImage = icon.getImage().getScaledInstance(60, 60,Image.SCALE_DEFAULT);
-			image= scaleImage;
-		}else if(icon.getIconWidth()<10){
-			Image scaleImage = icon.getImage().getScaledInstance(10, 10,Image.SCALE_DEFAULT);
-			image= scaleImage;
 		}else{
-			Image scaleImage = icon.getImage().getScaledInstance(icon.getIconWidth()+10*factor, icon.getIconHeight()+10*factor,Image.SCALE_DEFAULT);
+			Image scaleImage = icon.getImage().getScaledInstance((int)(icon.getIconWidth()*(factor)), (int)(icon.getIconHeight()*(factor)),Image.SCALE_DEFAULT);
 			image = scaleImage;
 		}
 	}
