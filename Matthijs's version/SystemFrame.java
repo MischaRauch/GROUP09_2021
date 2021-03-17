@@ -176,12 +176,39 @@ public class SystemFrame extends JFrame implements ActionListener
     titan.setSize(titanDiameter*scale);
     uranus.setSize(uranusDiameter*scale);
     neptune.setSize(neptuneDiameter*scale);
-
+    new DrawTrajectory(stepCount, locations);
 
     repaint();
     if(stepCount == 19999)
     {
       stepCount = 0;
     }
+  }
+  public class DrawTrajectory extends JComponent
+  {
+    DrawTrajectory(int stepCount, Vector3dInterface[][] locations)
+    {
+      double x = locations[1][stepCount].mul(scale).getX()+xOffset;
+      double y = locations[1][stepCount].mul(scale).getY()+yOffset;
+      this.setBounds((int) x,(int) y,2560, 1000);
+      for(int i =0; i < stepCount; i++)
+      {
+        //double x = locations[1][stepCount].mul(scale).getX()+xOffset;
+        //double y = locations[1][stepCount].mul(scale).getY()+yOffset;
+        this.setBounds((int) x,(int) y,2560, 1000);
+
+      }
+    }
+    public void draw(Graphics2D g2)
+  {
+    g2.setColor(new Color(232, 138, 37));
+    g2.fillOval(50, 50, 50, 50);
+  }
+
+  public void paintComponent(Graphics g)
+  {
+    Graphics2D g2 = (Graphics2D) g;
+    draw(g2);
+  }
   }
 }
