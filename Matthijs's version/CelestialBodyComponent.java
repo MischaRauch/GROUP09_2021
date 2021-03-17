@@ -8,6 +8,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import titan.Vector3dInterface;
+
 import java.awt.geom.*;
 
 public class CelestialBodyComponent extends JComponent
@@ -75,5 +78,90 @@ public class CelestialBodyComponent extends JComponent
   {
     Graphics2D g2 = (Graphics2D) g;
     draw(g2);
+    paintTrajectory(g2);
+  }
+  public void paintTrajectory(Graphics2D g)
+  {
+    SystemFrame sF = new SystemFrame();
+    int oldStepCount = 0;
+    if(sF.stepCount % 150 == 0)
+    {
+      int tmp;
+      for (tmp = oldStepCount; tmp < sF.stepCount; tmp+=500) 
+      {
+        if(this.name == "Mercury")
+        {
+          JPanel mercury = new JPanel();
+          mercury.setOpaque(true);
+          mercury.setBackground(new Color(112, 109, 107));
+          mercury.setBounds((int)x,(int)y, 5, 5);
+          sF.lPane.add(mercury);
+        }
+        if(this.name == "Venus")
+        {
+          JPanel venus = new JPanel();
+          venus.setBackground(new Color(196, 165, 143));
+          venus.setBounds((int)x,(int)y, 5, 5);
+          sF.lPane.add(venus);
+        }
+        if(this.name == "Earth")
+        {
+          JPanel earth = new JPanel();
+          earth.setBackground(new Color(38, 120, 60));
+          earth.setBounds((int)x,(int)y, 5, 5);
+          sF.lPane.add(earth);
+        }
+        if(this.name == "Moon")
+        {
+          JPanel moon = new JPanel();
+          moon.setBackground(new Color(171, 169, 167));
+          moon.setBounds((int)x,(int)y, 5, 5);
+          sF.lPane.add(moon);
+        }
+        if(this.name == "Mars")
+        {
+          JPanel mars = new JPanel();
+          mars.setBackground(new Color(199, 114, 30));
+          mars.setBounds((int)x,(int)y, 5, 5);
+          sF.lPane.add(mars);
+        }
+        if(this.name == "Jupiter")
+        {
+          JPanel jupiter = new JPanel();
+          jupiter.setBackground(new Color(209, 142, 84));
+          jupiter.setBounds((int)x,(int)y, 5, 5);
+          sF.lPane.add(jupiter);
+        }
+        if(this.name == "Saturn")
+        {
+          JPanel saturn = new JPanel();
+          saturn.setBackground(new Color(212, 169, 131));
+          saturn.setBounds((int)x,(int)y, 5, 5);
+          sF.lPane.add(saturn);
+        }
+        if(this.name == "Titan")
+        {
+          JPanel titan = new JPanel();
+          titan.setBackground(new Color(115, 191, 135));
+          titan.setBounds((int)x,(int)y, 5, 5);
+          sF.lPane.add(titan);
+        }
+        if(this.name == "Uranus")
+        {
+          JPanel uranus = new JPanel();
+          uranus.setBackground(new Color(190, 232, 237));
+          uranus.setBounds((int)x,(int)y, 5, 5);
+          sF.lPane.add(uranus);
+        }
+        if(this.name == "Neptune")
+        {
+          JPanel neptune = new JPanel();
+          neptune.setBackground(new Color(55, 86, 212));
+          neptune.setBounds((int)x,(int)y, 5, 5);
+          sF.lPane.add(neptune);
+        }
+        oldStepCount = sF.stepCount;
+      }
+    }
   }
 }

@@ -7,14 +7,15 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.GeneralPath;
 import java.awt.event.*;
 import titan.Vector3dInterface;
 import java.awt.Color;
 
 public class SystemFrame extends JFrame implements ActionListener
 {
-  private JLayeredPane lPane = new JLayeredPane();
-  private Vector3dInterface[][] locations;
+  public static JLayeredPane lPane = new JLayeredPane();
+  public static Vector3dInterface[][] locations;
   private Timer timer = new Timer(1, this);
   private CelestialBodyComponent sun;
   private CelestialBodyComponent mercury;
@@ -27,11 +28,11 @@ public class SystemFrame extends JFrame implements ActionListener
   private CelestialBodyComponent titan;
   private CelestialBodyComponent uranus;
   private CelestialBodyComponent neptune;
-  private int stepCount = 0;
-  private double scale = 0.000000001;
+  public static int stepCount = 0;
+  public double scale = 0.000000001;
   private double sizeScale = 1;
-  private double xOffset = 700;
-  private double yOffset = 400;
+  public double xOffset = 700;
+  public double yOffset = 400;
   private int sunDiameter = 1392700000;
   private int mercuryDiameter = 4879400;
   private int venusDiameter = 12104000;
@@ -44,7 +45,7 @@ public class SystemFrame extends JFrame implements ActionListener
   private int uranusDiameter = 50724000;
   private int neptuneDiameter = 49244000;
 
-
+  public SystemFrame() {}
   public SystemFrame(Vector3dInterface[][] locations)
   {
     lPane.setOpaque(true);
@@ -176,39 +177,11 @@ public class SystemFrame extends JFrame implements ActionListener
     titan.setSize(titanDiameter*scale);
     uranus.setSize(uranusDiameter*scale);
     neptune.setSize(neptuneDiameter*scale);
-    new DrawTrajectory(stepCount, locations);
 
     repaint();
     if(stepCount == 19999)
     {
       stepCount = 0;
     }
-  }
-  public class DrawTrajectory extends JComponent
-  {
-    DrawTrajectory(int stepCount, Vector3dInterface[][] locations)
-    {
-      double x = locations[1][stepCount].mul(scale).getX()+xOffset;
-      double y = locations[1][stepCount].mul(scale).getY()+yOffset;
-      this.setBounds((int) x,(int) y,2560, 1000);
-      for(int i =0; i < stepCount; i++)
-      {
-        //double x = locations[1][stepCount].mul(scale).getX()+xOffset;
-        //double y = locations[1][stepCount].mul(scale).getY()+yOffset;
-        this.setBounds((int) x,(int) y,2560, 1000);
-
-      }
-    }
-    public void draw(Graphics2D g2)
-  {
-    g2.setColor(new Color(232, 138, 37));
-    g2.fillOval(50, 50, 50, 50);
-  }
-
-  public void paintComponent(Graphics g)
-  {
-    Graphics2D g2 = (Graphics2D) g;
-    draw(g2);
-  }
   }
 }
