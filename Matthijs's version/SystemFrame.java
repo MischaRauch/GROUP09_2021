@@ -15,7 +15,7 @@ public class SystemFrame extends JFrame implements ActionListener
 {
   private JLayeredPane lPane = new JLayeredPane();
   private Vector3dInterface[][] locations;
-  private Timer timer = new Timer(10, this);
+  private Timer timer = new Timer(1, this);
   private CelestialBodyComponent sun;
   private CelestialBodyComponent mercury;
   private CelestialBodyComponent venus;
@@ -27,11 +27,23 @@ public class SystemFrame extends JFrame implements ActionListener
   private CelestialBodyComponent titan;
   private CelestialBodyComponent uranus;
   private CelestialBodyComponent neptune;
-  private RocketComponent rocket;
   private int stepCount = 0;
-  private double scale = 0.00000001;
+  private double scale = 0.000000001;
+  private double sizeScale = 1;
   private double xOffset = 700;
   private double yOffset = 400;
+  private int sunDiameter = 1392700000;
+  private int mercuryDiameter = 4879400;
+  private int venusDiameter = 12104000;
+  private int earthDiameter = 12742000;
+  private int moonDiameter = 3474200;
+  private int marsDiameter = 6779000;
+  private int jupiterDiameter = 139820000;
+  private int saturnDiameter = 116460000;
+  private int titanDiameter = 5149500;
+  private int uranusDiameter = 50724000;
+  private int neptuneDiameter = 49244000;
+
 
   public SystemFrame(Vector3dInterface[][] locations)
   {
@@ -49,7 +61,8 @@ public class SystemFrame extends JFrame implements ActionListener
     {
       public void actionPerformed(ActionEvent e)
       {
-        scale *= 2;
+        scale *= 1.25;
+        sizeScale *= 1.25;
       }
     });
     lPane.add(zoomInButton);
@@ -59,7 +72,8 @@ public class SystemFrame extends JFrame implements ActionListener
     {
       public void actionPerformed(ActionEvent e)
       {
-        scale *= 0.5;
+        scale *= 0.8;
+        sizeScale *= 0.8;
       }
     });
     lPane.add(zoomOutButton);
@@ -106,18 +120,17 @@ public class SystemFrame extends JFrame implements ActionListener
     });
     lPane.add(panDownButton);
 
-    sun = new CelestialBodyComponent("Sun", locations[0][stepCount].mul(scale).getX()+xOffset, locations[0][stepCount].mul(scale).getY()+yOffset, 696342e5*scale, new Color(232, 138, 37));
-    mercury = new CelestialBodyComponent("Mercury", locations[1][stepCount].mul(scale).getX()+xOffset, locations[1][stepCount].mul(scale).getY()+yOffset, 4879.4e5*scale, new Color(112, 109, 107));
-    venus = new CelestialBodyComponent("Venus", locations[2][stepCount].mul(scale).getX()+xOffset, locations[2][stepCount].mul(scale).getY()+yOffset, 12104e5*scale, new Color(196, 165, 143));
-    earth = new CelestialBodyComponent("Earth", locations[3][stepCount].mul(scale).getX()+xOffset, locations[3][stepCount].mul(scale).getY()+yOffset, 12742e5*scale, new Color(38, 120, 60));
-    moon = new CelestialBodyComponent("Moon", locations[4][stepCount].mul(scale).getX()+xOffset, locations[4][stepCount].mul(scale).getY()+yOffset, 3474.2e5*scale, new Color(171, 169, 167));
-    mars = new CelestialBodyComponent("Mars", locations[5][stepCount].mul(scale).getX()+xOffset, locations[5][stepCount].mul(scale).getY()+yOffset, 6779e5*scale, new Color(199, 114, 30));
-    jupiter = new CelestialBodyComponent("Jupiter", locations[6][stepCount].mul(scale).getX()+xOffset, locations[6][stepCount].mul(scale).getY()+yOffset, 139820e5*scale, new Color(209, 142, 84));
-    saturn = new CelestialBodyComponent("Saturn", locations[7][stepCount].mul(scale).getX()+xOffset, locations[7][stepCount].mul(scale).getY()+yOffset, 116460e5*scale, new Color(212, 169, 131));
-    titan = new CelestialBodyComponent("Titan", locations[8][stepCount].mul(scale).getX()+xOffset, locations[8][stepCount].mul(scale).getY()+yOffset, 5149.5e5*scale, new Color(115, 191, 135));
-    uranus = new CelestialBodyComponent("Uranus", locations[9][stepCount].mul(scale).getX()+xOffset, locations[9][stepCount].mul(scale).getY()+yOffset, 50724e5*scale, new Color(190, 232, 237));
-    neptune = new CelestialBodyComponent("Neptune", locations[10][stepCount].mul(scale).getX()+xOffset, locations[10][stepCount].mul(scale).getY()+yOffset, 49224e5*scale, new Color(55, 86, 212));
-    rocket = new RocketComponent(200, 400, 50e7*scale, 250e7*scale);
+    sun = new CelestialBodyComponent("Sun", locations[0][stepCount].mul(scale).getX()+xOffset, locations[0][stepCount].mul(scale).getY()+yOffset, sunDiameter*scale, new Color(232, 138, 37));
+    mercury = new CelestialBodyComponent("Mercury", locations[1][stepCount].mul(scale).getX()+xOffset, locations[1][stepCount].mul(scale).getY()+yOffset, mercuryDiameter*scale, new Color(112, 109, 107));
+    venus = new CelestialBodyComponent("Venus", locations[2][stepCount].mul(scale).getX()+xOffset, locations[2][stepCount].mul(scale).getY()+yOffset, venusDiameter*scale, new Color(196, 165, 143));
+    earth = new CelestialBodyComponent("Earth", locations[3][stepCount].mul(scale).getX()+xOffset, locations[3][stepCount].mul(scale).getY()+yOffset, earthDiameter*scale, new Color(38, 120, 60));
+    moon = new CelestialBodyComponent("Moon", locations[4][stepCount].mul(scale).getX()+xOffset, locations[4][stepCount].mul(scale).getY()+yOffset, moonDiameter*scale, new Color(171, 169, 167));
+    mars = new CelestialBodyComponent("Mars", locations[5][stepCount].mul(scale).getX()+xOffset, locations[5][stepCount].mul(scale).getY()+yOffset, marsDiameter*scale, new Color(199, 114, 30));
+    jupiter = new CelestialBodyComponent("Jupiter", locations[6][stepCount].mul(scale).getX()+xOffset, locations[6][stepCount].mul(scale).getY()+yOffset, jupiterDiameter*scale, new Color(209, 142, 84));
+    saturn = new CelestialBodyComponent("Saturn", locations[7][stepCount].mul(scale).getX()+xOffset, locations[7][stepCount].mul(scale).getY()+yOffset, saturnDiameter*scale, new Color(212, 169, 131));
+    titan = new CelestialBodyComponent("Titan", locations[8][stepCount].mul(scale).getX()+xOffset, locations[8][stepCount].mul(scale).getY()+yOffset, titanDiameter*scale, new Color(115, 191, 135));
+    uranus = new CelestialBodyComponent("Uranus", locations[9][stepCount].mul(scale).getX()+xOffset, locations[9][stepCount].mul(scale).getY()+yOffset, uranusDiameter*scale, new Color(190, 232, 237));
+    neptune = new CelestialBodyComponent("Neptune", locations[10][stepCount].mul(scale).getX()+xOffset, locations[10][stepCount].mul(scale).getY()+yOffset, neptuneDiameter*scale, new Color(55, 86, 212));
 
     lPane.add(mercury);
     lPane.add(venus);
@@ -130,7 +143,6 @@ public class SystemFrame extends JFrame implements ActionListener
     lPane.add(uranus);
     lPane.add(sun);
     lPane.add(neptune);
-    lPane.add(rocket);
 
     timer.start();
 
@@ -153,18 +165,17 @@ public class SystemFrame extends JFrame implements ActionListener
     uranus.setCoordinates(locations[9][stepCount].mul(scale).getX()+xOffset, locations[9][stepCount].mul(scale).getY()+yOffset);
     neptune.setCoordinates(locations[10][stepCount].mul(scale).getX()+xOffset, locations[10][stepCount].mul(scale).getY()+yOffset);
 
-    sun.setSize(696342e5*scale);
-    mercury.setSize(4879.4e5*scale);
-    venus.setSize(12104e5*scale);
-    earth.setSize(12742e5*scale);
-    moon.setSize(3474.2e5*scale);
-    mars.setSize(6679e5*scale);
-    jupiter.setSize(139820e5*scale);
-    saturn.setSize(116460e5*scale);
-    titan.setSize(5149.5e5*scale);
-    uranus.setSize(50724e5*scale);
-    neptune.setSize(49224e5*scale);
-    rocket.setSize(50e7*scale, 250e7*scale);
+    sun.setSize(75*sizeScale);
+    mercury.setSize(5*sizeScale);
+    venus.setSize(20*sizeScale);
+    earth.setSize(5*sizeScale);
+    moon.setSize(1*sizeScale);
+    mars.setSize(20*sizeScale);
+    jupiter.setSize(20*sizeScale);
+    saturn.setSize(20*sizeScale);
+    titan.setSize(5*sizeScale);
+    uranus.setSize(20*sizeScale);
+    neptune.setSize(20*sizeScale);
 
 
     repaint();
