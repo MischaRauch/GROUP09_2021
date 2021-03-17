@@ -165,17 +165,17 @@ public class SystemFrame extends JFrame implements ActionListener
     uranus.setCoordinates(locations[9][stepCount].mul(scale).getX()+xOffset, locations[9][stepCount].mul(scale).getY()+yOffset);
     neptune.setCoordinates(locations[10][stepCount].mul(scale).getX()+xOffset, locations[10][stepCount].mul(scale).getY()+yOffset);
 
-    sun.setSize(75*sizeScale);
-    mercury.setSize(5*sizeScale);
-    venus.setSize(20*sizeScale);
-    earth.setSize(5*sizeScale);
-    moon.setSize(1*sizeScale);
-    mars.setSize(20*sizeScale);
-    jupiter.setSize(20*sizeScale);
-    saturn.setSize(20*sizeScale);
-    titan.setSize(5*sizeScale);
-    uranus.setSize(20*sizeScale);
-    neptune.setSize(20*sizeScale);
+    sun.setSize(sunDiameter*scale);
+    mercury.setSize(mercuryDiameter*scale);
+    venus.setSize(venusDiameter*scale);
+    earth.setSize(earthDiameter*scale);
+    moon.setSize(moonDiameter*scale);
+    mars.setSize(marsDiameter*scale);
+    jupiter.setSize(jupiterDiameter*scale);
+    saturn.setSize(saturnDiameter*scale);
+    titan.setSize(titanDiameter*scale);
+    uranus.setSize(uranusDiameter*scale);
+    neptune.setSize(neptuneDiameter*scale);
 
 
     repaint();
