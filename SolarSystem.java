@@ -11,6 +11,8 @@ import titan.ODEFunctionInterface;
 import titan.ProbeSimulatorInterface;
 import titan.StateInterface;
 import java.lang.Math;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
 {
@@ -38,6 +40,7 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
   public double probesBestVelocity;
   public Vector3dInterface probeVel;
   private final double G = 6.674 * Math.pow(10, -11);
+  private double smallestDistance;
 
   public SolarSystem(double h, int nSteps)
   {
@@ -45,16 +48,16 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     this.h = h;
     locations = new Vector3dInterface[bodies.length][nSteps];
 
-    //calculateProbeAngle();
-    //trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
+    calculateProbeAngle();
+    trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
 
     locations = new Vector3dInterface[bodies.length][nSteps];
 
-    //System.out.println();
-    //locations = new Vector3dInterface[bodies.length][nSteps];
-    //resetValues();
-    //calculateProbeAngle();
-    //trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
+    System.out.println();
+    locations = new Vector3dInterface[bodies.length][nSteps];
+    resetValues();
+    calculateProbeAngle();
+    trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
   }
   public SolarSystem(double h, int nSteps, int iterations)
   {
@@ -64,6 +67,10 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     locations = new Vector3dInterface[bodies.length][nSteps];
     probesBestVelocity = 5E20;
     bruteForce(iterations);
+    calculateProbeAngle();
+    trajectory(probe.getCoord(), probe.getVel(), 0, h);
+
+    //calculateOptimalAngle(10000);
   }
 
   public Vector3dInterface[][] getLocations()
@@ -124,21 +131,28 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     double zAdd = Math.sin(xzAngle) * 6371e3;
     probe.setZ(probe.getZ() + zAdd);
 
-    double xvAdd = Math.cos(xyAngle) * 60e3;
-    double yvAdd = Math.sin(xyAngle) * 60e3;
-    double zvAdd = Math.sin(xzAngle) * 60e3;
+    Vector3dInterface coordAdd = new Vector3d(xAdd, yAdd, zAdd);
+    System.out.println("Start coordinates relative to earth: " + coordAdd);
+
+    System.out.println("Start coordinates: " + probe.getCoord());
+
+    double xvAdd = (Math.cos(xyAngle) * 59990);
+    double yvAdd = (Math.sin(xyAngle) * 59990);
+    double zvAdd = (Math.sin(xzAngle) * 59990);
 
     Vector3dInterface vAdd = new Vector3d(xvAdd, yvAdd, zvAdd);
+    System.out.println("Velocity: " + vAdd);
+
     probe.setVel(probe.getVel().add(vAdd));
 
     if (DEBUG) System.out.println("Rocket velocity relative to earth: " + Math.abs(earth.getVel().sub(probe.getVel()).norm()));
-  }
+    System.out.println("Velocity relative to earth: " + earth.getVel().sub(probe.getVel()).norm());
 
-  public void calculateOptimalAngle(int nSimulations)
-  {
-    for(int i = 0; i < nSimulations; i++)
+    System.out.println("Velocity of probe: " + probe.getVel());
+
+    if(Math.abs(earth.getVel().sub(probe.getVel()).norm()) > 60000)
     {
-
+      System.out.println("Vel too high");
     }
   }
 
@@ -165,49 +179,6 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     }
     return totalF;
   }
-
-  /*
-  public Vector3dInterface calculateFProbe(CelestialBody body, int step)
-  {
-    Vector3dInterface totalF = new Vector3d(0, 0, 0);
-
-    for(int i = 0; i < bodies.length; i++)
-    {
-      if(bodies[i] != body)
-      {
-        totalF = totalF.add((body.getCoord().sub(locations[i][step])).mul(1/(Math.pow(body.getCoord().sub(locations[i][step]).norm(), 3))).mul(-G * body.getMass() * bodies[i].getMass()));
-      }
-    }
-    return totalF;
-  }
-  */
-
-  public void printMatrix(Vector3dInterface[][] matrix)
-  {
-    for(int i = 0; i < matrix.length; i++)
-    {
-      System.out.println((locations[i][0].mul(0.000000001)));
-    }
-  }
-
-  /*
-   * Update rule for one step.
-   *
-   * @param   f   the differential equation as defined in the project manual:
-   *              y(t) describes the position of the system at time t
-   *              f(t, y(t)) describes the derivative of y(t) with respect to time t
-   * @param   t   the time
-   * @param   x   the location
-   * @param   h   the step size in seconds
-   * @return  the new location after taking one step
-   *
-   */
-  /*
-  public Vector3dInterface step(FunctionInterface f, double t, Vector3dInterface x, double h)
-  {
-    return f.call(h, x);
-  }
-  */
 
   /*
    * Solve the differential equation by taking multiple steps.
@@ -279,7 +250,14 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
    */
   public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h)
   {
-    for(int i = 0; i < nSteps; i++)
+    double minDist = 10e12;
+
+    for(int i = 0; i < bodies.length; i++)
+    {
+      locations[i][0] = bodies[i].getCoord();
+    }
+
+    for(int i = 1; i < nSteps; i++)
     {
       for(int j = 0; j < bodies.length; j++)
       {
@@ -297,7 +275,12 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
         bodies[j].setCoord((Vector3dInterface) step(bodies[j], 0, (StateInterface) bodies[j].getCoord(), h));
         locations[j][i] = bodies[j].getCoord();
       }
+      if(locations[11][i].dist(locations[8][i]) < minDist)
+      {
+        minDist = locations[11][i].dist(locations[8][i]);
+      }
     }
+    smallestDistance = minDist;
 
     System.out.println("Distance between probe and Titan: " + locations[11][nSteps-1].dist(locations[8][nSteps-1]));
     if (locations[11][nSteps-1].dist(locations[8][nSteps-1]) < probesBestVelocity)
@@ -305,11 +288,15 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
       probesBestVelocity = locations[11][nSteps-1].dist(locations[8][nSteps-1]);
       probeVel = bodies[11].getVel();
     }
-    //System.out.println("WTF:Probe "+locations[11][nSteps-1]);
-    //System.out.println("WTF2:Titan "+locations[8][nSteps-1]);
 
-    Vector3dInterface[] temp = new Vector3dInterface[0];
-    return temp;
+    Vector3dInterface[] trajectory = new Vector3dInterface[nSteps+1];
+    trajectory[0] = p0;
+    for(int i = 1; i < nSteps; i++)
+    {
+      trajectory[i] = locations[11][i-1];
+    }
+
+    return trajectory;
   }
   
   public void bruteForce(int iterations)
