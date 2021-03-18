@@ -28,12 +28,15 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
   private CelestialBody uranus = new CelestialBody("Uranus", 8.6813e25, new Vector3d(2.395195786685187e+12, 1.744450959214586e+12, -2.455116324031639e+10), new Vector3d(-4.059468635313243e+03, 5.187467354884825e+03, 7.182516236837899e+01));
   private CelestialBody neptune = new CelestialBody("Neptune", 1.02413e26, new Vector3d(4.382692942729203e+12, -9.093501655486243e+11, -8.227728929479486e+10), new Vector3d(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02));
   private CelestialBody probe = new CelestialBody("Rocket", 150e2, new Vector3d(-1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06), new Vector3d(5.427193405797901e+03, -2.931056622265021e+04, 6.575428158157592e-01));
+  //private CelestialBody probe = new CelestialBody("Rocket", 150e2, new Vector3d(-1.471922101663588e+11, -2.860995816266412e+10, 8.278183193596080e+06), new Vector3d(44549.654063717346,-50989.135821972195,13767.334325743603));
 
   private CelestialBody[] bodies = {sun, mercury, venus, earth, moon, mars, jupiter, saturn, titan, uranus, neptune, probe};
   private int nSteps;
   private double h;
   private Vector3dInterface[][] locations;
   private Vector3dInterface[] probeTrajectory;
+  public double probesBestVelocity;
+  public Vector3dInterface probeVel;
   private final double G = 6.674 * Math.pow(10, -11);
 
   public SolarSystem(double h, int nSteps)
@@ -42,16 +45,25 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     this.h = h;
     locations = new Vector3dInterface[bodies.length][nSteps];
 
-    calculateProbeAngle();
-    trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
+    //calculateProbeAngle();
+    //trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
 
     locations = new Vector3dInterface[bodies.length][nSteps];
 
-    System.out.println();
-    locations = new Vector3dInterface[bodies.length][nSteps];
+    //System.out.println();
+    //locations = new Vector3dInterface[bodies.length][nSteps];
+    //resetValues();
+    //calculateProbeAngle();
+    //trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
+  }
+  public SolarSystem(double h, int nSteps, int iterations)
+  {
+    this.nSteps = nSteps;
+    this.h = h;
     resetValues();
-    calculateProbeAngle();
-    trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
+    locations = new Vector3dInterface[bodies.length][nSteps];
+    probesBestVelocity = 5E20;
+    bruteForce(iterations);
   }
 
   public Vector3dInterface[][] getLocations()
@@ -119,7 +131,7 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     Vector3dInterface vAdd = new Vector3d(xvAdd, yvAdd, zvAdd);
     probe.setVel(probe.getVel().add(vAdd));
 
-    System.out.println("Rocket velocity relative to earth: " + Math.abs(earth.getVel().sub(probe.getVel()).norm()));
+    if (DEBUG) System.out.println("Rocket velocity relative to earth: " + Math.abs(earth.getVel().sub(probe.getVel()).norm()));
   }
 
   public void calculateOptimalAngle(int nSimulations)
@@ -148,6 +160,7 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
       if(bodies[i] != body)
       {
         totalF = totalF.add((body.getCoord().sub(bodies[i].getCoord())).mul(1/(Math.pow(body.getCoord().sub(bodies[i].getCoord()).norm(), 3))).mul(-G * body.getMass() * bodies[i].getMass()));
+        //ystem.out.println("Cord: "+body.getCoord());
       }
     }
     return totalF;
@@ -271,6 +284,8 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
       for(int j = 0; j < bodies.length; j++)
       {
         Vector3dInterface force = calculateF(bodies[j]);
+        //System.out.println("Force: "+force);
+
         if(DEBUG) System.out.println("Gravitation force on " + bodies[j] + ":" + force);
         Vector3dInterface acceleration = new Vector3d(force.getX()/bodies[j].getMass(), force.getY()/bodies[j].getMass(), force.getZ()/bodies[j].getMass());
         if(DEBUG) System.out.println("Acceleration of " + bodies[j] + ": " + acceleration);
@@ -285,8 +300,52 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     }
 
     System.out.println("Distance between probe and Titan: " + locations[11][nSteps-1].dist(locations[8][nSteps-1]));
+    if (locations[11][nSteps-1].dist(locations[8][nSteps-1]) < probesBestVelocity)
+    {
+      probesBestVelocity = locations[11][nSteps-1].dist(locations[8][nSteps-1]);
+      probeVel = bodies[11].getVel();
+    }
+    //System.out.println("WTF:Probe "+locations[11][nSteps-1]);
+    //System.out.println("WTF2:Titan "+locations[8][nSteps-1]);
 
     Vector3dInterface[] temp = new Vector3dInterface[0];
     return temp;
+  }
+  
+  public void bruteForce(int iterations)
+  {
+    Vector3dInterface initV = new Vector3d(5.427193405797901e+03, -2.931056622265021e+04, 6.575428158157592e-01);
+
+    for (int i = 0; i<iterations; i++)
+    {
+      calculateProbeAngle();
+      if (probesBestVelocity > 5E20) 
+      {
+        double x = probeVel.getX()*Math.random()*15e+2;
+        double y = probeVel.getY()*Math.random()*15e+2;
+        double z = probeVel.getZ()*Math.random()*15e+2;
+        probe.setVel(new Vector3d((int) x,(int) y,(int) z));
+      }
+      else 
+      {
+        double x = Math.random()*30e+2;
+        double y = Math.random()*30e+2;
+        double z = Math.random()*30e+2;
+        probe.setVel(new Vector3d((int) x,(int) y,(int) z));
+      }
+      //System.out.println((int) z);
+      //Vector3dInterface test = initV.add(new Vector3d((int) x, (int) y, (int) z));
+      //System.out.println("new Velocity: "+test);
+      //probe.setVel(test);
+      trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
+      System.out.println("BEST "+probesBestVelocity);
+      resetValues();
+    }
+    System.out.println("\n BEST "+probesBestVelocity);
+    System.out.println("BEST Velocity"+probeVel);
+    resetValues();
+    bodies[11].setVel(probeVel);
+
+
   }
 }
