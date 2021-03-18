@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.geom.*;
+import java.util.ArrayList;
 
 public class RocketComponent extends JComponent
 {
@@ -17,6 +18,10 @@ public class RocketComponent extends JComponent
   private double width;
   private double height;
   private JLabel label;
+  private ArrayList<JPanel> rocketA = new ArrayList<JPanel>();
+  private double initScale = 0.000000001;
+  private double xOffset = 700;
+  private double yOffset = 400;
 
   public RocketComponent(double x, double y, double width, double height)
   {
@@ -58,5 +63,39 @@ public class RocketComponent extends JComponent
   {
     Graphics2D g2 = (Graphics2D) g;
     draw(g2);
+    paintTrajectory(g2);
   }
+
+  public void paintTrajectory(Graphics2D g)
+  {
+    SystemFrame sF = new SystemFrame();
+    int oldStepCount = 0;
+    if(sF.stepCount % 150 == 0)
+    {
+      int tmp;
+      //if scale change delete all plotted points
+      if (initScale != sF.scale || xOffset != sF.xOffset || yOffset != sF.yOffset)
+      {
+        for (int i = 0; i < rocketA.size(); i++)
+        {
+          rocketA.get(i).setBounds(0,0,0,0);
+        }
+        rocketA.clear();
+      }
+      for (tmp = oldStepCount; tmp < sF.stepCount; tmp+=500) 
+      {
+          JPanel rocket = new JPanel();
+          rocket.setBackground(new Color(21, 239, 21));
+          double w = sF.locations[1][sF.stepCount].mul(sF.scale).getX()+sF.xOffset; 
+          double v = sF.locations[1][sF.stepCount].mul(sF.scale).getY()+sF.yOffset;
+          rocket.setBounds((int) x ,(int) y, 5, 5);
+          rocketA.add(rocket);
+          sF.lPane.add(rocket);
+        }
+        oldStepCount = sF.stepCount;
+        initScale = sF.scale;
+        xOffset = sF.xOffset;
+        yOffset = sF.yOffset;
+      }
+    }
 }

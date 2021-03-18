@@ -27,5 +27,9 @@ public class TestCode
 
     System.out.println("\n--------------------\n");
 
+    SolarSystem sol = new SolarSystem(6000, 20000);
+    SystemFrame frame = new SystemFrame(sol.getLocations());
+
+
   }
 }

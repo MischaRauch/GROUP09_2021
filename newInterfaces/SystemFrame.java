@@ -6,6 +6,9 @@
  */
 
 import javax.swing.*;
+
+import jdk.dynalink.beans.StaticClass;
+
 import java.awt.*;
 import java.awt.event.*;
 import titan.Vector3dInterface;
@@ -13,8 +16,8 @@ import java.awt.Color;
 
 public class SystemFrame extends JFrame implements ActionListener
 {
-  private JLayeredPane lPane = new JLayeredPane();
-  private Vector3dInterface[][] locations;
+  public static JLayeredPane lPane = new JLayeredPane();
+  public static Vector3dInterface[][] locations;
   private Timer timer = new Timer(1, this);
   private CelestialBodyComponent sun;
   private CelestialBodyComponent mercury;
@@ -28,12 +31,12 @@ public class SystemFrame extends JFrame implements ActionListener
   private CelestialBodyComponent uranus;
   private CelestialBodyComponent neptune;
   private RocketComponent probe;
-  private int stepCount = 0;
-  private double scale = 0.000000001;
-  private double xOffset = 700;
-  private double yOffset = 400;
+  public static int stepCount = 0;
+  public static double scale = 0.000000001;
+  public static double xOffset = 700;
+  public static double yOffset = 400;
 
-
+  public SystemFrame() {}
   public SystemFrame(Vector3dInterface[][] locations)
   {
     lPane.setOpaque(true);
