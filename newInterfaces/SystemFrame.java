@@ -178,7 +178,7 @@ public class SystemFrame extends JFrame implements ActionListener
     }
 
     repaint();
-    if(stepCount == 19999)
+    if(stepCount == locations[0].length-1)
     {
       stepCount = 0;
     }
