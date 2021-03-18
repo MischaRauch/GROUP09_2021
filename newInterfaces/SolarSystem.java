@@ -11,6 +11,8 @@ import titan.ODEFunctionInterface;
 import titan.ProbeSimulatorInterface;
 import titan.StateInterface;
 import java.lang.Math;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
 {
@@ -35,6 +37,7 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
   private Vector3dInterface[][] locations;
   private Vector3dInterface[] probeTrajectory;
   private final double G = 6.674 * Math.pow(10, -11);
+  private double smallestDistance;
 
   public SolarSystem(double h, int nSteps)
   {
@@ -45,13 +48,7 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     calculateProbeAngle();
     trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
 
-    locations = new Vector3dInterface[bodies.length][nSteps];
-
-    System.out.println();
-    locations = new Vector3dInterface[bodies.length][nSteps];
-    resetValues();
-    calculateProbeAngle();
-    trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
+    //calculateOptimalAngle(10000);
   }
 
   public Vector3dInterface[][] getLocations()
@@ -112,22 +109,67 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     double zAdd = Math.sin(xzAngle) * 6371e3;
     probe.setZ(probe.getZ() + zAdd);
 
-    double xvAdd = Math.cos(xyAngle) * 60e3;
-    double yvAdd = Math.sin(xyAngle) * 60e3;
-    double zvAdd = Math.sin(xzAngle) * 60e3;
+    double xvAdd = (Math.cos(xyAngle) * 59990);
+    double yvAdd = (Math.sin(xyAngle) * 59990);
+    double zvAdd = (Math.sin(xzAngle) * 59990);
 
     Vector3dInterface vAdd = new Vector3d(xvAdd, yvAdd, zvAdd);
     probe.setVel(probe.getVel().add(vAdd));
 
-    System.out.println("Rocket velocity relative to earth: " + Math.abs(earth.getVel().sub(probe.getVel()).norm()));
+    if(Math.abs(earth.getVel().sub(probe.getVel()).norm()) > 60000)
+    {
+      System.out.println("Vel too high");
+    }
+  }
+
+  public void calculateProbeAngleNew(double xAngle, double yAngle, double zAngle)
+  {
+    double xAdd = Math.cos(xAngle) * 6371e3;
+    probe.setX(probe.getX() + xAdd);
+
+    double yAdd = Math.sin(yAngle) * 6371e3;
+    probe.setY(probe.getY() + yAdd);
+
+    double zAdd = Math.sin(zAngle) * 6371e3;
+    probe.setZ(probe.getZ() + zAdd);
+
+    double xvAdd = (Math.cos(xAngle) * 59990);
+    double yvAdd = (Math.sin(yAngle) * 59990);
+    double zvAdd = (Math.sin(zAngle) * 59990);
+
+    Vector3dInterface vAdd = new Vector3d(xvAdd, yvAdd, zvAdd);
+    probe.setVel(probe.getVel().add(vAdd));
+
+    if(Math.abs(earth.getVel().sub(probe.getVel()).norm()) > 60000)
+    {
+      System.out.println("Vel too high");
+    }
+
+    //System.out.println("Rocket velocity relative to earth: " + Math.abs(earth.getVel().sub(probe.getVel()).norm()));
   }
 
   public void calculateOptimalAngle(int nSimulations)
   {
+    double prevBest = smallestDistance;
+
     for(int i = 0; i < nSimulations; i++)
     {
-
+      locations = new Vector3dInterface[bodies.length][nSteps];
+      resetValues();
+      calculateProbeAngle();
+      trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
+      if(smallestDistance < prevBest)
+      {
+        System.out.println("New best: " + smallestDistance);
+        prevBest = smallestDistance;
+      }
     }
+  }
+
+  public double angleRandomizer(double oldAngle)
+  {
+    double random = ThreadLocalRandom.current().nextDouble(oldAngle - 0.5, oldAngle + 0.5);
+    return random;
   }
 
   /*
@@ -266,6 +308,7 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
    */
   public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h)
   {
+    double minDist = 10e12;
     for(int i = 0; i < nSteps; i++)
     {
       for(int j = 0; j < bodies.length; j++)
@@ -282,9 +325,12 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
         bodies[j].setCoord((Vector3dInterface) step(bodies[j], 0, (StateInterface) bodies[j].getCoord(), h));
         locations[j][i] = bodies[j].getCoord();
       }
+      if(locations[11][i].dist(locations[8][i]) < minDist)
+      {
+        minDist = locations[11][i].dist(locations[8][i]);
+      }
     }
-
-    System.out.println("Distance between probe and Titan: " + locations[11][nSteps-1].dist(locations[8][nSteps-1]));
+    smallestDistance = minDist;
 
     Vector3dInterface[] temp = new Vector3dInterface[0];
     return temp;
