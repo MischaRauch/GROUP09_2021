@@ -174,7 +174,7 @@ public class SystemFrame extends JFrame implements ActionListener
     if(stepCount % 100 == 0)
     {
       System.out.println("Distance between probe and Titan: " + locations[11][stepCount].dist(locations[8][stepCount]));
-      System.out.println("Z distance: " + ((Vector3d)(locations[11][stepCount])).zDist(locations[8][stepCount]));
+      //System.out.println("Z distance: " + ((Vector3d)(locations[11][stepCount])).zDist(locations[8][stepCount]));
     }
 
     repaint();

@@ -298,7 +298,7 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
 
     return trajectory;
   }
-  
+
   public void bruteForce(int iterations)
   {
     Vector3dInterface initV = new Vector3d(5.427193405797901e+03, -2.931056622265021e+04, 6.575428158157592e-01);
@@ -306,14 +306,14 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     for (int i = 0; i<iterations; i++)
     {
       calculateProbeAngle();
-      if (probesBestVelocity > 5E20) 
+      if (probesBestVelocity > 5E20)
       {
         double x = probeVel.getX()*Math.random()*15e+2;
         double y = probeVel.getY()*Math.random()*15e+2;
         double z = probeVel.getZ()*Math.random()*15e+2;
         probe.setVel(new Vector3d((int) x,(int) y,(int) z));
       }
-      else 
+      else
       {
         double x = Math.random()*30e+2;
         double y = Math.random()*30e+2;
