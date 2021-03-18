@@ -14,14 +14,9 @@ public class TestCode
     System.out.println("\n--------------------\n");
 
     SolarSystem sol = new SolarSystem(60*100, 525600/100);
-    SystemFrame frame = new SystemFrame(sol.getLocations());
-
+    //SystemFrame frame = new SystemFrame(sol.getLocations());
 
     System.out.println("\n--------------------\n");
-
-    SolarSystem sol = new SolarSystem(6000, 20000);
-    SystemFrame frame = new SystemFrame(sol.getLocations());
-
 
   }
 }

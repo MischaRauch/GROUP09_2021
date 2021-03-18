@@ -46,10 +46,14 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     calculateProbeAngle();
     trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
 
+
+    System.out.println();
+    locations = new Vector3dInterface[bodies.length][nSteps];
     resetValues();
     System.out.println("Probe start coordinates: " + probe.getCoord());
     calculateProbeAngle();
     trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
+    System.out.println("Probe start coordinates: " + locations[11][0]);
   }
 
   public Vector3dInterface[][] getLocations()
@@ -104,8 +108,6 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     Vector3dInterface vAdd = new Vector3d(xvAdd, yvAdd, zvAdd);
     System.out.println(vAdd);
     probe.setVel(probe.getVel().add(vAdd));
-
-    System.out.println("xy: " + xyAngle + "\nyz: " + yzAngle + "\nxz: " + xzAngle);
 
     System.out.println("Rocket velocity relative to earth: " + Math.abs(earth.getVel().sub(probe.getVel()).norm()));
   }
@@ -276,6 +278,8 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     }
 
     System.out.println("Distance between probe and Titan: " + locations[11][nSteps-1].dist(locations[8][nSteps-1]));
+
+    System.out.println("Probe start coord inside trajectory: " + locations[11][0]);
 
     Vector3dInterface[] temp = new Vector3dInterface[0];
     return temp;
