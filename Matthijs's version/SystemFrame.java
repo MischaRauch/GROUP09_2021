@@ -15,6 +15,7 @@ import java.awt.Color;
 public class SystemFrame extends JFrame implements ActionListener
 {
   public static JLayeredPane lPane = new JLayeredPane();
+  //public static JPanel animation = new JPanel();
   public static Vector3dInterface[][] locations;
   private Timer timer = new Timer(1, this);
   private CelestialBodyComponent sun;
@@ -28,11 +29,12 @@ public class SystemFrame extends JFrame implements ActionListener
   private CelestialBodyComponent titan;
   private CelestialBodyComponent uranus;
   private CelestialBodyComponent neptune;
+  public CelestialBodyComponent cbc;
   public static int stepCount = 0;
-  public double scale = 0.000000001;
+  public static double scale = 0.000000001;
   private double sizeScale = 1;
-  public double xOffset = 700;
-  public double yOffset = 400;
+  public static double xOffset = 700;
+  public static double yOffset = 400;
   private int sunDiameter = 1392700000;
   private int mercuryDiameter = 4879400;
   private int venusDiameter = 12104000;
@@ -144,6 +146,8 @@ public class SystemFrame extends JFrame implements ActionListener
     lPane.add(uranus);
     lPane.add(sun);
     lPane.add(neptune);
+    //lPane.add(animation);
+
 
     timer.start();
 
@@ -177,6 +181,7 @@ public class SystemFrame extends JFrame implements ActionListener
     titan.setSize(titanDiameter*scale);
     uranus.setSize(uranusDiameter*scale);
     neptune.setSize(neptuneDiameter*scale);
+
 
     repaint();
     if(stepCount == 19999)
