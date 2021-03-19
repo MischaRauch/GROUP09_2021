@@ -67,10 +67,6 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     locations = new Vector3dInterface[bodies.length][nSteps];
     probesBestVelocity = 5E20;
     bruteForce(iterations);
-    calculateProbeAngle();
-    trajectory(probe.getCoord(), probe.getVel(), 0, h);
-
-    //calculateOptimalAngle(10000);
   }
 
   public Vector3dInterface[][] getLocations()
@@ -132,27 +128,27 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     probe.setZ(probe.getZ() + zAdd);
 
     Vector3dInterface coordAdd = new Vector3d(xAdd, yAdd, zAdd);
-    System.out.println("Start coordinates relative to earth: " + coordAdd);
+    if (DEBUG) System.out.println("Start coordinates relative to earth: " + coordAdd);
 
-    System.out.println("Start coordinates: " + probe.getCoord());
+    if (DEBUG) System.out.println("Start coordinates: " + probe.getCoord());
 
     double xvAdd = (Math.cos(xyAngle) * 59990);
     double yvAdd = (Math.sin(xyAngle) * 59990);
     double zvAdd = (Math.sin(xzAngle) * 59990);
 
     Vector3dInterface vAdd = new Vector3d(xvAdd, yvAdd, zvAdd);
-    System.out.println("Velocity: " + vAdd);
+    if (DEBUG) System.out.println("Velocity: " + vAdd);
 
     probe.setVel(probe.getVel().add(vAdd));
 
     if (DEBUG) System.out.println("Rocket velocity relative to earth: " + Math.abs(earth.getVel().sub(probe.getVel()).norm()));
-    System.out.println("Velocity relative to earth: " + earth.getVel().sub(probe.getVel()).norm());
+    if (DEBUG) System.out.println("Velocity relative to earth: " + earth.getVel().sub(probe.getVel()).norm());
 
-    System.out.println("Velocity of probe: " + probe.getVel());
+    if (DEBUG) System.out.println("Velocity of probe: " + probe.getVel());
 
     if(Math.abs(earth.getVel().sub(probe.getVel()).norm()) > 60000)
     {
-      System.out.println("Vel too high");
+      if (DEBUG) System.out.println("Vel too high");
     }
   }
 
@@ -282,7 +278,7 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     }
     smallestDistance = minDist;
 
-    System.out.println("Distance between probe and Titan: " + locations[11][nSteps-1].dist(locations[8][nSteps-1]));
+    if (DEBUG) System.out.println("Distance between probe and Titan: " + locations[11][nSteps-1].dist(locations[8][nSteps-1]));
     if (locations[11][nSteps-1].dist(locations[8][nSteps-1]) < probesBestVelocity)
     {
       probesBestVelocity = locations[11][nSteps-1].dist(locations[8][nSteps-1]);
@@ -320,16 +316,12 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
         double z = Math.random()*30e+2;
         probe.setVel(new Vector3d((int) x,(int) y,(int) z));
       }
-      //System.out.println((int) z);
-      //Vector3dInterface test = initV.add(new Vector3d((int) x, (int) y, (int) z));
-      //System.out.println("new Velocity: "+test);
-      //probe.setVel(test);
       trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
-      System.out.println("BEST "+probesBestVelocity);
+      if (DEBUG) System.out.println("BEST "+probesBestVelocity);
       resetValues();
     }
-    System.out.println("\n BEST "+probesBestVelocity);
-    System.out.println("BEST Velocity"+probeVel);
+    if (DEBUG) System.out.println("\n BEST "+probesBestVelocity);
+    if (DEBUG) System.out.println("BEST Velocity"+probeVel);
     resetValues();
     bodies[11].setVel(probeVel);
 

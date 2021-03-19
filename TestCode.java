@@ -13,7 +13,7 @@ public class TestCode
   {
     System.out.println("\n--------------------\n");
 
-    SolarSystem sol = new SolarSystem(60*100, 525600/100,100);
+    SolarSystem sol = new SolarSystem(60*100, 525600/100,5);
     //SolarSystem sol = new SolarSystem(0, 0);
 
     SystemFrame frame = new SystemFrame(sol.getLocations());
