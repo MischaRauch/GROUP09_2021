@@ -42,6 +42,7 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
   private final double G = 6.674 * Math.pow(10, -11);
   private double smallestDistance;
 
+  // Constructor
   public SolarSystem(double h, int nSteps)
   {
     this.nSteps = nSteps;
@@ -59,6 +60,8 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     calculateProbeAngle();
     trajectory(new Vector3d(0,0,0), new Vector3d(0,0,0), 120e6, h);
   }
+
+  // Constructor for trajectory brute force
   public SolarSystem(double h, int nSteps, int iterations)
   {
     this.nSteps = nSteps;
@@ -69,11 +72,18 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     bruteForce(iterations);
   }
 
+  /*
+   * Getter function, returns the coordinates for all bodies
+   *
+   * @return  a Vector3dInterface matrix containing the coordinates for all bodies
+   */
   public Vector3dInterface[][] getLocations()
   {
     return locations;
   }
-
+  /*
+   * Reset the coordinates for all bodies
+   */
   public void resetValues()
   {
     sun = new CelestialBody("Sun", 1.988500e30, new Vector3d(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06), new Vector3d(-1.420511669610689e+01, -4.954714716629277e+00, 3.994237625449041e-01));
@@ -103,6 +113,10 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     bodies[11] = probe;
   }
 
+  /*
+   * Method for calculating an initial angle and velocity for the probe and its starting
+   * coordinates
+   */
   public void calculateProbeAngle()
   {
     Vector3d earthXy = new Vector3d(earth.getX(), earth.getY(), 0);
@@ -153,14 +167,11 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
   }
 
   /*
-  // Does nothing, used newSolve for doing the steps because this solve is weird.
-  public Vector3dInterface[] solve(FunctionInterface f, Vector3dInterface x0, double h, int nSteps)
-  {
-    Vector3dInterface[] woop = new Vector3d[nSteps];
-    return woop;
-  }
-  */
-
+   * Calcualtes the force on a CelestialBody
+   *
+   * @param   body    the body on which to calculate the force
+   * @return  a Vector3dInterface containing the force in Newton in each dimension
+   */
   public Vector3dInterface calculateF(CelestialBody body)
   {
     Vector3dInterface totalF = new Vector3d(0, 0, 0);
@@ -258,7 +269,6 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
       for(int j = 0; j < bodies.length; j++)
       {
         Vector3dInterface force = calculateF(bodies[j]);
-        //System.out.println("Force: "+force);
 
         if(DEBUG) System.out.println("Gravitation force on " + bodies[j] + ":" + force);
         Vector3dInterface acceleration = new Vector3d(force.getX()/bodies[j].getMass(), force.getY()/bodies[j].getMass(), force.getZ()/bodies[j].getMass());
@@ -295,6 +305,12 @@ public class SolarSystem implements ODESolverInterface, ProbeSimulatorInterface
     return trajectory;
   }
 
+
+  /*
+   * Brute force method for calculating optimal start velocities for the rocket
+   *
+   * @param   iterations       the amount of iterations which the method should do
+   */
   public void bruteForce(int iterations)
   {
     Vector3dInterface initV = new Vector3d(5.427193405797901e+03, -2.931056622265021e+04, 6.575428158157592e-01);

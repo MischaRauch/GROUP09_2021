@@ -37,6 +37,8 @@ public class SystemFrame extends JFrame implements ActionListener
   public static double yOffset = 400;
 
   public SystemFrame() {}
+
+  // Constructor
   public SystemFrame(Vector3dInterface[][] locations)
   {
     lPane.setOpaque(true);
@@ -47,8 +49,10 @@ public class SystemFrame extends JFrame implements ActionListener
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.getContentPane().setBackground(Color.BLACK);
     this.setVisible(true);
+
+    // Creation of JButtons for panning/zooming
     JButton zoomInButton = new JButton("Zoom in");
-    zoomInButton.setBounds(1300,800,100,30);
+    zoomInButton.setBounds(1300,700,100,30);
     zoomInButton.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -58,7 +62,7 @@ public class SystemFrame extends JFrame implements ActionListener
     });
     lPane.add(zoomInButton);
     JButton zoomOutButton = new JButton("Zoom out");
-    zoomOutButton.setBounds(1300,760,100,30);
+    zoomOutButton.setBounds(1300,660,100,30);
     zoomOutButton.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -69,7 +73,7 @@ public class SystemFrame extends JFrame implements ActionListener
     lPane.add(zoomOutButton);
 
     JButton panRightButton = new JButton("Pan right");
-    panRightButton.setBounds(1200,760,100,30);
+    panRightButton.setBounds(1200,660,100,30);
     panRightButton.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -79,7 +83,7 @@ public class SystemFrame extends JFrame implements ActionListener
     });
     lPane.add(panRightButton);
     JButton panLeftButton = new JButton("Pan left");
-    panLeftButton.setBounds(1200,800,100,30);
+    panLeftButton.setBounds(1200,700,100,30);
     panLeftButton.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -90,7 +94,7 @@ public class SystemFrame extends JFrame implements ActionListener
     lPane.add(panLeftButton);
 
     JButton panUpButton = new JButton("Pan up");
-    panUpButton.setBounds(1100,760,100,30);
+    panUpButton.setBounds(1100,660,100,30);
     panUpButton.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -100,7 +104,7 @@ public class SystemFrame extends JFrame implements ActionListener
     });
     lPane.add(panUpButton);
     JButton panDownButton = new JButton("Pan down");
-    panDownButton.setBounds(1100,800,100,30);
+    panDownButton.setBounds(1100,700,100,30);
     panDownButton.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -110,6 +114,7 @@ public class SystemFrame extends JFrame implements ActionListener
     });
     lPane.add(panDownButton);
 
+    // Initialise CelestialBodyComponents
     sun = new CelestialBodyComponent("Sun", locations[0][stepCount].mul(scale).getX()+xOffset, locations[0][stepCount].mul(scale).getY()+yOffset, 696342e5*scale, new Color(232, 138, 37));
     mercury = new CelestialBodyComponent("Mercury", locations[1][stepCount].mul(scale).getX()+xOffset, locations[1][stepCount].mul(scale).getY()+yOffset, 4879.4e5*scale, new Color(112, 109, 107));
     venus = new CelestialBodyComponent("Venus", locations[2][stepCount].mul(scale).getX()+xOffset, locations[2][stepCount].mul(scale).getY()+yOffset, 12104e5*scale, new Color(196, 165, 143));
@@ -123,6 +128,7 @@ public class SystemFrame extends JFrame implements ActionListener
     neptune = new CelestialBodyComponent("Neptune", locations[10][stepCount].mul(scale).getX()+xOffset, locations[10][stepCount].mul(scale).getY()+yOffset, 49224e5*scale, new Color(55, 86, 212));
     probe = new RocketComponent(locations[11][stepCount].mul(scale).getX()+xOffset, locations[11][stepCount].mul(scale).getY()+yOffset, 50e7*scale, 250e7*scale);
 
+    // Add components to frame
     lPane.add(mercury);
     lPane.add(venus);
     lPane.add(moon);
@@ -136,14 +142,17 @@ public class SystemFrame extends JFrame implements ActionListener
     lPane.add(neptune);
     lPane.add(probe);
 
+    // Start timer
     timer.start();
 
+    // Add lPane to frame and revalidate
     this.add(lPane);
     this.revalidate();
   }
 
   public void actionPerformed(ActionEvent e)
   {
+    // Each action event caused by the timer -> increase stepCount by 1 and set coordinates accordingly
     stepCount += 1;
     sun.setCoordinates(locations[0][stepCount].mul(scale).getX()+xOffset, locations[0][stepCount].mul(scale).getY()+yOffset);
     mercury.setCoordinates(locations[1][stepCount].mul(scale).getX()+xOffset, locations[1][stepCount].mul(scale).getY()+yOffset);
@@ -158,6 +167,7 @@ public class SystemFrame extends JFrame implements ActionListener
     neptune.setCoordinates(locations[10][stepCount].mul(scale).getX()+xOffset, locations[10][stepCount].mul(scale).getY()+yOffset);
     probe.setCoordinates(locations[11][stepCount].mul(scale).getX()+xOffset, locations[11][stepCount].mul(scale).getY()+yOffset);
 
+    // If the scale has changed due to zooming scale the size of the planets
     sun.setSize(696342e5*scale);
     mercury.setSize(4879.4e5*scale);
     venus.setSize(12104e5*scale);
@@ -171,13 +181,17 @@ public class SystemFrame extends JFrame implements ActionListener
     neptune.setSize(49224e5*scale);
     probe.setSize(50e7*scale, 250e7*scale);
 
+    // Each 100 steps print the distance between the probe and titan.
     if(stepCount % 100 == 0)
     {
       System.out.println("Distance between probe and Titan: " + locations[11][stepCount].dist(locations[8][stepCount]));
       //System.out.println("Z distance: " + ((Vector3d)(locations[11][stepCount])).zDist(locations[8][stepCount]));
     }
 
+    // Repaint
     repaint();
+
+    // If end of calculations has been reached, reset animation
     if(stepCount == locations[0].length-1)
     {
       stepCount = 0;
