@@ -1,2 +1,6 @@
 
 *.class
+*.xml
+*.iml
+*.png
+*.mf
