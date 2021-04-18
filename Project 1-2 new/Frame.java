@@ -23,14 +23,16 @@ public class Frame extends JFrame implements ActionListener {
     private final PlanetComponent titan;
     private final PlanetComponent uranus;
     private final PlanetComponent neptune;
+    private final PlanetComponent probe;
 
     private final State[] states;
+    private final Vector3dInterface[] coordinatesProbe;
 
     public static double scale = 0.000000001;
     public static double xOffset = 700;
     public static double yOffset = 400;
 
-    public Frame(StateInterface[] states) {
+    public Frame(StateInterface[] states, Vector3dInterface[] probeCoordinates) {
         this.setSize(2560, 1000);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(Color.BLACK);
@@ -40,6 +42,7 @@ public class Frame extends JFrame implements ActionListener {
         lPane.setLayout(null);
 
         this.states = new State[states.length];
+        this.coordinatesProbe = probeCoordinates;
 
         for(int i = 0; i < states.length; i++) {
             this.states[i] = (State) states[i];
@@ -67,6 +70,7 @@ public class Frame extends JFrame implements ActionListener {
         titan = new PlanetComponent("Titan", coordinates[8].mul(scale).getX()+xOffset, coordinates[8].mul(scale).getY()+yOffset, 5149.5e5*scale, new Color(115, 191, 135));
         uranus = new PlanetComponent("Uranus", coordinates[9].mul(scale).getX()+xOffset, coordinates[9].mul(scale).getY()+yOffset, 50724e5*scale, new Color(190, 232, 237));
         neptune = new PlanetComponent("Neptune", coordinates[10].mul(scale).getX()+xOffset, coordinates[10].mul(scale).getY()+yOffset, 49224e5*scale, new Color(55, 86, 212));
+        probe = new PlanetComponent("Probe", coordinatesProbe[0].mul(scale).getX()+xOffset, coordinatesProbe[0].mul(scale).getY()+yOffset, 49224e5*scale, new Color(55, 86, 212));
 
         lPane.add(mercury);
         lPane.add(venus);
@@ -79,6 +83,7 @@ public class Frame extends JFrame implements ActionListener {
         lPane.add(uranus);
         lPane.add(sun);
         lPane.add(neptune);
+        lPane.add(probe);
 
         this.add(lPane);
         this.revalidate();
@@ -106,6 +111,7 @@ public class Frame extends JFrame implements ActionListener {
         titan.setCoordinates(coordinates[8].mul(scale).getX()+xOffset, coordinates[8].mul(scale).getY()+yOffset);
         uranus.setCoordinates(coordinates[9].mul(scale).getX()+xOffset, coordinates[9].mul(scale).getY()+yOffset);
         neptune.setCoordinates(coordinates[10].mul(scale).getX()+xOffset, coordinates[10].mul(scale).getY()+yOffset);
+        probe.setCoordinates(coordinatesProbe[stepCount].mul(scale).getX()+xOffset, coordinatesProbe[stepCount].mul(scale).getY()+yOffset);
 
         // If the scale has changed due to zooming scale the size of the planets
         sun.setSize(696342e5*scale);

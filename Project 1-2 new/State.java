@@ -5,7 +5,6 @@ import titan.Vector3dInterface;
 public class State implements StateInterface {
 
     private Vector3dInterface[] coordinates;
-
     private Vector3dInterface[] velocities;
 
     private final double sunM = 1.988500e30;
