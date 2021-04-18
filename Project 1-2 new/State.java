@@ -4,9 +4,9 @@ import titan.Vector3dInterface;
 
 public class State implements StateInterface {
 
-    public Vector3dInterface[] coordinates;
+    private Vector3dInterface[] coordinates;
 
-    public Vector3dInterface[] velocities;
+    private Vector3dInterface[] velocities;
 
     private final double sunM = 1.988500e30;
     private final double mercuryM = 3.302e23;
@@ -27,43 +27,33 @@ public class State implements StateInterface {
         this.velocities = velocities;
     }
 
+    public Vector3dInterface[] getCoordinates() {
+        return coordinates;
+    }
+
+    public Vector3dInterface[] getVelocities() {
+        return velocities;
+    }
+
     @Override
     public StateInterface addMul(double step, RateInterface r) {
 
         Rate rate = (Rate) r;
 
         Vector3dInterface[] newCoordinates = new Vector3d[11];
-        for(int i = 0; i < newCoordinates.length; i++) {
-            newCoordinates[i] = this.coordinates[i];
-        }
+        System.arraycopy(this.coordinates, 0, newCoordinates, 0, newCoordinates.length);
         Vector3dInterface[] newVelocities = new Vector3d[11];
+        System.arraycopy(this.velocities, 0, newVelocities, 0, newVelocities.length);
+
+        Vector3dInterface[] rates = rate.getRates();
+
         for(int i = 0; i < newVelocities.length; i++) {
-            newVelocities[i] = this.velocities[i];
+            newVelocities[i] = newVelocities[i].add(rates[i]);
         }
 
-        newVelocities[0] = newVelocities[0].add(rate.sunR);
-        newVelocities[1] = newVelocities[1].add(rate.mercuryR);
-        newVelocities[2] = newVelocities[2].add(rate.venusR);
-        newVelocities[3] = newVelocities[3].add(rate.earthR);
-        newVelocities[4] = newVelocities[4].add(rate.moonR);
-        newVelocities[5] = newVelocities[5].add(rate.marsR);
-        newVelocities[6] = newVelocities[6].add(rate.jupiterR);
-        newVelocities[7] = newVelocities[7].add(rate.saturnR);
-        newVelocities[8] = newVelocities[8].add(rate.titanR);
-        newVelocities[9] = newVelocities[9].add(rate.uranusR);
-        newVelocities[10] = newVelocities[10].add(rate.neptuneR);
-
-        newCoordinates[0] = newCoordinates[0].addMul(step, newVelocities[0]);
-        newCoordinates[1] = newCoordinates[1].addMul(step, newVelocities[1]);
-        newCoordinates[2] = newCoordinates[2].addMul(step, newVelocities[2]);
-        newCoordinates[3] = newCoordinates[3].addMul(step, newVelocities[3]);
-        newCoordinates[4] = newCoordinates[4].addMul(step, newVelocities[4]);
-        newCoordinates[5] = newCoordinates[5].addMul(step, newVelocities[5]);
-        newCoordinates[6] = newCoordinates[6].addMul(step, newVelocities[6]);
-        newCoordinates[7] = newCoordinates[7].addMul(step, newVelocities[7]);
-        newCoordinates[8] = newCoordinates[8].addMul(step, newVelocities[8]);
-        newCoordinates[9] = newCoordinates[9].addMul(step, newVelocities[9]);
-        newCoordinates[10] = newCoordinates[10].addMul(step, newVelocities[10]);
+        for(int i = 0; i < newCoordinates.length; i++) {
+            newCoordinates[i] = newCoordinates[i].addMul(step, newVelocities[i]);
+        }
 
         return new State(newCoordinates, newVelocities);
     }

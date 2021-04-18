@@ -8,29 +8,29 @@ import java.awt.event.ActionListener;
 
 public class Frame extends JFrame implements ActionListener {
 
-    private Timer timer = new Timer(20, this);
+    private Timer timer = new Timer(1, this);
     private JLayeredPane lPane = new JLayeredPane();
     private int stepCount = 0;
 
-    private PlanetComponent sun;
-    private PlanetComponent mercury;
-    private PlanetComponent venus;
-    private PlanetComponent earth;
-    private PlanetComponent moon;
-    private PlanetComponent mars;
-    private PlanetComponent jupiter;
-    private PlanetComponent saturn;
-    private PlanetComponent titan;
-    private PlanetComponent uranus;
-    private PlanetComponent neptune;
+    private final PlanetComponent sun;
+    private final PlanetComponent mercury;
+    private final PlanetComponent venus;
+    private final PlanetComponent earth;
+    private final PlanetComponent moon;
+    private final PlanetComponent mars;
+    private final PlanetComponent jupiter;
+    private final PlanetComponent saturn;
+    private final PlanetComponent titan;
+    private final PlanetComponent uranus;
+    private final PlanetComponent neptune;
 
-    private State[] states;
+    private final State[] states;
 
     public static double scale = 0.000000001;
     public static double xOffset = 700;
     public static double yOffset = 400;
 
-    public Frame(StateInterface[] s) {
+    public Frame(StateInterface[] states) {
         this.setSize(2560, 1000);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(Color.BLACK);
@@ -39,23 +39,34 @@ public class Frame extends JFrame implements ActionListener {
         lPane.setBackground(Color.BLACK);
         lPane.setLayout(null);
 
-        states = new State[s.length];
+        this.states = new State[states.length];
 
-        for(int i = 0; i < s.length; i++) {
-            states[i] = (State) s[i];
+        for(int i = 0; i < states.length; i++) {
+            this.states[i] = (State) states[i];
+            if(i % 200 == 0) {
+                State state = (State) this.states[i];
+                Vector3dInterface[] coordinates = state.getCoordinates();
+                for(int j = 1; j < coordinates.length; j++) {
+                    TrajectoryComponent t = new TrajectoryComponent(coordinates[j].mul(scale).getX()+xOffset, coordinates[j].mul(scale).getY()+yOffset);
+                    lPane.add(t);
+                }
+            }
         }
 
-        sun = new PlanetComponent("Sun", states[0].coordinates[0].mul(scale).getX()+xOffset, states[0].coordinates[0].mul(scale).getY()+yOffset, 696342e5*scale, new Color(232, 138, 37));
-        mercury = new PlanetComponent("Mercury", states[0].coordinates[1].mul(scale).getX()+xOffset, states[0].coordinates[1].mul(scale).getY()+yOffset, 4879.4e5*scale, new Color(112, 109, 107));
-        venus = new PlanetComponent("Venus", states[0].coordinates[2].mul(scale).getX()+xOffset, states[0].coordinates[2].mul(scale).getY()+yOffset, 12104e5*scale, new Color(196, 165, 143));
-        earth = new PlanetComponent("Earth", states[0].coordinates[3].mul(scale).getX()+xOffset, states[0].coordinates[3].mul(scale).getY()+yOffset, 12742e5*scale, new Color(38, 120, 60));
-        moon = new PlanetComponent("Moon", states[0].coordinates[4].mul(scale).getX()+xOffset, states[0].coordinates[4].mul(scale).getY()+yOffset, 3474.2e5*scale, new Color(171, 169, 167));
-        mars = new PlanetComponent("Mars", states[0].coordinates[5].mul(scale).getX()+xOffset, states[0].coordinates[5].mul(scale).getY()+yOffset, 6779e5*scale, new Color(199, 114, 30));
-        jupiter = new PlanetComponent("Jupiter", states[0].coordinates[6].mul(scale).getX()+xOffset, states[0].coordinates[6].mul(scale).getY()+yOffset, 139820e5*scale, new Color(209, 142, 84));
-        saturn = new PlanetComponent("Saturn", states[0].coordinates[7].mul(scale).getX()+xOffset, states[0].coordinates[7].mul(scale).getY()+yOffset, 116460e5*scale, new Color(212, 169, 131));
-        titan = new PlanetComponent("Titan", states[0].coordinates[8].mul(scale).getX()+xOffset, states[0].coordinates[8].mul(scale).getY()+yOffset, 5149.5e5*scale, new Color(115, 191, 135));
-        uranus = new PlanetComponent("Uranus", states[0].coordinates[9].mul(scale).getX()+xOffset, states[0].coordinates[9].mul(scale).getY()+yOffset, 50724e5*scale, new Color(190, 232, 237));
-        neptune = new PlanetComponent("Neptune", states[0].coordinates[10].mul(scale).getX()+xOffset, states[0].coordinates[10].mul(scale).getY()+yOffset, 49224e5*scale, new Color(55, 86, 212));
+        State state = (State) this.states[stepCount];
+        Vector3dInterface[] coordinates = state.getCoordinates();
+
+        sun = new PlanetComponent("Sun", coordinates[0].mul(scale).getX()+xOffset, coordinates[0].mul(scale).getY()+yOffset, 696342e5*scale, new Color(232, 138, 37));
+        mercury = new PlanetComponent("Mercury", coordinates[1].mul(scale).getX()+xOffset, coordinates[1].mul(scale).getY()+yOffset, 4879.4e5*scale, new Color(112, 109, 107));
+        venus = new PlanetComponent("Venus", coordinates[2].mul(scale).getX()+xOffset, coordinates[2].mul(scale).getY()+yOffset, 12104e5*scale, new Color(196, 165, 143));
+        earth = new PlanetComponent("Earth", coordinates[3].mul(scale).getX()+xOffset, coordinates[3].mul(scale).getY()+yOffset, 12742e5*scale, new Color(38, 120, 60));
+        moon = new PlanetComponent("Moon", coordinates[4].mul(scale).getX()+xOffset, coordinates[4].mul(scale).getY()+yOffset, 3474.2e5*scale, new Color(171, 169, 167));
+        mars = new PlanetComponent("Mars", coordinates[5].mul(scale).getX()+xOffset, coordinates[5].mul(scale).getY()+yOffset, 6779e5*scale, new Color(199, 114, 30));
+        jupiter = new PlanetComponent("Jupiter", coordinates[6].mul(scale).getX()+xOffset, coordinates[6].mul(scale).getY()+yOffset, 139820e5*scale, new Color(209, 142, 84));
+        saturn = new PlanetComponent("Saturn", coordinates[7].mul(scale).getX()+xOffset, coordinates[7].mul(scale).getY()+yOffset, 116460e5*scale, new Color(212, 169, 131));
+        titan = new PlanetComponent("Titan", coordinates[8].mul(scale).getX()+xOffset, coordinates[8].mul(scale).getY()+yOffset, 5149.5e5*scale, new Color(115, 191, 135));
+        uranus = new PlanetComponent("Uranus", coordinates[9].mul(scale).getX()+xOffset, coordinates[9].mul(scale).getY()+yOffset, 50724e5*scale, new Color(190, 232, 237));
+        neptune = new PlanetComponent("Neptune", coordinates[10].mul(scale).getX()+xOffset, coordinates[10].mul(scale).getY()+yOffset, 49224e5*scale, new Color(55, 86, 212));
 
         lPane.add(mercury);
         lPane.add(venus);
@@ -80,17 +91,21 @@ public class Frame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // Each action event caused by the timer -> increase stepCount by 1 and set coordinates accordingly
         stepCount += 1;
-        sun.setCoordinates(states[stepCount].coordinates[0].mul(scale).getX()+xOffset, states[stepCount].coordinates[0].mul(scale).getY()+yOffset);
-        mercury.setCoordinates(states[stepCount].coordinates[1].mul(scale).getX()+xOffset, states[stepCount].coordinates[1].mul(scale).getY()+yOffset);
-        venus.setCoordinates(states[stepCount].coordinates[2].mul(scale).getX()+xOffset, states[stepCount].coordinates[2].mul(scale).getY()+yOffset);
-        earth.setCoordinates(states[stepCount].coordinates[3].mul(scale).getX()+xOffset, states[stepCount].coordinates[3].mul(scale).getY()+yOffset);
-        moon.setCoordinates(states[stepCount].coordinates[4].mul(scale).getX()+xOffset, states[stepCount].coordinates[4].mul(scale).getY()+yOffset);
-        mars.setCoordinates(states[stepCount].coordinates[5].mul(scale).getX()+xOffset, states[stepCount].coordinates[5].mul(scale).getY()+yOffset);
-        jupiter.setCoordinates(states[stepCount].coordinates[6].mul(scale).getX()+xOffset, states[stepCount].coordinates[6].mul(scale).getY()+yOffset);
-        saturn.setCoordinates(states[stepCount].coordinates[7].mul(scale).getX()+xOffset, states[stepCount].coordinates[7].mul(scale).getY()+yOffset);
-        titan.setCoordinates(states[stepCount].coordinates[8].mul(scale).getX()+xOffset, states[stepCount].coordinates[8].mul(scale).getY()+yOffset);
-        uranus.setCoordinates(states[stepCount].coordinates[9].mul(scale).getX()+xOffset, states[stepCount].coordinates[9].mul(scale).getY()+yOffset);
-        neptune.setCoordinates(states[stepCount].coordinates[10].mul(scale).getX()+xOffset, states[stepCount].coordinates[10].mul(scale).getY()+yOffset);
+
+        State state = (State) states[stepCount];
+        Vector3dInterface[] coordinates = state.getCoordinates();
+
+        sun.setCoordinates(coordinates[0].mul(scale).getX()+xOffset, coordinates[0].mul(scale).getY()+yOffset);
+        mercury.setCoordinates(coordinates[1].mul(scale).getX()+xOffset, coordinates[1].mul(scale).getY()+yOffset);
+        venus.setCoordinates(coordinates[2].mul(scale).getX()+xOffset, coordinates[2].mul(scale).getY()+yOffset);
+        earth.setCoordinates(coordinates[3].mul(scale).getX()+xOffset, coordinates[3].mul(scale).getY()+yOffset);
+        moon.setCoordinates(coordinates[4].mul(scale).getX()+xOffset, coordinates[4].mul(scale).getY()+yOffset);
+        mars.setCoordinates(coordinates[5].mul(scale).getX()+xOffset, coordinates[5].mul(scale).getY()+yOffset);
+        jupiter.setCoordinates(coordinates[6].mul(scale).getX()+xOffset, coordinates[6].mul(scale).getY()+yOffset);
+        saturn.setCoordinates(coordinates[7].mul(scale).getX()+xOffset, coordinates[7].mul(scale).getY()+yOffset);
+        titan.setCoordinates(coordinates[8].mul(scale).getX()+xOffset, coordinates[8].mul(scale).getY()+yOffset);
+        uranus.setCoordinates(coordinates[9].mul(scale).getX()+xOffset, coordinates[9].mul(scale).getY()+yOffset);
+        neptune.setCoordinates(coordinates[10].mul(scale).getX()+xOffset, coordinates[10].mul(scale).getY()+yOffset);
 
         // If the scale has changed due to zooming scale the size of the planets
         sun.setSize(696342e5*scale);
