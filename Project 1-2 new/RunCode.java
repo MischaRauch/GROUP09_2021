@@ -1,13 +1,10 @@
 public class RunCode {
 
-    private static double a = 2;
-    private static double b = 5;
-
-    private static final double[] list = {a, b};
+    private static final double stepSize = 600;
 
     public static void main(String[] args) {
-        ODESolver solver = new ODESolver(600); // 6000
-        ProbeSimulator probeSimulator = new ProbeSimulator(solver.getStates(), 600);
+        ODESolver solver = new ODESolver(stepSize); // 6000
+        ProbeSimulator probeSimulator = new ProbeSimulator(solver.getStates(), stepSize);
 
         Frame frame = new Frame(solver.getStates(), probeSimulator.getCoordinatesProbe());
     }
