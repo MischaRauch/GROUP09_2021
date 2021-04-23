@@ -35,6 +35,9 @@ public class State implements StateInterface {
     public double getTime() {
         return time;
     }
+    public double[] getMasses() {
+        return masses;
+    }
 
     @Override
     public StateInterface addMul(double step, RateInterface r) {

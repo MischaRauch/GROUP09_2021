@@ -12,7 +12,7 @@ public class ODEFunction implements ODEFunctionInterface {
 
     }
 
-    private Vector3dInterface[] calculateF(Vector3dInterface[] coordinates, double[] masses) {
+    public Vector3dInterface[] calculateF(Vector3dInterface[] coordinates, double[] masses) {
         Vector3dInterface[] forces = new Vector3dInterface[coordinates.length];
 
         // Loops through all the bodies, where i is the body on which the total force is being calculated
@@ -34,7 +34,7 @@ public class ODEFunction implements ODEFunctionInterface {
         return forces;
     }
 
-    private Vector3dInterface[] calculateAccelerations(Vector3dInterface[] forces, double[] masses) {
+    public Vector3dInterface[] calculateAccelerations(Vector3dInterface[] forces, double[] masses) {
         Vector3dInterface[] accelerations = new Vector3dInterface[forces.length];
         for(int i = 0; i < accelerations.length; i++) {
             accelerations[i] = new Vector3d(forces[i].getX()/masses[i], forces[i].getY()/masses[i], forces[i].getZ()/masses[i]);

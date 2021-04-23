@@ -6,7 +6,7 @@ public class RunCode {
         ODESolver solver = new ODESolver(stepSize); // 6000
         ProbeSimulator probeSimulator = new ProbeSimulator(solver.getStates(), stepSize);
 
-        Frame frame = new Frame(solver.getStates(), probeSimulator.getCoordinatesProbe());
+        //Frame frame = new Frame(solver.getStates(), probeSimulator.getCoordinatesProbe());
     }
 
 }

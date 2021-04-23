@@ -34,8 +34,11 @@ public class ODESolver implements ODESolverInterface {
 
     public ODESolver(double dt) {
         StateInterface y0 = new State(coordinates, velocities, 0);
+        State y1 = new State(coordinates, velocities,0);
         ODEFunctionInterface f = new ODEFunction();
         states = solve(f, y0, 31536000, dt); //31536000
+        VerletSolver vS = new VerletSolver(coordinates,velocities,y1.getMasses());
+        vS.solve(2, 0.5);
     }
 
     public StateInterface[] getStates() {
