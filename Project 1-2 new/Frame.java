@@ -46,7 +46,7 @@ public class Frame extends JFrame implements ActionListener {
 
         for(int i = 0; i < states.length; i++) {
             this.states[i] = (State) states[i];
-            if(i % 200 == 0) {
+            if(i % 2000 == 0) {
                 State state = (State) this.states[i];
                 Vector3dInterface[] coordinates = state.getCoordinates();
                 for(int j = 1; j < coordinates.length; j++) {
@@ -95,7 +95,7 @@ public class Frame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // Each action event caused by the timer -> increase stepCount by 1 and set coordinates accordingly
-        stepCount += 1;
+        stepCount += 20;
 
         State state = (State) states[stepCount];
         Vector3dInterface[] coordinates = state.getCoordinates();

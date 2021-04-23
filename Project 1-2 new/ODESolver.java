@@ -33,7 +33,7 @@ public class ODESolver implements ODESolverInterface {
     private final Vector3dInterface[] velocities = {sunV, mercuryV, venusV, earthV, moonV, marsV, jupiterV, saturnV, titanV, uranusV, neptuneV};
 
     public ODESolver(double dt) {
-        StateInterface y0 = new State(coordinates, velocities);
+        StateInterface y0 = new State(coordinates, velocities, 0);
         ODEFunctionInterface f = new ODEFunction();
         states = solve(f, y0, 31536000, dt); //31536000
     }
@@ -57,7 +57,7 @@ public class ODESolver implements ODESolverInterface {
 
         for(int i = 1; i < states.length; i++) {
             t += h;
-            states[i] = step(f, t, states[i-1], h);
+            states[i] = RKstep(f, t, states[i-1], h);
         }
 
         return states;
@@ -65,7 +65,17 @@ public class ODESolver implements ODESolverInterface {
 
     @Override
     public StateInterface step(ODEFunctionInterface f, double t, StateInterface y, double h) {
-        RateInterface r = f.call(h, y);
+        RateInterface r = (Rate) f.call(t, y);
         return y.addMul(h, r);
+    }
+
+    public StateInterface RKstep(ODEFunctionInterface f, double t, StateInterface y, double h) {
+        Rate ki1 = (Rate) f.call(t, y);
+        Rate ki2 = (Rate) f.call(t + 0.5*h, y.addMul(h*0.5, ki1));
+        Rate ki3 = (Rate) f.call(t + 0.5*h, y.addMul(h*0.5, ki2));
+        Rate ki4 = (Rate) f.call(t + h, y.addMul(h, ki3));
+
+        RateInterface kitot = (ki1.addMul(2, ki2).addMul(2, ki3).addMul(1, ki4)).mul(1.0/6.0);
+        return y.addMul(h, kitot);
     }
 }

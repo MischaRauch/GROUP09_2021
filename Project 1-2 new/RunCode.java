@@ -6,8 +6,8 @@ public class RunCode {
     private static final double[] list = {a, b};
 
     public static void main(String[] args) {
-        ODESolver solver = new ODESolver(6000);
-        ProbeSimulator probeSimulator = new ProbeSimulator(solver.getStates(), 6000);
+        ODESolver solver = new ODESolver(600); // 6000
+        ProbeSimulator probeSimulator = new ProbeSimulator(solver.getStates(), 600);
 
         Frame frame = new Frame(solver.getStates(), probeSimulator.getCoordinatesProbe());
     }
