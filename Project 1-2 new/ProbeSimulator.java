@@ -1,14 +1,12 @@
-import titan.ProbeSimulatorInterface;
-import titan.StateInterface;
-import titan.Vector3dInterface;
+import titan.*;
 
 public class ProbeSimulator implements ProbeSimulatorInterface {
 
     private Vector3dInterface[] coordinatesProbe;
 
     private final StateInterface[] states;
-    private final double mass = 15e3;
-    private final double G = 6.674 * Math.pow(10, -11);
+    private static final double mass = 15e3;
+    private static final double G = 6.674 * Math.pow(10, -11);
 
     private double[] masses = new double[11];
 
@@ -53,18 +51,34 @@ public class ProbeSimulator implements ProbeSimulatorInterface {
         int t = 0;
 
         Vector3dInterface[] coordinates = new Vector3dInterface[(int) ((tf/h)+1)];
+        StateInterface[] states = new StateInterface[(int) ((tf/h)+1)];
         coordinates[0] = p0;
+        Vector3dInterface[] p = {p0};
+        Vector3dInterface[] v = {v0};
+        states[0] = new State(p, v, t);
+        ODEFunctionInterface f = new ODEFunction();
 
         for(int i = 1; i < coordinates.length; i++) {
             t += h;
-            Vector3dInterface newCoordinates = coordinates[i-1];
-            State state = (State) states[i];
-            Vector3dInterface force = calculateF(newCoordinates, state.getCoordinates());
-            v0 = v0.add(calculateRate(force, h));
-            newCoordinates = newCoordinates.addMul(h, v0);
-            coordinates[i] = newCoordinates;
+            states[i] = RKstep(f, t, states[i-1], h);
+            coordinates[i] = ((State)states[i]).getCoordinates()[0];
         }
 
         return coordinates;
+    }
+
+    public StateInterface step(ODEFunctionInterface f, double t, StateInterface y, double h) {
+        RateInterface r = (Rate) f.call(t, y);
+        return y.addMul(h, r);
+    }
+
+    public StateInterface RKstep(ODEFunctionInterface f, double t, StateInterface y, double h) {
+        Rate ki1 = (Rate) f.call(t, y);
+        Rate ki2 = (Rate) f.call(t + 0.5*h, y.addMul(h*0.5, ki1));
+        Rate ki3 = (Rate) f.call(t + 0.5*h, y.addMul(h*0.5, ki2));
+        Rate ki4 = (Rate) f.call(t + h, y.addMul(h, ki3));
+
+        RateInterface kitot = (ki1.addMul(2, ki2).addMul(2, ki3).addMul(1, ki4)).mul(1.0/6.0);
+        return y.addMul(h, kitot);
     }
 }

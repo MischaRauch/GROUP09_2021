@@ -41,9 +41,9 @@ public class State implements StateInterface {
 
         Rate rate = (Rate) r;
 
-        Vector3dInterface[] newCoordinates = new Vector3d[11];
+        Vector3dInterface[] newCoordinates = new Vector3d[coordinates.length];
         System.arraycopy(this.coordinates, 0, newCoordinates, 0, newCoordinates.length);
-        Vector3dInterface[] newVelocities = new Vector3d[11];
+        Vector3dInterface[] newVelocities = new Vector3d[velocities.length];
         System.arraycopy(this.velocities, 0, newVelocities, 0, newVelocities.length);
 
         Vector3dInterface[] rates = rate.getRates();
@@ -57,27 +57,5 @@ public class State implements StateInterface {
         }
 
         return new State(newCoordinates, newVelocities, this.time+step);
-    }
-
-    public StateInterface addMulRK(double step, RateInterface r) {
-
-        Rate rate = (Rate) r;
-
-        Vector3dInterface[] newCoordinates = new Vector3d[11];
-        System.arraycopy(this.coordinates, 0, newCoordinates, 0, newCoordinates.length);
-        Vector3dInterface[] newVelocities = new Vector3d[11];
-        System.arraycopy(this.velocities, 0, newVelocities, 0, newVelocities.length);
-
-        Vector3dInterface[] rates = rate.getRates();
-
-        for(int i = 0; i < newVelocities.length; i++) {
-            newVelocities[i] = newVelocities[i].add(rates[i]);
-        }
-
-        for(int i = 0; i < newCoordinates.length; i++) {
-            newCoordinates[i] = newCoordinates[i].addMul(step, newVelocities[i]);
-        }
-
-        return new State(newCoordinates, newVelocities, this.time+time);
     }
 }
