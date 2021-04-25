@@ -1,11 +1,13 @@
-import java.util.Arrays;
-
 import titan.*;
 
+/**
+ * Class for calculating the trajectories of only the planets. Contains all
+ * the starting coordinates and velocities for the planets and calculates the
+ * trajectories from those starting coordinates/velocities.
+ */
 public class ODESolver implements ODESolverInterface {
 
-    private final StateInterface[] states;
-
+    // Starting coordinates for all the planets
     private final Vector3dInterface sunC = new Vector3d(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06);
     private final Vector3dInterface mercuryC = new Vector3d(6.047855986424127e+06, -6.801800047868888e+10, -5.702742359714534e+09);
     private final Vector3dInterface venusC = new Vector3d(-9.435345478592035e+10, 5.350359551033670e+10, 6.131453014410347e+09);
@@ -18,8 +20,7 @@ public class ODESolver implements ODESolverInterface {
     private final Vector3dInterface uranusC = new Vector3d(2.395195786685187e+12, 1.744450959214586e+12, -2.455116324031639e+10);
     private final Vector3dInterface neptuneC = new Vector3d(4.382692942729203e+12, -9.093501655486243e+11, -8.227728929479486e+10);
 
-    private final Vector3dInterface[] coordinates = {sunC, mercuryC, venusC, earthC, moonC, marsC, jupiterC, saturnC, titanC, uranusC, neptuneC};
-
+    // Starting velocities for all the planets
     private final Vector3dInterface sunV = new Vector3d(-1.420511669610689e+01, -4.954714716629277e+00, 3.994237625449041e-01);
     private final Vector3dInterface mercuryV = new Vector3d(3.892585189044652e+04, 2.978342247012996e+03, -3.327964151414740e+03);
     private final Vector3dInterface venusV = new Vector3d(-1.726404287724406e+04, -3.073432518238123e+04, 5.741783385280979e-04);
@@ -32,28 +33,61 @@ public class ODESolver implements ODESolverInterface {
     private final Vector3dInterface uranusV = new Vector3d(-4.059468635313243e+03, 5.187467354884825e+03, 7.182516236837899e+01);
     private final Vector3dInterface neptuneV = new Vector3d(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02);
 
+    // Array containing the starting coordinates for all planets
+    private final Vector3dInterface[] coordinates = {sunC, mercuryC, venusC, earthC, moonC, marsC, jupiterC, saturnC, titanC, uranusC, neptuneC};
+    // Array containing the starting velocities for all planets
     private final Vector3dInterface[] velocities = {sunV, mercuryV, venusV, earthV, moonV, marsV, jupiterV, saturnV, titanV, uranusV, neptuneV};
+    // Instance field which will contain the states for each time step
+    private final StateInterface[] states;
 
-    public ODESolver(double dt) {
+    /**
+     * Constructor for the ODESolver class. Creates starting state and sets states instance field using
+     * the solve method.
+     *
+     * @param   h the size of step to be taken
+     */
+    public ODESolver(double h) {
         StateInterface y0 = new State(coordinates, velocities, 0);
         State y1 = new State(coordinates, velocities,0);
         ODEFunctionInterface f = new ODEFunction();
-        states = solve(f, y0, 31536000, dt); //31536000
+        states = solve(f, y0, 31536000, h); //31536000
         VerletSolver vS = new VerletSolver(coordinates,velocities,y1.getMasses());
-        //vS.solve(31536000, dt);
+        //vS.solve(31536000, h);
         //State tmp = (State) states[0];
         //System.out.println(tmp.getCoordinates()[0].toString());
     }
 
+    /**
+     * Getter method
+     * @return  the states instance field containing the states for each time step
+     */
     public StateInterface[] getStates() {
         return states;
     }
 
+    /**
+     * Solve the differential equation by taking multiple steps.
+     *
+     * @param   f       the function defining the differential equation dy/dt=f(t,y)
+     * @param   y0      the starting state
+     * @param   ts      the times at which the states should be output, with ts[0] being the initial time
+     * @return  an array of size ts.length with all intermediate states along the path
+     */
     @Override
     public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double[] ts) {
         return new StateInterface[0];
     }
 
+    /**
+     * Solve the differential equation by taking multiple steps of equal size, starting at time 0.
+     * The final step may have a smaller size, if the step-size does not exactly divide the solution time range
+     *
+     * @param   f       the function defining the differential equation dy/dt=f(t,y)
+     * @param   y0      the starting state
+     * @param   tf      the final time
+     * @param   h       the size of step to be taken
+     * @return  an array of size round(tf/h)+1 including all intermediate states along the path
+     */
     @Override
     public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double tf, double h) {
 
@@ -70,18 +104,38 @@ public class ODESolver implements ODESolverInterface {
         return states;
     }
 
+    /**
+     * Update rule for one step.
+     *
+     * @param   f   the function defining the differential equation dy/dt=f(t,y)
+     * @param   t   the time
+     * @param   y   the state
+     * @param   h   the step size
+     * @return  the new state after taking one step
+     */
     @Override
     public StateInterface step(ODEFunctionInterface f, double t, StateInterface y, double h) {
         RateInterface r = (Rate) f.call(t, y);
         return y.addMul(h, r);
     }
 
+    /**
+     * Update rule for one Runge-Kutta step.
+     *
+     * @param f     the function defining the differential equation dy/dt=f(t,y)
+     * @param t     the time
+     * @param y     the state
+     * @param h     the step size
+     * @return the new state after taking one step
+     */
     public StateInterface RKstep(ODEFunctionInterface f, double t, StateInterface y, double h) {
+        // Creates rate objects for each k of the RK method
         Rate ki1 = (Rate) f.call(t, y);
         Rate ki2 = (Rate) f.call(t + 0.5*h, y.addMul(h*0.5, ki1));
         Rate ki3 = (Rate) f.call(t + 0.5*h, y.addMul(h*0.5, ki2));
         Rate ki4 = (Rate) f.call(t + h, y.addMul(h, ki3));
 
+        // Combines the ki's
         RateInterface kitot = (ki1.addMul(2, ki2).addMul(2, ki3).addMul(1, ki4)).mul(1.0/6.0);
         return y.addMul(h, kitot);
     }

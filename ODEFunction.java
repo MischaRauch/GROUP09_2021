@@ -3,15 +3,28 @@ import titan.RateInterface;
 import titan.StateInterface;
 import titan.Vector3dInterface;
 
+/**
+ * Class which is used to calculate the rate-of-change of a system
+ */
 public class ODEFunction implements ODEFunctionInterface {
 
     private Vector3dInterface[] rates;
     private static final double G = 6.674 * Math.pow(10, -11);
 
+    /**
+     * Empty constructor for the ODEFunction class
+     */
     public ODEFunction() {
 
     }
 
+    /**
+     * Method which calculates the force on each body in a system provided with their coordinates and masses
+     *
+     * @param coordinates   array containing the coordinates of all bodies in the system
+     * @param masses        array containing the masses of all bodies in the system
+     * @return array containing the forces on all bodies in the system
+     */
     public Vector3dInterface[] calculateF(Vector3dInterface[] coordinates, double[] masses) {
         Vector3dInterface[] forces = new Vector3dInterface[coordinates.length];
 
@@ -34,6 +47,14 @@ public class ODEFunction implements ODEFunctionInterface {
         return forces;
     }
 
+    /**
+     * Method which calculates the accelerations on all bodies in a system provided with the forces on and
+     * masses of each body.
+     *
+     * @param forces    array containing the forces on all bodies
+     * @param masses    masses of all bodies
+     * @return array containing the accelerations on all bodies
+     */
     public Vector3dInterface[] calculateAccelerations(Vector3dInterface[] forces, double[] masses) {
         Vector3dInterface[] accelerations = new Vector3dInterface[forces.length];
         for(int i = 0; i < accelerations.length; i++) {
@@ -42,6 +63,13 @@ public class ODEFunction implements ODEFunctionInterface {
         return accelerations;
     }
 
+    /**
+     * Call method which calculates the rate of change by finding the force and acceleration on all bodies.
+     *
+     * @param   t   the time at which to evaluate the function
+     * @param   y   the state at which to evaluate the function
+     * @return  The average rate-of-change over the time-step. Has dimensions of [state]/[time].
+     */
     @Override
     public RateInterface call(double t, StateInterface y) {
         State state = (State) y;

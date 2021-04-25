@@ -24,7 +24,7 @@ public class ProbeSimulator implements ProbeSimulatorInterface {
 
     private Vector3dInterface calculateF(Vector3dInterface coordinatesProbe, Vector3dInterface[] coordinates) {
         Vector3dInterface force = new Vector3d(0,0,0);
-        // Loops through all the other bodies and adds the force of each body on body i to the total force
+        // Loops through all the bodies and adds the force of each body on the probe to the total force
         for(int i = 0; i < coordinates.length; i++) {
             double mm = (masses[i] * mass);
             double distance = coordinatesProbe.dist(coordinates[i]);
