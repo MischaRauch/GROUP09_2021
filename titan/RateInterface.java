@@ -15,7 +15,7 @@ package titan;
  * must cast the rate argument of addMul to a concrete Rate class of the expected type.
  *
  * For example, a Vector2d object might implement both StateInterface and RateInterface,
- * and define an addMul method taking and returning Vector2d object. The overriden addMul
+ * and define an addMul method taking and returning Vector2d object. The overridden addMul
  * from StateInterface would then be implemented by casting the rate to Vector2d, and
  * dispatching to the addMul method taking a Vector2d.
  */

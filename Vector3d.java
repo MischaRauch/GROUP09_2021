@@ -6,11 +6,9 @@
  */
 
 import titan.Vector3dInterface;
-import titan.StateInterface;
-import titan.RateInterface;
 import java.lang.Math;
 
-public class Vector3d implements Vector3dInterface, StateInterface, RateInterface
+public class Vector3d implements Vector3dInterface
 {
   private double x;
   private double y;
@@ -108,10 +106,12 @@ public class Vector3d implements Vector3dInterface, StateInterface, RateInterfac
     return this.add(other.mul(scalar));
   }
 
+  /*
   public double zDist(Vector3dInterface other)
   {
     return Math.abs(this.getZ() - other.getZ());
   }
+  */
 
   /**
    * @return the Euclidean norm of a vector
@@ -138,16 +138,4 @@ public class Vector3d implements Vector3dInterface, StateInterface, RateInterfac
     return "(" + x + "," + y + "," + z + ")";
   }
 
-  /**
-   * Update a state to a new state computed by: this + step * rate
-   *
-   * @param step   The time-step of the update
-   * @param rate   The average rate-of-change over the time-step. Has dimensions of [state]/[time].
-   * @return The new state after the update. Required to have the same class as 'this'.
-   */
-  public StateInterface addMul(double step, RateInterface rate)
-  {
-    Vector3dInterface v = (Vector3d) rate;
-    return (StateInterface) this.addMul(step, v);
-  }
 }
