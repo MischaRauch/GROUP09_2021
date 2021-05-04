@@ -1,3 +1,4 @@
+import titan.ODEFunctionInterface;
 import titan.RateInterface;
 import titan.StateInterface;
 import titan.Vector3dInterface;
@@ -24,9 +25,10 @@ public class State implements StateInterface {
     private final double titanM = 1.34553e23;
     private final double uranusM = 8.6813e25;
     private final double neptuneM = 1.02413e26;
+    private final double probeM = 15e3;
 
     // Array containing the masses for all planets
-    public final double[] masses = {sunM, mercuryM, venusM, earthM, moonM, marsM, jupiterM, saturnM, titanM, uranusM, neptuneM};
+    public final double[] masses = {sunM, mercuryM, venusM, earthM, moonM, marsM, jupiterM, saturnM, titanM, uranusM, neptuneM, probeM};
 
     /**
      * Constructor for the State class.
@@ -45,6 +47,14 @@ public class State implements StateInterface {
      * @return an array containing the coordinate vectors of each object in the system at time this.time
      */
     public Vector3dInterface[] getCoordinates() {
+        return coordinates;
+    }
+
+    /**
+     * Getter method
+     * @return an array containing the velocity vectors of each object in the system at time this.time
+     */
+    public Vector3dInterface[] getVelocities() {
         return coordinates;
     }
 
@@ -95,5 +105,26 @@ public class State implements StateInterface {
         }
 
         return new State(newCoordinates, newVelocities, this.time+step);    // Returns the new state after the update
+    }
+
+    public StateInterface addMulVerlet(double step, Vector3dInterface[] accelerations, ODEFunctionInterface f) {
+
+        // Creates copies of the previous states coordinates
+        Vector3dInterface[] newCoordinates = new Vector3d[coordinates.length];
+        System.arraycopy(this.coordinates, 0, newCoordinates, 0, newCoordinates.length);
+        Vector3dInterface[] newVelocities = new Vector3d[velocities.length];
+        System.arraycopy(this.velocities, 0, newVelocities, 0, newVelocities.length);
+
+        for(int i = 0; i < newCoordinates.length; i++) {
+            newCoordinates[i] = newCoordinates[i].addMul(step, velocities[i]).addMul(0.5*Math.pow(step,2), accelerations[i]);
+        }
+
+        Vector3dInterface[] accelerationsNew = ((ODEFunction) f).callA(this.time+step,this);
+
+        for(int i = 0; i < newVelocities.length; i++) {
+            newVelocities[i] = newVelocities[i].add(((accelerations[i].add(accelerationsNew[i])).mul(0.5)).mul(step));
+        }
+
+        return new State(newCoordinates, newVelocities, this.time+step);
     }
 }

@@ -5,7 +5,7 @@ import titan.*;
  * the starting coordinates and velocities for the planets and calculates the
  * trajectories from those starting coordinates/velocities.
  */
-public class ODESolver implements ODESolverInterface {
+public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface{
 
     // Starting coordinates for all the planets
     private final Vector3dInterface sunC = new Vector3d(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06);
@@ -19,6 +19,7 @@ public class ODESolver implements ODESolverInterface {
     private final Vector3dInterface titanC = new Vector3d(6.332873118527889e+11, -1.357175556995868e+12, -2.134637041453660e+09);
     private final Vector3dInterface uranusC = new Vector3d(2.395195786685187e+12, 1.744450959214586e+12, -2.455116324031639e+10);
     private final Vector3dInterface neptuneC = new Vector3d(4.382692942729203e+12, -9.093501655486243e+11, -8.227728929479486e+10);
+    private Vector3dInterface probeC = new Vector3d(-1.471922101663588e+11, -2.860995816266412e+10-6371e3, 8.278183193596080e+06);
 
     // Starting velocities for all the planets
     private final Vector3dInterface sunV = new Vector3d(-1.420511669610689e+01, -4.954714716629277e+00, 3.994237625449041e-01);
@@ -32,13 +33,16 @@ public class ODESolver implements ODESolverInterface {
     private final Vector3dInterface titanV = new Vector3d(3.056877965721629e+03, 6.125612956428791e+03, -9.523587380845593e+02);
     private final Vector3dInterface uranusV = new Vector3d(-4.059468635313243e+03, 5.187467354884825e+03, 7.182516236837899e+01);
     private final Vector3dInterface neptuneV = new Vector3d(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02);
+    private Vector3dInterface probeV = new Vector3d(5.427193405797901e+03, -2.931056622265021e+04-30e3, 6.575428158157592e-01);
 
     // Array containing the starting coordinates for all planets
-    private final Vector3dInterface[] coordinates = {sunC, mercuryC, venusC, earthC, moonC, marsC, jupiterC, saturnC, titanC, uranusC, neptuneC};
+    private Vector3dInterface[] coordinates = {sunC, mercuryC, venusC, earthC, moonC, marsC, jupiterC, saturnC, titanC, uranusC, neptuneC, probeC};
     // Array containing the starting velocities for all planets
-    private final Vector3dInterface[] velocities = {sunV, mercuryV, venusV, earthV, moonV, marsV, jupiterV, saturnV, titanV, uranusV, neptuneV};
+    private Vector3dInterface[] velocities = {sunV, mercuryV, venusV, earthV, moonV, marsV, jupiterV, saturnV, titanV, uranusV, neptuneV, probeV};
     // Instance field which will contain the states for each time step
-    private final StateInterface[] states;
+    private StateInterface[] states;
+
+    private final int SecondsInYear = 31536000;
 
     /**
      * Constructor for the ODESolver class. Creates starting state and sets states instance field using
@@ -50,11 +54,8 @@ public class ODESolver implements ODESolverInterface {
         StateInterface y0 = new State(coordinates, velocities, 0);
         State y1 = new State(coordinates, velocities,0);
         ODEFunctionInterface f = new ODEFunction();
-        states = solve(f, y0, 31536000, h); //31536000
-        VerletSolver vS = new VerletSolver(coordinates,velocities,y1.getMasses());
-        //vS.solve(31536000, h);
-        //State tmp = (State) states[0];
-        //System.out.println(tmp.getCoordinates()[0].toString());
+        states = solve(f, y0, SecondsInYear, h); //31536000
+        trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(0, -60e3, 0), SecondsInYear, h);
     }
 
     /**
@@ -91,6 +92,8 @@ public class ODESolver implements ODESolverInterface {
     @Override
     public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double tf, double h) {
 
+        long start_time = System.nanoTime();
+
         int t = 0;
 
         StateInterface[] states = new StateInterface[(int) ((tf/h)+1)];
@@ -100,6 +103,10 @@ public class ODESolver implements ODESolverInterface {
             t += h;
             states[i] = RKstep(f, t, states[i-1], h);
         }
+
+        long end_time = System.nanoTime();
+
+        System.out.println(((end_time - start_time) / 1e6) + " ms.");
 
         return states;
     }
@@ -138,5 +145,48 @@ public class ODESolver implements ODESolverInterface {
         // Combines the ki's
         RateInterface kitot = (ki1.addMul(2, ki2).addMul(2, ki3).addMul(1, ki4)).mul(1.0/6.0);
         return y.addMul(h, kitot);
+    }
+
+    public StateInterface VerletStep(ODEFunctionInterface f, double t, StateInterface y, double h) {
+        Vector3dInterface[] accelerations = ((ODEFunction) f).callA(t,y);
+        State state = (State) y;
+
+        return state.addMulVerlet(h, accelerations, f);
+    }
+
+    @Override
+    public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double[] ts) {
+        return new Vector3dInterface[0];
+    }
+
+    /**
+     * Method which recalculates the trajectory of the probe and updates the states with the recalculated trajectory.
+     * @param p0 starting coordinates !RELATIVE TO EARTH!
+     * @param v0 starting velocity !RELATIVE TO EARTH!
+     * @param tf the final time
+     * @param h the sizeof step to be taken
+     * @return an array of the coordinates of the probe !RELATIVE TO THE SOLAR SYSTEM BARYCENTRE!
+     */
+    @Override
+    public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h) {
+
+        Vector3dInterface[] probeCoordinates = new Vector3dInterface[(int) ((tf/h)+1)];
+        ODEFunctionInterface f = new ODEFunction();
+        probeCoordinates[0] = p0;
+        coordinates[11] = coordinates[3].add(p0);
+        velocities[11] = velocities[3].add(v0);
+        states = new StateInterface[(int) ((tf/h)+1)];
+        states[0] = new State(coordinates, velocities, 0);
+
+        int t = 0;
+
+        for(int i = 1; i < states.length; i++) {
+            t += h;
+            states[i] = RKstep(f, t, states[i-1], h);
+            State state = (State) states[i];
+            probeCoordinates[i] = state.getCoordinates()[11];
+        }
+
+        return probeCoordinates;
     }
 }

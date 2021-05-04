@@ -26,7 +26,6 @@ public class Frame extends JFrame implements ActionListener {
     private final PlanetComponent probe;
 
     private final State[] states;
-    private final Vector3dInterface[] coordinatesProbe;
 
     public static double scale = 0.000000001;
     public static double xOffset = 700;
@@ -37,7 +36,7 @@ public class Frame extends JFrame implements ActionListener {
             new Color(209, 142, 84), new Color(212, 169, 131), new Color(115, 191, 135),
             new Color(190, 232, 237), new Color(55, 86, 212), new Color(200, 86, 150)};
 
-    public Frame(StateInterface[] states, Vector3dInterface[] probeCoordinates) {
+    public Frame(StateInterface[] states) {
         this.setSize(2560, 1000);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(Color.BLACK);
@@ -47,9 +46,8 @@ public class Frame extends JFrame implements ActionListener {
         lPane.setLayout(null);
 
         this.states = new State[states.length];
-        this.coordinatesProbe = probeCoordinates;
 
-        for(int i = 0; i < states.length; i+=40) {
+        for(int i = 0; i < states.length; i+=20) {
             this.states[i] = (State) states[i];
             if(i % 2000 == 0) {
                 State state = (State) this.states[i];
@@ -77,7 +75,7 @@ public class Frame extends JFrame implements ActionListener {
         titan = new PlanetComponent("Titan", coordinates[8].mul(scale).getX()+xOffset, coordinates[8].mul(scale).getY()+yOffset, 5149.5e5*scale, colors[8]);
         uranus = new PlanetComponent("Uranus", coordinates[9].mul(scale).getX()+xOffset, coordinates[9].mul(scale).getY()+yOffset, 50724e5*scale, colors[9]);
         neptune = new PlanetComponent("Neptune", coordinates[10].mul(scale).getX()+xOffset, coordinates[10].mul(scale).getY()+yOffset, 49224e5*scale, colors[10]);
-        probe = new PlanetComponent("Probe", coordinatesProbe[0].mul(scale).getX()+xOffset, coordinatesProbe[0].mul(scale).getY()+yOffset, 49224e5*scale, colors[11]);
+        probe = new PlanetComponent("Probe", coordinates[11].mul(scale).getX()+xOffset, coordinates[11].mul(scale).getY()+yOffset, 49224e5*scale, colors[11]);
 
         lPane.add(mercury);
         lPane.add(venus);
@@ -102,7 +100,7 @@ public class Frame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // Each action event caused by the timer -> increase stepCount by 1 and set coordinates accordingly
-        stepCount += 40;
+        stepCount += 20;
 
         State state = (State) states[stepCount];
         Vector3dInterface[] coordinates = state.getCoordinates();
@@ -118,7 +116,7 @@ public class Frame extends JFrame implements ActionListener {
         titan.setCoordinates(coordinates[8].mul(scale).getX()+xOffset, coordinates[8].mul(scale).getY()+yOffset);
         uranus.setCoordinates(coordinates[9].mul(scale).getX()+xOffset, coordinates[9].mul(scale).getY()+yOffset);
         neptune.setCoordinates(coordinates[10].mul(scale).getX()+xOffset, coordinates[10].mul(scale).getY()+yOffset);
-        probe.setCoordinates(coordinatesProbe[stepCount].mul(scale).getX()+xOffset, coordinatesProbe[stepCount].mul(scale).getY()+yOffset);
+        probe.setCoordinates(coordinates[11].mul(scale).getX()+xOffset, coordinates[11].mul(scale).getY()+yOffset);
 
         // If the scale has changed due to zooming scale the size of the planets
         sun.setSize(696342e5*scale);

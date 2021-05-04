@@ -39,7 +39,8 @@ public class ODEFunction implements ODEFunctionInterface {
                     double mm = (masses[i] * masses[j]);
                     double distance = coordinates[i].dist(coordinates[j]);
                     Vector3dInterface unitVector = (coordinates[i].sub(coordinates[j])).mul(1/distance);
-                    totalF = totalF.add(unitVector.mul(-G * mm/Math.pow(distance, 2)));
+                    Vector3dInterface forceToAdd = unitVector.mul(-G * mm/Math.pow(distance, 2));
+                    totalF = totalF.add(forceToAdd);
                 }
             }
             forces[i] = totalF;
@@ -84,5 +85,15 @@ public class ODEFunction implements ODEFunctionInterface {
         }
 
         return new Rate(rates);
+    }
+
+    public Vector3dInterface[] callA(double t, StateInterface y) {
+        State state = (State) y;
+        rates = new Vector3dInterface[state.getCoordinates().length];
+
+        Vector3dInterface[] forces = calculateF(state.getCoordinates(), state.masses);
+        Vector3dInterface[] accelerations = calculateAccelerations(forces, state.masses);
+
+        return accelerations;
     }
 }
