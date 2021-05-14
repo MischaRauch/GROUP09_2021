@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Rate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TEST</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Rate.java</span></div><h1>Rate.java</h1><pre class="source lang-java linenums">
+import src.main.java.titan.RateInterface;
+import src.main.java.titan.Vector3dInterface;
+
+public class Rate implements RateInterface {
+
+    private final Vector3dInterface[] rates;
+
+<span class="fc" id="L9">    public Rate(Vector3dInterface[] rates) {</span>
+<span class="fc" id="L10">        this.rates = new Vector3dInterface[rates.length];</span>
+<span class="fc" id="L11">        System.arraycopy(rates, 0, this.rates, 0, rates.length);</span>
+<span class="fc" id="L12">    }</span>
+
+    public Vector3dInterface[] getRates() {
+<span class="fc" id="L15">        return rates;</span>
+    }
+
+    public Rate addMul(double scalar, Rate other) {
+<span class="nc" id="L19">        Vector3dInterface[] addRates = new Vector3dInterface[rates.length];</span>
+<span class="nc" id="L20">        Vector3dInterface[] otherRates = other.getRates();</span>
+<span class="nc bnc" id="L21" title="All 2 branches missed.">        for(int i = 0; i &lt; addRates.length; i ++) {</span>
+<span class="nc" id="L22">            addRates[i] = this.rates[i].add(otherRates[i].mul(scalar));</span>
+        }
+<span class="nc" id="L24">        return new Rate(addRates);</span>
+    }
+
+    public Rate mul(double scalar) {
+<span class="nc" id="L28">        Vector3dInterface[] mulRates = new Vector3dInterface[rates.length];</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        for(int i = 0; i &lt; mulRates.length; i ++) {</span>
+<span class="nc" id="L30">            mulRates[i] = this.rates[i].mul(scalar);</span>
+        }
+<span class="nc" id="L32">        return new Rate(mulRates);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

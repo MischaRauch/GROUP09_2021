@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Frame.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TEST</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Frame.java</span></div><h1>Frame.java</h1><pre class="source lang-java linenums">
+import titan.StateInterface;
+import src.main.java.titan.Vector3dInterface;
+import src.main.java.PlanetComponent;
+
+import src.main.java.TrajectoryComponent;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Frame extends JFrame implements ActionListener {
+
+<span class="nc" id="L14">    private Timer timer = new Timer(1, this);</span>
+<span class="nc" id="L15">    private JLayeredPane lPane = new JLayeredPane();</span>
+<span class="nc" id="L16">    private int stepCount = 0;</span>
+
+    private final PlanetComponent sun;
+    private final PlanetComponent mercury;
+    private final PlanetComponent venus;
+    private final PlanetComponent earth;
+    private final PlanetComponent moon;
+    private final PlanetComponent mars;
+    private final PlanetComponent jupiter;
+    private final PlanetComponent saturn;
+    private final PlanetComponent titan;
+    private final PlanetComponent uranus;
+    private final PlanetComponent neptune;
+    private final PlanetComponent probe;
+
+    private final State[] states;
+
+<span class="nc" id="L33">    public static double scale = 0.000000001;</span>
+<span class="nc" id="L34">    public static double xOffset = 700;</span>
+<span class="nc" id="L35">    public static double yOffset = 400;</span>
+
+<span class="nc" id="L37">    private final Color[] colors = {new Color(232, 138, 37), new Color(112, 109, 107), new Color(196, 165, 143),</span>
+            new Color(38, 120, 60), new Color(171, 169, 167), new Color(199, 114, 30),
+            new Color(209, 142, 84), new Color(212, 169, 131), new Color(115, 191, 135),
+            new Color(190, 232, 237), new Color(55, 86, 212), new Color(200, 86, 150)};
+
+<span class="nc" id="L42">    public Frame(StateInterface[] states) {</span>
+<span class="nc" id="L43">        this.setSize(2560, 1000);</span>
+<span class="nc" id="L44">        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L45">        this.getContentPane().setBackground(Color.BLACK);</span>
+
+<span class="nc" id="L47">        lPane.setOpaque(true);</span>
+<span class="nc" id="L48">        lPane.setBackground(Color.BLACK);</span>
+<span class="nc" id="L49">        lPane.setLayout(null);</span>
+
+<span class="nc" id="L51">        this.states = new State[states.length];</span>
+
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        for(int i = 0; i &lt; states.length; i+=20) {</span>
+<span class="nc" id="L54">            this.states[i] = (State) states[i];</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">            if(i % 2000 == 0) {</span>
+<span class="nc" id="L56">                State state = (State) this.states[i];</span>
+<span class="nc" id="L57">                Vector3dInterface[] coordinates = state.getCoordinates();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                for(int j = 1; j &lt; coordinates.length; j++) {</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                    if(j!= 4) {</span>
+<span class="nc" id="L60">                        TrajectoryComponent t = new TrajectoryComponent(coordinates[j].mul(scale).getX() + xOffset, coordinates[j].mul(scale).getY() + yOffset, colors[j]);</span>
+<span class="nc" id="L61">                        lPane.add(t);</span>
+                    }
+                }
+            }
+        }
+
+<span class="nc" id="L67">        State state = (State) this.states[stepCount];</span>
+<span class="nc" id="L68">        Vector3dInterface[] coordinates = state.getCoordinates();</span>
+
+<span class="nc" id="L70">        sun = new PlanetComponent(&quot;Sun&quot;, coordinates[0].mul(scale).getX()+xOffset, coordinates[0].mul(scale).getY()+yOffset, 696342e5*scale, colors[0]);</span>
+<span class="nc" id="L71">        mercury = new PlanetComponent(&quot;Mercury&quot;, coordinates[1].mul(scale).getX()+xOffset, coordinates[1].mul(scale).getY()+yOffset, 4879.4e5*scale, colors[1]);</span>
+<span class="nc" id="L72">        venus = new PlanetComponent(&quot;Venus&quot;, coordinates[2].mul(scale).getX()+xOffset, coordinates[2].mul(scale).getY()+yOffset, 12104e5*scale, colors[2]);</span>
+<span class="nc" id="L73">        earth = new PlanetComponent(&quot;Earth&quot;, coordinates[3].mul(scale).getX()+xOffset, coordinates[3].mul(scale).getY()+yOffset, 12742e5*scale, colors[3]);</span>
+<span class="nc" id="L74">        moon = new PlanetComponent(&quot;Moon&quot;, coordinates[4].mul(scale).getX()+xOffset, coordinates[4].mul(scale).getY()+yOffset, 3474.2e5*scale, colors[4]);</span>
+<span class="nc" id="L75">        mars = new PlanetComponent(&quot;Mars&quot;, coordinates[5].mul(scale).getX()+xOffset, coordinates[5].mul(scale).getY()+yOffset, 6779e5*scale, colors[5]);</span>
+<span class="nc" id="L76">        jupiter = new PlanetComponent(&quot;Jupiter&quot;, coordinates[6].mul(scale).getX()+xOffset, coordinates[6].mul(scale).getY()+yOffset, 139820e5*scale, colors[6]);</span>
+<span class="nc" id="L77">        saturn = new PlanetComponent(&quot;Saturn&quot;, coordinates[7].mul(scale).getX()+xOffset, coordinates[7].mul(scale).getY()+yOffset, 116460e5*scale, colors[7]);</span>
+<span class="nc" id="L78">        titan = new PlanetComponent(&quot;Titan&quot;, coordinates[8].mul(scale).getX()+xOffset, coordinates[8].mul(scale).getY()+yOffset, 5149.5e5*scale, colors[8]);</span>
+<span class="nc" id="L79">        uranus = new PlanetComponent(&quot;Uranus&quot;, coordinates[9].mul(scale).getX()+xOffset, coordinates[9].mul(scale).getY()+yOffset, 50724e5*scale, colors[9]);</span>
+<span class="nc" id="L80">        neptune = new PlanetComponent(&quot;Neptune&quot;, coordinates[10].mul(scale).getX()+xOffset, coordinates[10].mul(scale).getY()+yOffset, 49224e5*scale, colors[10]);</span>
+<span class="nc" id="L81">        probe = new PlanetComponent(&quot;Probe&quot;, coordinates[11].mul(scale).getX()+xOffset, coordinates[11].mul(scale).getY()+yOffset, 49224e5*scale, colors[11]);</span>
+
+<span class="nc" id="L83">        lPane.add(mercury);</span>
+<span class="nc" id="L84">        lPane.add(venus);</span>
+<span class="nc" id="L85">        lPane.add(moon);</span>
+<span class="nc" id="L86">        lPane.add(earth);</span>
+<span class="nc" id="L87">        lPane.add(mars);</span>
+<span class="nc" id="L88">        lPane.add(jupiter);</span>
+<span class="nc" id="L89">        lPane.add(titan);</span>
+<span class="nc" id="L90">        lPane.add(saturn);</span>
+<span class="nc" id="L91">        lPane.add(uranus);</span>
+<span class="nc" id="L92">        lPane.add(sun);</span>
+<span class="nc" id="L93">        lPane.add(neptune);</span>
+<span class="nc" id="L94">        lPane.add(probe);</span>
+
+<span class="nc" id="L96">        this.add(lPane);</span>
+<span class="nc" id="L97">        this.revalidate();</span>
+<span class="nc" id="L98">        this.setVisible(true);</span>
+
+<span class="nc" id="L100">        timer.start();</span>
+<span class="nc" id="L101">    }</span>
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Each action event caused by the timer -&gt; increase stepCount by 1 and set coordinates accordingly
+<span class="nc" id="L106">        stepCount += 20;</span>
+
+<span class="nc" id="L108">        State state = (State) states[stepCount];</span>
+<span class="nc" id="L109">        Vector3dInterface[] coordinates = state.getCoordinates();</span>
+
+<span class="nc" id="L111">        sun.setCoordinates(coordinates[0].mul(scale).getX()+xOffset, coordinates[0].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L112">        mercury.setCoordinates(coordinates[1].mul(scale).getX()+xOffset, coordinates[1].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L113">        venus.setCoordinates(coordinates[2].mul(scale).getX()+xOffset, coordinates[2].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L114">        earth.setCoordinates(coordinates[3].mul(scale).getX()+xOffset, coordinates[3].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L115">        moon.setCoordinates(coordinates[4].mul(scale).getX()+xOffset, coordinates[4].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L116">        mars.setCoordinates(coordinates[5].mul(scale).getX()+xOffset, coordinates[5].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L117">        jupiter.setCoordinates(coordinates[6].mul(scale).getX()+xOffset, coordinates[6].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L118">        saturn.setCoordinates(coordinates[7].mul(scale).getX()+xOffset, coordinates[7].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L119">        titan.setCoordinates(coordinates[8].mul(scale).getX()+xOffset, coordinates[8].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L120">        uranus.setCoordinates(coordinates[9].mul(scale).getX()+xOffset, coordinates[9].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L121">        neptune.setCoordinates(coordinates[10].mul(scale).getX()+xOffset, coordinates[10].mul(scale).getY()+yOffset);</span>
+<span class="nc" id="L122">        probe.setCoordinates(coordinates[11].mul(scale).getX()+xOffset, coordinates[11].mul(scale).getY()+yOffset);</span>
+
+        // If the scale has changed due to zooming scale the size of the planets
+<span class="nc" id="L125">        sun.setSize(696342e5*scale);</span>
+<span class="nc" id="L126">        mercury.setSize(4879.4e5*scale);</span>
+<span class="nc" id="L127">        venus.setSize(12104e5*scale);</span>
+<span class="nc" id="L128">        earth.setSize(12742e5*scale);</span>
+<span class="nc" id="L129">        moon.setSize(3474.2e5*scale);</span>
+<span class="nc" id="L130">        mars.setSize(6679e5*scale);</span>
+<span class="nc" id="L131">        jupiter.setSize(139820e5*scale);</span>
+<span class="nc" id="L132">        saturn.setSize(116460e5*scale);</span>
+<span class="nc" id="L133">        titan.setSize(5149.5e5*scale);</span>
+<span class="nc" id="L134">        uranus.setSize(50724e5*scale);</span>
+<span class="nc" id="L135">        neptune.setSize(49224e5*scale);</span>
+
+        // Repaint
+<span class="nc" id="L138">        repaint();</span>
+
+        // If end of calculations has been reached, reset animation
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if(stepCount == states.length-1) {</span>
+<span class="nc" id="L142">            stepCount = 0;</span>
+        }
+<span class="nc" id="L144">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
