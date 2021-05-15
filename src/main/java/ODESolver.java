@@ -15,7 +15,7 @@ import src.main.java.titan.RateInterface;
  * the starting coordinates and velocities for the planets and calculates the
  * trajectories from those starting coordinates/velocities.
  */
-public class ODESolver implements ODESolverInterface {
+public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface{
 
     // Starting coordinates for all the planets
     private final Vector3dInterface sunC = new Vector3d(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06);
