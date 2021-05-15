@@ -6,29 +6,31 @@ titan/Vector3dInterface.java
  src.main.java.titan.Vector3dInterface
 PlanetComponent.java
  src.main.java.PlanetComponent
+SpaceShuttle.java
+ SpaceShuttle
 titan/ProbeSimulatorInterface.java
  titan.ProbeSimulatorInterface
-TrajectoryComponent.java
- src.main.java.TrajectoryComponent
 titan/ODESolverInterface.java
  titan.ODESolverInterface
-titan/ODEFunctionInterface.java
- titan.ODEFunctionInterface
-Vector3d.java
- src.main.java.Vector3d
+RunCode.java
+ RunCode
+TrajectoryComponent.java
+ src.main.java.TrajectoryComponent
 Rate.java
  Rate
-ODEFunction.java
- ODEFunction
-Frame.java
- Frame
+Vector3d.java
+ src.main.java.Vector3d
+titan/ODEFunctionInterface.java
+ titan.ODEFunctionInterface
+ODESolver.java
+ ODESolver
 State.java
  State
 VerletSolver.java
  VerletSolver
-RunCode.java
- RunCode
-ODESolver.java
- ODESolver
 ProbeSimulator.java
  ProbeSimulator
+Frame.java
+ Frame
+ODEFunction.java
+ ODEFunction
