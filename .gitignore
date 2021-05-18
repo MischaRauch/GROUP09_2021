@@ -33,3 +33,12 @@ build/classes/java/main/.project
 build/classes/java/main/.settings/org.eclipse.buildship.core.prefs
 build/classes/java/main/build.gradle
 build/classes/java/main/README.md
+.gradle/6.8/executionHistory/executionHistory.bin
+.gradle/6.8/executionHistory/executionHistory.lock
+.gradle/6.8/fileHashes/fileHashes.bin
+.gradle/6.8/fileHashes/fileHashes.lock
+.gradle/6.8/javaCompile/javaCompile.lock
+.gradle/6.8/javaCompile/taskHistory.bin
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+.gradle/buildOutputCleanup/outputFiles.bin
+build/tmp/compileJava/source-classes-mapping.txt
