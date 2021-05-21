@@ -17,7 +17,7 @@ import src.main.java.titan.RateInterface;
  */
 public class ODESolver implements ODESolverInterface {
 
-    // Starting coordinates for all the planets
+    // Starting coordinates for all the planets - PROVIDED VALUES
     private final Vector3dInterface sunC = new Vector3d(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06);
     private final Vector3dInterface mercuryC = new Vector3d(6.047855986424127e+06, -6.801800047868888e+10, -5.702742359714534e+09);
     private final Vector3dInterface venusC = new Vector3d(-9.435345478592035e+10, 5.350359551033670e+10, 6.131453014410347e+09);
@@ -30,8 +30,23 @@ public class ODESolver implements ODESolverInterface {
     private final Vector3dInterface uranusC = new Vector3d(2.395195786685187e+12, 1.744450959214586e+12, -2.455116324031639e+10);
     private final Vector3dInterface neptuneC = new Vector3d(4.382692942729203e+12, -9.093501655486243e+11, -8.227728929479486e+10);
     private Vector3dInterface probeC = new Vector3d(-1.471922101663588e+11, -2.860995816266412e+10-6371e3, 8.278183193596080e+06);
+    /*
+    // Starting coordinates for all the planets - NASA HORIZON VALUES
+    private final Vector3dInterface sunC = new Vector3d((-6.807847851469811E+05*1000), 1.079960529004681E+06*1000, 6.577801896302961E+03*1000);
+    private final Vector3dInterface mercuryC = new Vector3d(5.941270492988122E+03*1000, 6.801804551422262E+07*1000, -5.702728562917408E+06*1000);
+    private final Vector3dInterface venusC = new Vector3d(-9.435356118127899E+07*1000, 5.350355062360455E+07*1000, 6.131466820352264E+06*1000);
+    private final Vector3dInterface earthC = new Vector3d(-1.471923166635424E+08*1000, -2.861000299246477E+07*1000, 8.291942464411259E+03*1000);
+    private final Vector3dInterface moonC = new Vector3d(-1.472344969594165E+08*1000, -2.822582844526653E+07*1000, 1.054166983666271E+04*1000);
+    private final Vector3dInterface marsC = new Vector3d(-3.615638921529161E+07*1000, -2.167633037046744E+08*1000, -3.687670305939779E+06*1000);
+    private final Vector3dInterface jupiterC = new Vector3d(1.781303138592156E+08*1000, -7.551118436250294E+08*1000, -8.532838524470329E+05*1000);
+    private final Vector3dInterface saturnC = new Vector3d(6.328646641500651E+08*1000, -1.358172804527507E+09*1000, -1.578520137930810E+06*1000);
+    private final Vector3dInterface titanC = new Vector3d(6.332873118527889E+08*1000, -1.357175556995868E+09*1000, -2.134637041453660E+06*1000);
+    private final Vector3dInterface uranusC = new Vector3d(2.395195716207961E+09*1000, 1.744451068474438E+09*1000, -2.455128792996490E+07*1000);
+    private final Vector3dInterface neptuneC = new Vector3d(4.382692942729912E+09*1000, -9.093501655460005E+08*1000, -8.227728929321569E+07*1000);
+    private Vector3dInterface probeC = new Vector3d(-1.471922101663588e+11, -2.860995816266412e+10-6371e3, 8.278183193596080e+06);
+    */
 
-    // Starting velocities for all the planets
+    // Starting velocities for all the planets - PROVIDED VALUES
     private final Vector3dInterface sunV = new Vector3d(-1.420511669610689e+01, -4.954714716629277e+00, 3.994237625449041e-01);
     private final Vector3dInterface mercuryV = new Vector3d(3.892585189044652e+04, 2.978342247012996e+03, -3.327964151414740e+03);
     private final Vector3dInterface venusV = new Vector3d(-1.726404287724406e+04, -3.073432518238123e+04, 5.741783385280979e-04);
@@ -44,6 +59,21 @@ public class ODESolver implements ODESolverInterface {
     private final Vector3dInterface uranusV = new Vector3d(-4.059468635313243e+03, 5.187467354884825e+03, 7.182516236837899e+01);
     private final Vector3dInterface neptuneV = new Vector3d(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02);
     private Vector3dInterface probeV = new Vector3d(5.427193405797901e+03, -2.931056622265021e+04-30e3, 6.575428158157592e-01);
+    /*
+    // Starting velocities for all the planets - NASA HORIZON VALUES
+    private final Vector3dInterface sunV = new Vector3d(-1.420511174031879E-02*1000, -4.954720611047453E-03*1000, 3.994075214250549E-04*1000);
+    private final Vector3dInterface mercuryV = new Vector3d(3.892585186728442E+01*1000, 2.978342169553609E+00*1000, -3.327964322084350E+00*1000);
+    private final Vector3dInterface venusV = new Vector3d(-1.726404291136308E+01*1000, -3.073432516609996E+01*1000, 5.741783064386929E-01*1000);
+    private final Vector3dInterface earthV = new Vector3d(5.427193376018815E+00*1000, -2.931056623471520E+01*1000, 6.575114893578871E-04*1000);
+    private final Vector3dInterface moonV = new Vector3d(4.433121575882713E+00*1000, -2.948453616031408E+01*1000, 8.896594867343843E-02*1000);
+    private final Vector3dInterface marsV = new Vector3d(2.481551975121696E+01*1000, -1.816368005464070E+00*1000, -6.467321619018108E-01*1000);
+    private final Vector3dInterface jupiterV = new Vector3d(1.255852554663750E+01*1000, 3.622680206123269E+00*1000, -2.958620404125016E-01*1000);
+    private final Vector3dInterface saturnV = new Vector3d(8.220842186554890E+00*1000, 4.052137378979608E+00*1000, -3.976224719266916E-01*1000);
+    private final Vector3dInterface titanV = new Vector3d(3.056877965721629E+00*1000, 6.125612956428791E+00*1000, -9.523587380845593E-01*1000);
+    private final Vector3dInterface uranusV = new Vector3d(-4.059468388338293E+00*1000, 5.187467342275506E+00*1000, 7.182537902566288E-02*1000);
+    private final Vector3dInterface neptuneV = new Vector3d(1.068410753078312E+00*1000, 5.354959504463812E+00*1000, -1.343918419749561E-01*1000);
+    private Vector3dInterface probeV = new Vector3d(5.427193405797901e+03, -2.931056622265021e+04-30e3, 6.575428158157592e-01);
+    */
 
     // Array containing the starting coordinates for all planets
     private Vector3dInterface[] coordinates = {sunC, mercuryC, venusC, earthC, moonC, marsC, jupiterC, saturnC, titanC, uranusC, neptuneC, probeC};

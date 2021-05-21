@@ -15,9 +15,9 @@ public class ProbeSimulator implements ProbeSimulatorInterface {
 
     private final StateInterface[] states;
     private static final double mass = 15e3;
-<span class="fc" id="L18">    private static final double G = 6.674 * Math.pow(10, -11);</span>
+<span class="nc" id="L18">    private static final double G = 6.674 * Math.pow(10, -11);</span>
 
-<span class="pc" id="L20">    private double[] masses = new double[11];</span>
+<span class="nc" id="L20">    private double[] masses = new double[11];</span>
 
 <span class="nc" id="L22">    public ProbeSimulator(StateInterface[] states, double h) {</span>
 <span class="nc" id="L23">        this.states = states;</span>
@@ -26,9 +26,9 @@ public class ProbeSimulator implements ProbeSimulatorInterface {
 
 <span class="nc" id="L27">        this.coordinatesProbe = trajectory(new Vector3d(-1.471922101663588e+11, -2.860995816266412e+10+6371e3, 8.278183193596080e+06), new Vector3d(5.427193405797901e+03, -2.931056622265021e+04, 6.575428158157592e-01), 31536000, h);</span>
 <span class="nc" id="L28">    }</span>
-<span class="fc" id="L29">    public ProbeSimulator() {</span>
-<span class="fc" id="L30">        states = new StateInterface[2];</span>
-<span class="fc" id="L31">    }</span>
+<span class="nc" id="L29">    public ProbeSimulator() {</span>
+<span class="nc" id="L30">        states = new StateInterface[2];</span>
+<span class="nc" id="L31">    }</span>
 
     public Vector3dInterface[] getCoordinatesProbe() {
 <span class="nc" id="L34">        return coordinatesProbe;</span>
@@ -68,30 +68,30 @@ public class ProbeSimulator implements ProbeSimulatorInterface {
     @Override
     public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h) {
         //create reference Objects
-<span class="fc" id="L71">        ODEFunctionInterface f = new ODEFunction();</span>
-<span class="fc" id="L72">        ODESolver ode = new ODESolver();</span>
+<span class="nc" id="L71">        ODEFunctionInterface f = new ODEFunction();</span>
+<span class="nc" id="L72">        ODESolver ode = new ODESolver();</span>
         //set up the data
-<span class="fc" id="L74">        Vector3dInterface[] probeCoordinates = new Vector3dInterface[(int) ((tf/h)+2)];</span>
-<span class="fc" id="L75">        probeCoordinates[0] = p0;</span>
-<span class="fc" id="L76">        Vector3dInterface[] coordinates = ode.getCoordinates();</span>
-<span class="fc" id="L77">        Vector3dInterface[] velocities = ode.getVelocities();</span>
-<span class="fc" id="L78">        coordinates[11] = coordinates[3].add(p0);</span>
-<span class="fc" id="L79">        velocities[11] = velocities[3].add(v0);</span>
+<span class="nc" id="L74">        Vector3dInterface[] probeCoordinates = new Vector3dInterface[(int) ((tf/h)+2)];</span>
+<span class="nc" id="L75">        probeCoordinates[0] = p0;</span>
+<span class="nc" id="L76">        Vector3dInterface[] coordinates = ode.getCoordinates();</span>
+<span class="nc" id="L77">        Vector3dInterface[] velocities = ode.getVelocities();</span>
+<span class="nc" id="L78">        coordinates[11] = coordinates[3].add(p0);</span>
+<span class="nc" id="L79">        velocities[11] = velocities[3].add(v0);</span>
         //set up the storing values for the calculation
-<span class="fc" id="L81">        StateInterface[] states = new StateInterface[(int) ((tf/h)+2)];</span>
-<span class="fc" id="L82">        states = new StateInterface[(int) ((tf/h)+2)];</span>
-<span class="fc" id="L83">        states[0] = new State(coordinates, velocities, 0);</span>
+<span class="nc" id="L81">        StateInterface[] states = new StateInterface[(int) ((tf/h)+2)];</span>
+<span class="nc" id="L82">        states = new StateInterface[(int) ((tf/h)+2)];</span>
+<span class="nc" id="L83">        states[0] = new State(coordinates, velocities, 0);</span>
 
-<span class="fc" id="L85">        int t = 0;</span>
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        for(int i = 1; i &lt; states.length; i++) {</span>
+<span class="nc" id="L85">        int t = 0;</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        for(int i = 1; i &lt; states.length; i++) {</span>
             //for each step perform the chossen step and set the value
-<span class="fc" id="L88">            t += h;</span>
+<span class="nc" id="L88">            t += h;</span>
             //step = Eulers; RKstep = Runge-Kutte; verletStep = Verlet solver
-<span class="fc" id="L90">            states[i] = ode.verletStep(f, t, states[i-1], h);</span>
-<span class="fc" id="L91">            State state = (State) states[i];</span>
-<span class="fc" id="L92">            probeCoordinates[i] = state.getCoordinates()[11];</span>
+<span class="nc" id="L90">            states[i] = ode.verletStep(f, t, states[i-1], h);</span>
+<span class="nc" id="L91">            State state = (State) states[i];</span>
+<span class="nc" id="L92">            probeCoordinates[i] = state.getCoordinates()[11];</span>
         }
-<span class="fc" id="L94">        return probeCoordinates;</span>
+<span class="nc" id="L94">        return probeCoordinates;</span>
     }
 
     /* EULER'S METHOD

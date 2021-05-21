@@ -6,13 +6,13 @@ public class Rate implements RateInterface {
 
     private final Vector3dInterface[] rates;
 
-<span class="nc" id="L9">    public Rate(Vector3dInterface[] rates) {</span>
-<span class="nc" id="L10">        this.rates = new Vector3dInterface[rates.length];</span>
-<span class="nc" id="L11">        System.arraycopy(rates, 0, this.rates, 0, rates.length);</span>
-<span class="nc" id="L12">    }</span>
+<span class="fc" id="L9">    public Rate(Vector3dInterface[] rates) {</span>
+<span class="fc" id="L10">        this.rates = new Vector3dInterface[rates.length];</span>
+<span class="fc" id="L11">        System.arraycopy(rates, 0, this.rates, 0, rates.length);</span>
+<span class="fc" id="L12">    }</span>
 
     public Vector3dInterface[] getRates() {
-<span class="nc" id="L15">        return rates;</span>
+<span class="fc" id="L15">        return rates;</span>
     }
 
     public Rate addMul(double scalar, Rate other) {

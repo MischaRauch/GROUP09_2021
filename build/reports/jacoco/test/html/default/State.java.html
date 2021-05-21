@@ -21,21 +21,21 @@ public class State implements StateInterface {
 <span class="fc" id="L21">    public static boolean first = true;</span>
 
     // The masses for all planets
-<span class="fc" id="L24">    private final double sunM = 1.988500e30;</span>
-<span class="fc" id="L25">    private final double mercuryM = 3.302e23;</span>
-<span class="fc" id="L26">    private final double venusM = 4.8685e24;</span>
-<span class="fc" id="L27">    private final double earthM = 5.97219e24;</span>
-<span class="fc" id="L28">    private final double moonM = 7.349e22;</span>
-<span class="fc" id="L29">    private final double marsM = 6.4171e23;</span>
-<span class="fc" id="L30">    private final double jupiterM = 1.89813e27;</span>
-<span class="fc" id="L31">    private final double saturnM = 5.6834e26;</span>
-<span class="fc" id="L32">    private final double titanM = 1.34553e23;</span>
-<span class="fc" id="L33">    private final double uranusM = 8.6813e25;</span>
-<span class="fc" id="L34">    private final double neptuneM = 1.02413e26;</span>
-<span class="fc" id="L35">    private final double probeM = 15e3;</span>
+<span class="pc" id="L24">    private final double sunM = 1.988500e30;</span>
+<span class="pc" id="L25">    private final double mercuryM = 3.302e23;</span>
+<span class="pc" id="L26">    private final double venusM = 4.8685e24;</span>
+<span class="pc" id="L27">    private final double earthM = 5.97219e24;</span>
+<span class="pc" id="L28">    private final double moonM = 7.349e22;</span>
+<span class="pc" id="L29">    private final double marsM = 6.4171e23;</span>
+<span class="pc" id="L30">    private final double jupiterM = 1.89813e27;</span>
+<span class="pc" id="L31">    private final double saturnM = 5.6834e26;</span>
+<span class="pc" id="L32">    private final double titanM = 1.34553e23;</span>
+<span class="pc" id="L33">    private final double uranusM = 8.6813e25;</span>
+<span class="pc" id="L34">    private final double neptuneM = 1.02413e26;</span>
+<span class="pc" id="L35">    private final double probeM = 15e3;</span>
 
     // Array containing the masses for all planets
-<span class="fc" id="L38">    public final double[] masses = {sunM, mercuryM, venusM, earthM, moonM, marsM, jupiterM, saturnM, titanM, uranusM, neptuneM, probeM};</span>
+<span class="pc" id="L38">    public final double[] masses = {sunM, mercuryM, venusM, earthM, moonM, marsM, jupiterM, saturnM, titanM, uranusM, neptuneM, probeM};</span>
 
     /**
      * Constructor for the State class.
@@ -48,12 +48,12 @@ public class State implements StateInterface {
 <span class="fc" id="L48">        this.velocities = velocities;</span>
 <span class="fc" id="L49">        this.time = time;</span>
 <span class="fc" id="L50">    }</span>
-<span class="fc" id="L51">    public State(Vector3dInterface[] coordinates, Vector3dInterface[] prevCoordinates, Vector3dInterface[] velocities, double time) {</span>
-<span class="fc" id="L52">        this.coordinates = coordinates;</span>
-<span class="fc" id="L53">        this.prevCoordinates = prevCoordinates;</span>
-<span class="fc" id="L54">        this.velocities = velocities;</span>
-<span class="fc" id="L55">        this.time = time;</span>
-<span class="fc" id="L56">    }</span>
+<span class="nc" id="L51">    public State(Vector3dInterface[] coordinates, Vector3dInterface[] prevCoordinates, Vector3dInterface[] velocities, double time) {</span>
+<span class="nc" id="L52">        this.coordinates = coordinates;</span>
+<span class="nc" id="L53">        this.prevCoordinates = prevCoordinates;</span>
+<span class="nc" id="L54">        this.velocities = velocities;</span>
+<span class="nc" id="L55">        this.time = time;</span>
+<span class="nc" id="L56">    }</span>
 
     /**
      * Getter method
@@ -76,7 +76,7 @@ public class State implements StateInterface {
      * @return the time of the State object it is called on.
      */
     public double getTime() {
-<span class="nc" id="L79">        return time;</span>
+<span class="fc" id="L79">        return time;</span>
     }
 
     /**
@@ -97,28 +97,28 @@ public class State implements StateInterface {
     @Override
     public StateInterface addMul(double step, RateInterface r) {
 
-<span class="nc" id="L100">        Rate rate = (Rate) r;</span>
+<span class="fc" id="L100">        Rate rate = (Rate) r;</span>
 
         // Creates copies of the previous states coordinates
-<span class="nc" id="L103">        Vector3dInterface[] newCoordinates = new Vector3d[coordinates.length];</span>
-<span class="nc" id="L104">        System.arraycopy(this.coordinates, 0, newCoordinates, 0, newCoordinates.length);</span>
-<span class="nc" id="L105">        Vector3dInterface[] newVelocities = new Vector3d[velocities.length];</span>
-<span class="nc" id="L106">        System.arraycopy(this.velocities, 0, newVelocities, 0, newVelocities.length);</span>
+<span class="fc" id="L103">        Vector3dInterface[] newCoordinates = new Vector3d[coordinates.length];</span>
+<span class="fc" id="L104">        System.arraycopy(this.coordinates, 0, newCoordinates, 0, newCoordinates.length);</span>
+<span class="fc" id="L105">        Vector3dInterface[] newVelocities = new Vector3d[velocities.length];</span>
+<span class="fc" id="L106">        System.arraycopy(this.velocities, 0, newVelocities, 0, newVelocities.length);</span>
 
-<span class="nc" id="L108">        Vector3dInterface[] rates = rate.getRates(); // Retrieves the rates-of-change and stores them inside an array</span>
+<span class="fc" id="L108">        Vector3dInterface[] rates = rate.getRates(); // Retrieves the rates-of-change and stores them inside an array</span>
 
         // For loop which calculates the new velocities for each body in the system and updates the newVelocities array
-<span class="nc bnc" id="L111" title="All 2 branches missed.">        for(int i = 0; i &lt; newVelocities.length; i++) {</span>
-<span class="nc" id="L112">            newVelocities[i] = newVelocities[i].add(rates[i]);</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        for(int i = 0; i &lt; newVelocities.length; i++) {</span>
+<span class="fc" id="L112">            newVelocities[i] = newVelocities[i].add(rates[i]);</span>
         }
 
         // For loop which calculates the new coordinates for each body in the system and updates the newCoordinates array
-<span class="nc bnc" id="L116" title="All 2 branches missed.">        for(int i = 0; i &lt; newCoordinates.length; i++) {</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for(int i = 0; i &lt; newCoordinates.length; i++) {</span>
             //newCoordinates[i] = newCoordinates[i].addMul(step, newVelocities[i]);
-<span class="nc" id="L118">            newCoordinates[i] = newCoordinates[i].addMul(step,velocities[i]);</span>
+<span class="fc" id="L118">            newCoordinates[i] = newCoordinates[i].addMul(step,velocities[i]);</span>
         }
 
-<span class="nc" id="L121">        return new State(newCoordinates, newVelocities, this.time+step);    // Returns the new state after the update</span>
+<span class="fc" id="L121">        return new State(newCoordinates, newVelocities, this.time+step);    // Returns the new state after the update</span>
     }
 
     public StateInterface addMulVerlet1(double step, Vector3dInterface[] accelerations, ODEFunctionInterface f) {
@@ -146,27 +146,27 @@ public class State implements StateInterface {
     public StateInterface addMulVerlet(double step, Vector3dInterface[] accelerations, ODEFunctionInterface f) {
 
         // Creates copies of the previous states coordinates
-<span class="fc" id="L149">        Vector3dInterface[] newCoordinates = new Vector3d[coordinates.length];</span>
-<span class="fc" id="L150">        System.arraycopy(this.coordinates, 0, newCoordinates, 0, newCoordinates.length);</span>
+<span class="nc" id="L149">        Vector3dInterface[] newCoordinates = new Vector3d[coordinates.length];</span>
+<span class="nc" id="L150">        System.arraycopy(this.coordinates, 0, newCoordinates, 0, newCoordinates.length);</span>
 
-<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (this.prevCoordinates == null) {</span>
-<span class="fc" id="L153">             first = true;</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (this.prevCoordinates == null) {</span>
+<span class="nc" id="L153">             first = true;</span>
         }
 
-<span class="fc bfc" id="L156" title="All 2 branches covered.">        if(first) {</span>
-<span class="fc bfc" id="L157" title="All 2 branches covered.">            for(int i = 0; i &lt; newCoordinates.length; i++) {</span>
-<span class="fc" id="L158">                newCoordinates[i] = coordinates[i].add((velocities[i].mul(step))).add(accelerations[i].mul(0.5*Math.pow(step,2)));</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if(first) {</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            for(int i = 0; i &lt; newCoordinates.length; i++) {</span>
+<span class="nc" id="L158">                newCoordinates[i] = coordinates[i].add((velocities[i].mul(step))).add(accelerations[i].mul(0.5*Math.pow(step,2)));</span>
             }
-<span class="fc" id="L160">            first = false;</span>
-<span class="fc" id="L161">           return new State(newCoordinates, coordinates, velocities, this.time+step);</span>
+<span class="nc" id="L160">            first = false;</span>
+<span class="nc" id="L161">           return new State(newCoordinates, coordinates, velocities, this.time+step);</span>
 
         }
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        for(int i = 0; i &lt; newCoordinates.length; i++) {</span>
-<span class="fc" id="L165">            Vector3dInterface tmp = (coordinates[i].mul(2)).sub(prevCoordinates[i]);</span>
-<span class="fc" id="L166">            Vector3dInterface tmp2 = accelerations[i].mul(Math.pow(step,2));</span>
-<span class="fc" id="L167">            newCoordinates[i] = tmp.add(tmp2);</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        for(int i = 0; i &lt; newCoordinates.length; i++) {</span>
+<span class="nc" id="L165">            Vector3dInterface tmp = (coordinates[i].mul(2)).sub(prevCoordinates[i]);</span>
+<span class="nc" id="L166">            Vector3dInterface tmp2 = accelerations[i].mul(Math.pow(step,2));</span>
+<span class="nc" id="L167">            newCoordinates[i] = tmp.add(tmp2);</span>
         }
-<span class="fc" id="L169">       return new State(newCoordinates, coordinates, velocities, this.time+step);</span>
+<span class="nc" id="L169">       return new State(newCoordinates, coordinates, velocities, this.time+step);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
