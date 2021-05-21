@@ -14,6 +14,7 @@ public class Frame extends JFrame implements ActionListener {
     private Timer timer = new Timer(1, this);
     private JLayeredPane lPane = new JLayeredPane();
     private int stepCount = 0;
+    private int frameSkip = 25;
 
     private final PlanetComponent sun;
     private final PlanetComponent mercury;
@@ -50,9 +51,9 @@ public class Frame extends JFrame implements ActionListener {
 
         this.states = new State[states.length];
 
-        for(int i = 0; i < states.length; i+=20) {
+        for(int i = 0; i < states.length; i+=frameSkip) {
             this.states[i] = (State) states[i];
-            if(i % 2000 == 0) {
+            if(i % (frameSkip*100) == 0) {
                 State state = (State) this.states[i];
                 Vector3dInterface[] coordinates = state.getCoordinates();
                 for(int j = 1; j < coordinates.length; j++) {
@@ -63,6 +64,16 @@ public class Frame extends JFrame implements ActionListener {
                 }
             }
         }
+
+        JButton pauseButton = new JButton("Play/Pause");
+        pauseButton.setBounds(1200,660,100,30);
+        pauseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        lPane.add(pauseButton);
 
         State state = (State) this.states[stepCount];
         Vector3dInterface[] coordinates = state.getCoordinates();
@@ -103,7 +114,12 @@ public class Frame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // Each action event caused by the timer -> increase stepCount by 1 and set coordinates accordingly
-        stepCount += 20;
+        stepCount += frameSkip;
+
+        // If end of calculations has been reached, reset animation
+        if(stepCount > states.length-1) {
+            stepCount = 0;
+        }
 
         State state = (State) states[stepCount];
         Vector3dInterface[] coordinates = state.getCoordinates();
@@ -136,10 +152,5 @@ public class Frame extends JFrame implements ActionListener {
 
         // Repaint
         repaint();
-
-        // If end of calculations has been reached, reset animation
-        if(stepCount == states.length-1) {
-            stepCount = 0;
-        }
     }
 }
