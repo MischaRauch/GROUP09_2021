@@ -53,27 +53,39 @@ public class Frame extends JFrame implements ActionListener {
 
         for(int i = 0; i < states.length; i+=frameSkip) {
             this.states[i] = (State) states[i];
-            if(i % (frameSkip*100) == 0) {
-                State state = (State) this.states[i];
-                Vector3dInterface[] coordinates = state.getCoordinates();
-                for(int j = 1; j < coordinates.length; j++) {
-                    if(j!= 4) {
-                        TrajectoryComponent t = new TrajectoryComponent(coordinates[j].mul(scale).getX() + xOffset, coordinates[j].mul(scale).getY() + yOffset, colors[j]);
-                        lPane.add(t);
-                    }
-                }
-            }
+//            if(i % (frameSkip*100) == 0) {
+//                State state = (State) this.states[i];
+//                Vector3dInterface[] coordinates = state.getCoordinates();
+//                for(int j = 1; j < coordinates.length; j++) {
+//                    if(j!= 4) {
+//                        TrajectoryComponent t = new TrajectoryComponent(coordinates[j].mul(scale).getX() + xOffset, coordinates[j].mul(scale).getY() + yOffset, colors[j]);
+//                        lPane.add(t);
+//                    }
+//                }
+//            }
         }
 
-        JButton pauseButton = new JButton("Play/Pause");
-        pauseButton.setBounds(1200,660,100,30);
-        pauseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
+        // Creation of JButtons for panning/zooming
+        JButton zoomInButton = new JButton("Zoom in");
+        zoomInButton.setBounds(1300,700,100,30);
+        zoomInButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                scale *= 2;
             }
         });
-        lPane.add(pauseButton);
+        lPane.add(zoomInButton);
+        JButton zoomOutButton = new JButton("Zoom out");
+        zoomOutButton.setBounds(1300,660,100,30);
+        zoomOutButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                scale *= 0.5;
+            }
+        });
+        lPane.add(zoomOutButton);
 
         State state = (State) this.states[stepCount];
         Vector3dInterface[] coordinates = state.getCoordinates();
