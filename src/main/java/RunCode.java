@@ -17,6 +17,8 @@ public class RunCode {
     public static void main(String[] args) {
         ODESolver solver = new ODESolver(stepSize); // 6000
 
+        HillClimbing climber = new HillClimbing(solver, 365.25*(24*60*60),stepSize);
+
         Frame frame = new Frame(solver.getStates());
     }
 
