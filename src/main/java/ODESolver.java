@@ -15,7 +15,7 @@ import src.main.java.titan.RateInterface;
  * the starting coordinates and velocities for the planets and calculates the
  * trajectories from those starting coordinates/velocities.
  */
-public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
+public class ODESolver implements ODESolverInterface {
 
     // Starting coordinates for all the planets - PROVIDED VALUES
     private final Vector3dInterface sunC = new Vector3d(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06);
@@ -85,8 +85,6 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
    // private final int SecondsInYear = 31536000;
     private final double SecondsInYear = (365.25*(24*60*60));
 
-    private double smallestDistRocketTitan;
-
     /**
      * Constructor for the ODESolver class. Creates starting state and sets states instance field using
      * the solve method.
@@ -97,13 +95,9 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
         StateInterface y0 = new State(coordinates, velocities, 0);
         ODEFunctionInterface f = new ODEFunction();
         states = solve(f, y0, SecondsInYear, h); //31536000
-        trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(0, -60e3, 0), SecondsInYear, h);
+       // trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(0, -60e3, 0), SecondsInYear, h);
     }
     public ODESolver(){}
-
-    public double getSmallestDistRocketTitan() {
-        return smallestDistRocketTitan;
-    }
 
     /**
      * Getter method
@@ -211,35 +205,4 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
         return state.addMulVerlet(h, accelerations, f);
     }
 
-    @Override
-    public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double[] ts) {
-        return new Vector3dInterface[0];
-    }
-
-    @Override
-    public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h) {
-        Vector3dInterface[] probeCoordinates = new Vector3dInterface[(int) ((tf/h)+1)];
-        ODEFunctionInterface f = new ODEFunction();
-        probeCoordinates[0] = p0;
-        coordinates[11] = coordinates[3].add(p0);
-        velocities[11] = velocities[3].add(v0);
-        states = new StateInterface[(int) ((tf/h)+1)];
-        states[0] = new State(coordinates, velocities, 0);
-        smallestDistRocketTitan = Double.MAX_VALUE;
-
-        int t = 0;
-
-        for(int i = 1; i < states.length; i++) {
-            t += h;
-            states[i] = verletStep(f, t, states[i-1], h);
-            State state = (State) states[i];
-            probeCoordinates[i] = state.getCoordinates()[11];
-            double distRocketTitan = probeCoordinates[i].dist(state.getCoordinates()[8]);
-            if(distRocketTitan < smallestDistRocketTitan) {
-                smallestDistRocketTitan = distRocketTitan;
-            }
-        }
-
-        return probeCoordinates;
-    }
 }
