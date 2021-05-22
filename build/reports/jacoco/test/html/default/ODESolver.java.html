@@ -15,7 +15,7 @@ import src.main.java.titan.RateInterface;
  * the starting coordinates and velocities for the planets and calculates the
  * trajectories from those starting coordinates/velocities.
  */
-public class ODESolver implements ODESolverInterface {
+public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
 
     // Starting coordinates for all the planets - PROVIDED VALUES
 <span class="pc" id="L21">    private final Vector3dInterface sunC = new Vector3d(-6.806783239281648e+08, 1.080005533878725e+09, 6.564012751690170e+06);</span>
@@ -205,5 +205,31 @@ public class ODESolver implements ODESolverInterface {
 <span class="nc" id="L205">        return state.addMulVerlet(h, accelerations, f);</span>
     }
 
+    @Override
+    public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double[] ts) {
+<span class="nc" id="L180">        return new Vector3dInterface[0];</span>
+    }
+
+    @Override
+    public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h) {
+<span class="nc" id="L185">        Vector3dInterface[] probeCoordinates = new Vector3dInterface[(int) ((tf/h)+1)];</span>
+<span class="nc" id="L186">        ODEFunctionInterface f = new ODEFunction();</span>
+<span class="nc" id="L187">        probeCoordinates[0] = p0;</span>
+<span class="nc" id="L188">        coordinates[11] = coordinates[3].add(p0);</span>
+<span class="nc" id="L189">        velocities[11] = velocities[3].add(v0);</span>
+<span class="nc" id="L190">        states = new StateInterface[(int) ((tf/h)+1)];</span>
+<span class="nc" id="L191">        states[0] = new State(coordinates, velocities, 0);</span>
+
+<span class="nc" id="L193">        int t = 0;</span>
+
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        for(int i = 1; i &lt; states.length; i++) {</span>
+<span class="nc" id="L196">            t += h;</span>
+<span class="nc" id="L197">            states[i] = RKstep(f, t, states[i-1], h);</span>
+<span class="nc" id="L198">            State state = (State) states[i];</span>
+<span class="nc" id="L199">            probeCoordinates[i] = state.getCoordinates()[11];</span>
+        }
+
+<span class="nc" id="L202">        return probeCoordinates;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

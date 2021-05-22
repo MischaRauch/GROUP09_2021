@@ -16,20 +16,20 @@ public class Rate implements RateInterface {
     }
 
     public Rate addMul(double scalar, Rate other) {
-<span class="nc" id="L19">        Vector3dInterface[] addRates = new Vector3dInterface[rates.length];</span>
-<span class="nc" id="L20">        Vector3dInterface[] otherRates = other.getRates();</span>
-<span class="nc bnc" id="L21" title="All 2 branches missed.">        for(int i = 0; i &lt; addRates.length; i ++) {</span>
-<span class="nc" id="L22">            addRates[i] = this.rates[i].add(otherRates[i].mul(scalar));</span>
+<span class="fc" id="L19">        Vector3dInterface[] addRates = new Vector3dInterface[rates.length];</span>
+<span class="fc" id="L20">        Vector3dInterface[] otherRates = other.getRates();</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        for(int i = 0; i &lt; addRates.length; i ++) {</span>
+<span class="fc" id="L22">            addRates[i] = this.rates[i].add(otherRates[i].mul(scalar));</span>
         }
-<span class="nc" id="L24">        return new Rate(addRates);</span>
+<span class="fc" id="L24">        return new Rate(addRates);</span>
     }
 
     public Rate mul(double scalar) {
-<span class="nc" id="L28">        Vector3dInterface[] mulRates = new Vector3dInterface[rates.length];</span>
-<span class="nc bnc" id="L29" title="All 2 branches missed.">        for(int i = 0; i &lt; mulRates.length; i ++) {</span>
-<span class="nc" id="L30">            mulRates[i] = this.rates[i].mul(scalar);</span>
+<span class="fc" id="L28">        Vector3dInterface[] mulRates = new Vector3dInterface[rates.length];</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        for(int i = 0; i &lt; mulRates.length; i ++) {</span>
+<span class="fc" id="L30">            mulRates[i] = this.rates[i].mul(scalar);</span>
         }
-<span class="nc" id="L32">        return new Rate(mulRates);</span>
+<span class="fc" id="L32">        return new Rate(mulRates);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

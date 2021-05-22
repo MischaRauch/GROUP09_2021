@@ -26,6 +26,7 @@ public class ProbeSimulator implements ProbeSimulatorInterface {
 
         this.coordinatesProbe = trajectory(new Vector3d(-1.471922101663588e+11, -2.860995816266412e+10+6371e3, 8.278183193596080e+06), new Vector3d(5.427193405797901e+03, -2.931056622265021e+04, 6.575428158157592e-01), 31536000, h);
     }
+
     public ProbeSimulator() {
         states = new StateInterface[2];
     }
@@ -87,7 +88,7 @@ public class ProbeSimulator implements ProbeSimulatorInterface {
             //for each step perform the chossen step and set the value
             t += h;
             //step = Eulers; RKstep = Runge-Kutte; verletStep = Verlet solver
-            states[i] = ode.verletStep(f, t, states[i-1], h);
+            states[i] = ode.RKstep(f, t, states[i-1], h);
             State state = (State) states[i];
             probeCoordinates[i] = state.getCoordinates()[11];
         }

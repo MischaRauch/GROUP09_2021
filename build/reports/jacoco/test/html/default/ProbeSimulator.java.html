@@ -31,30 +31,30 @@ public class ProbeSimulator implements ProbeSimulatorInterface {
 <span class="nc" id="L31">    }</span>
 
     public Vector3dInterface[] getCoordinatesProbe() {
-<span class="nc" id="L34">        return coordinatesProbe;</span>
+<span class="nc" id="L35">        return coordinatesProbe;</span>
     }
 
     private Vector3dInterface calculateF(Vector3dInterface coordinatesProbe, Vector3dInterface[] coordinates) {
-<span class="nc" id="L38">        Vector3dInterface force = new Vector3d(0,0,0);</span>
+<span class="nc" id="L39">        Vector3dInterface force = new Vector3d(0,0,0);</span>
         // Loops through all the bodies and adds the force of each body on the probe to the total force
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        for(int i = 0; i &lt; coordinates.length; i++) {</span>
-<span class="nc" id="L41">            double mm = (masses[i] * mass);</span>
-<span class="nc" id="L42">            double distance = coordinatesProbe.dist(coordinates[i]);</span>
-<span class="nc" id="L43">            Vector3dInterface unitVector = (coordinatesProbe.sub(coordinates[i])).mul(1/distance);</span>
-<span class="nc" id="L44">            force = force.add(unitVector.mul(-G * mm/Math.pow(distance, 2)));</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        for(int i = 0; i &lt; coordinates.length; i++) {</span>
+<span class="nc" id="L42">            double mm = (masses[i] * mass);</span>
+<span class="nc" id="L43">            double distance = coordinatesProbe.dist(coordinates[i]);</span>
+<span class="nc" id="L44">            Vector3dInterface unitVector = (coordinatesProbe.sub(coordinates[i])).mul(1/distance);</span>
+<span class="nc" id="L45">            force = force.add(unitVector.mul(-G * mm/Math.pow(distance, 2)));</span>
         }
-<span class="nc" id="L46">        return force;</span>
+<span class="nc" id="L47">        return force;</span>
     }
 
     private Vector3dInterface calculateRate(Vector3dInterface force, double h) {
-<span class="nc" id="L50">        Vector3dInterface rate = new Vector3d(force.getX()/mass, force.getY()/mass, force.getZ()/mass);</span>
-<span class="nc" id="L51">        rate = rate.mul(h);</span>
-<span class="nc" id="L52">        return rate;</span>
+<span class="nc" id="L51">        Vector3dInterface rate = new Vector3d(force.getX()/mass, force.getY()/mass, force.getZ()/mass);</span>
+<span class="nc" id="L52">        rate = rate.mul(h);</span>
+<span class="nc" id="L53">        return rate;</span>
     }
 
     @Override
     public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double[] ts) {
-<span class="nc" id="L57">        return new Vector3dInterface[0];</span>
+<span class="nc" id="L58">        return new Vector3dInterface[0];</span>
     }
 
     /**

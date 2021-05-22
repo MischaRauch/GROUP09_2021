@@ -1,5 +1,7 @@
 titan/StateInterface.java
  titan.StateInterface
+Vector3d.java
+ src.main.java.Vector3d
 titan/RateInterface.java
  src.main.java.titan.RateInterface
 titan/Vector3dInterface.java
