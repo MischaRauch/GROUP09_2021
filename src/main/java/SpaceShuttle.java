@@ -3,26 +3,22 @@ import src.main.java.Vector3d;
 
 public class SpaceShuttle{
     private double fuelMass;
-    private double burnRate = 0.0000005;
     private double probeMass;
-    private Vector3dInterface ve = new Vector3d(2e4,2e4,2e4); // effective exhaust velocity
-    private int stepsize;
-    private int secondsInYear = 31536000;
-    private Vector3dInterface[] acceleration;
-    private double[] mass_flow; // mass flow rate
-    private Vector3dInterface[] thrust;
-    private Vector3dInterface maxThrust;
+    private final Vector3dInterface maxThrust = new Vector3d(15000,15000,15000);
     private double totalM;
     private boolean noMass;
+    //private double burnRate = 0.0000005;
+    //private Vector3dInterface ve = new Vector3d(2e4,2e4,2e4); // effective exhaust velocity
+    //private int stepsize;
+    //private int secondsInYear = 31536000;
 
-    public SpaceShuttle(double massOfProbe, double initialFuelMass, int chosenStepsize) {
+    public SpaceShuttle(double massOfProbe, double initialFuelMass) {
         probeMass = massOfProbe;
         fuelMass = initialFuelMass;
-        stepsize = chosenStepsize;
-        mass_flow = new double[stepsize];
-        totalM = totalMass(probeMass, fuelMass);
+        totalM = probeMass + fuelMass;
         noMass = false;
     }
+
     /**
      * Computes the acceleration for one step.
      */
@@ -32,36 +28,39 @@ public class SpaceShuttle{
             return null;
         }
         Vector3dInterface thrust = maxThrust.mul(percentage);
-        Vector3dInterface acceleration = new Vector3d(thrust.getX() / totalM, thrust.getY() / totalM, thrust.getZ() / totalM);
+        Vector3dInterface acceleration = thrust.mul(1/totalM);
+        //System.out.println("The thrust is: "+ thrust);
+        //System.out.println("The acceleration is: "+ acceleration);
         Vector3dInterface newVelocity = previousVelocity.add(acceleration);
-        reduceMass(thrust,newVelocity);
+        reduceMass(thrust, newVelocity);
         return acceleration;
     }
+
     /**
      * Computes the used mass of the fuel by using the formula: m = F/V
      */
-    public void reduceMass(Vector3dInterface force,Vector3dInterface velocity){
-        double usedMass = force.norm()/velocity.norm();
+    public void reduceMass(Vector3dInterface force, Vector3dInterface velocity){
+        double usedMass = force.norm() / velocity.norm();
+        //System.out.println("The used fuel mass is: " + usedMass);
         fuelMass = fuelMass - usedMass;
         if(fuelMass==0 || fuelMass<0){
             noMass = true;
         }
-        totalM = totalM + fuelMass;
-
-        /**
-        fuelMass = fuelMass*Math.pow((1 - burnRate), 1);
-        if(fuelMass==0 || fuelMass<0){
-            noMass = true;
-        }
-        totalM = probeMass + fuelMass;*/
+        totalM = probeMass + fuelMass;
+        System.out.println("The total mass is: " + totalM);
     }
 
-    public double getTotalM(){
+    public double getTotalMass(){
         return totalM;
     }
+
+    public double getFuelMass(){
+        return fuelMass;
+    }
+
     /**
      * Computes the total mass of the shuttle (the mass of the probe + the mass of the fuel).
-     */
+     *
     public double totalMass(double massOfProbe, double massOfFuel) {
         return massOfProbe + massOfFuel;
     }
@@ -69,7 +68,7 @@ public class SpaceShuttle{
     /** Computes the mass flow rate (ṁ) using the formulas:
         m(t) = M + m * (1 - burnRate)^t; ṁ = dm/dt = m * (-1) * (1 - burnRate)^t * ln((1 - burnRate))
      *
-     */
+     *
     public double[] massFlowRate(double fuelMass, double burnRate, int secondsInYear) {
 
         double[] ṁ = new double[stepsize];
@@ -85,7 +84,7 @@ public class SpaceShuttle{
 
     /**
      * Computes the thrust of the probe by using the formula t = ve * ṁ.
-     */
+     *
     public Vector3dInterface[] calculateF() {
 
         double[] ṁ = massFlowRate(fuelMass, burnRate, secondsInYear);
@@ -101,7 +100,7 @@ public class SpaceShuttle{
 
     /**
      * Computes the accelerations.
-     */
+     *
     public Vector3dInterface[] calculateAccelerations() {
 
        	calculateF();
@@ -119,8 +118,8 @@ public class SpaceShuttle{
 
     /**
      * Computes the thrust by using the formula Ma = F.
-     */
-    /*public Vector3dInterface[] computeThrust() {
+     *
+     public Vector3dInterface[] computeThrust() {
 
         fuelMass = fuelMass * (1 - burnRate); //notice that fuelMass will change at each step.
         double allMass = probeMass + fuelMass;
@@ -133,17 +132,4 @@ public class SpaceShuttle{
 
         return thrust;
     }*/
-
-    /**
-     * Gets the acceleration from each step's calculations.
-     */
-    public Vector3dInterface[] setA(Rate a) {
-        acceleration = a.getRates();
-        return acceleration;
-    }
-
-    public Vector3dInterface[] getThrust() {
-        return thrust;
-    }
-     
 }
