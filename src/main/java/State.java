@@ -4,8 +4,6 @@ import titan.ODEFunctionInterface;
 import titan.StateInterface;
 import src.main.java.titan.Vector3dInterface;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
-
 /**
  * Class which represents the state of a system. Contains the coordinates and velocities of all objects in the system.
  */
@@ -119,7 +117,15 @@ public class State implements StateInterface {
         return new State(newCoordinates, newVelocities, this.time+step);    // Returns the new state after the update
     }
 
-    public StateInterface addMulVerlet1(double step, Vector3dInterface[] accelerations, ODEFunctionInterface f) {
+    /**
+     * Update a state using Velocity Verlet.
+     *
+     * @param step              the time-step of the update
+     * @param accelerations     the accelerations to use in the step
+     * @param f                 the function defining the differential equation dy/dt=f(t,y)
+     * @return the new state after the step
+     */
+    public StateInterface addMulVelVerlet(double step, Vector3dInterface[] accelerations, ODEFunctionInterface f) {
 
         // Creates copies of the previous states coordinates
         Vector3dInterface[] newCoordinates = new Vector3d[coordinates.length];
@@ -128,20 +134,26 @@ public class State implements StateInterface {
         System.arraycopy(this.velocities, 0, newVelocities, 0, newVelocities.length);
 
         for(int i = 0; i < newCoordinates.length; i++) {
-            //newCoordinates[i] = newCoordinates[i].addMul(step, velocities[i]).addMul(0.5*Math.pow(step,2), accelerations[i]);
             newCoordinates[i] = coordinates[i].addMul(step,velocities[i]).addMul(0.5*Math.pow(step,2), accelerations[i]);
         }
 
         Vector3dInterface[] accelerationsNew = ((ODEFunction) f).callA(this.time+step,this);
 
         for(int i = 0; i < newVelocities.length; i++) {
-            //newVelocities[i] = newVelocities[i].add(((accelerations[i].add(accelerationsNew[i])).mul(0.5)).mul(step));
             newVelocities[i] = velocities[i].add(((accelerations[i].add(accelerationsNew[i])).mul(0.5).mul(step)));
         }
+
         return new State(newCoordinates, newVelocities, this.time+step);
     }
 
-    public StateInterface addMulVerlet(double step, Vector3dInterface[] accelerations, ODEFunctionInterface f) {
+    /**
+     * Update a state using Störmer-Verlet.
+     *
+     * @param step              the time-step of the update
+     * @param accelerations     the accelerations to use in the step
+     * @return the new state after the step
+     */
+    public StateInterface addMulVerlet(double step, Vector3dInterface[] accelerations) {
 
         // Creates copies of the previous states coordinates
         Vector3dInterface[] newCoordinates = new Vector3d[coordinates.length];

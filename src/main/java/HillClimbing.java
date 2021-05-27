@@ -1,16 +1,31 @@
-import src.main.java.titan.Vector3dInterface;
-
 import java.util.ArrayList;
-import java.util.Random;
 
+/**
+ * Hill climbing class used for finding a trajectory to Titan.
+ */
 public class HillClimbing {
 
-    private RocketState startState = new RocketState(new Vector3d(0, -6371e3, 0), new Vector3d(0,-0,-0));
+    // The initial state from which the hill climbing algorithm starts searching, the position vector is decided here.
+    private RocketState startState = new RocketState(new Vector3d(0, -6371e3, 0), new Vector3d(0,0,0));
 
+    /**
+     * Constructor which starts the algorithm.
+     * @param solver    solver used for performing simulations
+     * @param tf        the final time for each simulation
+     * @param h         the step size to use in each simulation
+     */
     public HillClimbing(ODESolver solver, double tf, double h) {
         RocketState finalState = hillClimb(solver, startState, tf, h);
     }
 
+    /**
+     * Performs simulations while slightly altering the velocity every time to find a trajectory to titan.
+     * @param solver        solver used for performing simulations
+     * @param startState    the initial state from which the algorithm will start
+     * @param tf            the final time for each simulation
+     * @param h             the step size to use in each simulation
+     * @return the starting state which got the probe/rocket closest to Titan
+     */
     private RocketState hillClimb(ODESolver solver, RocketState startState, double tf, double h) {
         RocketState bestState = startState;
         double curDist = Double.MAX_VALUE;

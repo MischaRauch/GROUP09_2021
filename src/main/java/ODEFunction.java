@@ -88,6 +88,13 @@ public class ODEFunction implements ODEFunctionInterface {
         return new Rate(rates);
     }
 
+    /**
+     * Call method which calculates the acceleration of all bodies.
+     *
+     * @param   t   the time at which to evaluate the function
+     * @param   y   the state at which to evaluate the function
+     * @return  The acceleration over the time-step.
+     */
     public Vector3dInterface[] callA(double t, StateInterface y) {
         State state = (State) y;
         rates = new Vector3dInterface[state.getCoordinates().length];

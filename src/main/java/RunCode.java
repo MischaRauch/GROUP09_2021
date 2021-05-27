@@ -17,6 +17,7 @@ public class RunCode {
     public static void main(String[] args) {
         ODESolver solver = new ODESolver(stepSize); // 6000
 
+        // The line below can be used for running/testing the hill climbing algorithm
         //HillClimbing climber = new HillClimbing(solver, 365.25*(24*60*60),stepSize);
 
         Frame frame = new Frame(solver.getStates());

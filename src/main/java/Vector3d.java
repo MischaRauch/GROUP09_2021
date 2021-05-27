@@ -1,13 +1,9 @@
-/*
- * @author Matthijs Vossen
- * @version 0.99.0
- *
- * This class is an implementation of the Vector3dInterface, used to represent vectors.
- */
-
 import src.main.java.titan.Vector3dInterface;
 import java.lang.Math;
 
+/**
+ * This class is an implementation of the Vector3dInterface, used to represent vectors.
+ */
 public class Vector3d implements Vector3dInterface
 {
   private double x;
@@ -52,7 +48,7 @@ public class Vector3d implements Vector3dInterface
     this.z = z;
   }
 
-  /*
+  /**
    * Vector addition. !WARNING! does not actually add the vector to the vector
    * it's being called on, just returns the result of this addition.
    *
@@ -63,7 +59,7 @@ public class Vector3d implements Vector3dInterface
     return new Vector3d(x + other.getX(), y + other.getY(), z + other.getZ());
   }
 
-  /*
+  /**
    * Vector subtraction. !WARNING! does not actually subtract the vector from the vector
    * it's being called on, just returns the result of this subtraction.
    *
@@ -74,25 +70,16 @@ public class Vector3d implements Vector3dInterface
     return new Vector3d(x - other.getX(), y - other.getY(), z - other.getZ());
   }
 
-  public double dotProd(Vector3dInterface other)
-  {
-    return (this.getX()*other.getX() + this.getY()*other.getY() + this.getZ()*other.getZ());
-  }
-
-  /*
+  /**
    * Vector multiplication by a scalar. !WARNING! does not actually multiply the vector
    * it's being called on, just returns the result of this multiplication.
    *
+   * @param scalar  the double used in the multiplication step
    * @return the result of the multiplication of this vector
    */
   public Vector3dInterface mul(double scalar)
   {
     return new Vector3d(x*scalar, y*scalar, z*scalar);
-  }
-
-  public double angle(Vector3dInterface other)
-  {
-    return Math.acos(this.dotProd(other)/(this.norm()*other.norm()));
   }
 
   /**
@@ -106,13 +93,6 @@ public class Vector3d implements Vector3dInterface
   {
     return this.add(other.mul(scalar));
   }
-
-  /*
-  public double zDist(Vector3dInterface other)
-  {
-    return Math.abs(this.getZ() - other.getZ());
-  }
-  */
 
   /**
    * @return the Euclidean norm of a vector
@@ -128,10 +108,6 @@ public class Vector3d implements Vector3dInterface
   public double dist(Vector3dInterface other)
   {
     return Math.sqrt(Math.pow(other.getX() - x, 2) + Math.pow(other.getY() - y, 2) + Math.pow(other.getZ() - z, 2));
-  }
-
-  public Vector3dInterface distVector(Vector3dInterface other) {
-    return new Vector3d(x-other.getX(), y-other.getY(), z- other.getZ());
   }
 
   /**
