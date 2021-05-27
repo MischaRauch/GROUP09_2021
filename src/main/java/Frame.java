@@ -86,7 +86,7 @@ public class Frame extends JFrame implements ActionListener {
         {
             public void actionPerformed(ActionEvent e)
             {
-                scale *= 2;
+                scale *= 1.6;
                 scaleChanged = true;
             }
         });
@@ -97,7 +97,7 @@ public class Frame extends JFrame implements ActionListener {
         {
             public void actionPerformed(ActionEvent e)
             {
-                scale *= 0.5;
+                scale *= 0.625;
                 scaleChanged = true;
             }
         });

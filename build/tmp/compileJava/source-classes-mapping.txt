@@ -20,8 +20,8 @@ RocketState.java
  RocketState
 HillClimbing.java
  HillClimbing
-RunCode.java
- RunCode
+SpaceShuttle.java
+ SpaceShuttle
 Vector3d.java
  Vector3d
 ODEFunction.java
@@ -30,13 +30,13 @@ State.java
  State
 ProbeSimulator.java
  ProbeSimulator
+ODESolver.java
+ ODESolver
+TrajectoryComponent.java
+ TrajectoryComponent
+RunCode.java
+ RunCode
 Frame.java
  Frame
  Frame$1
  Frame$2
-TrajectoryComponent.java
- TrajectoryComponent
-ODESolver.java
- ODESolver
-SpaceShuttle.java
- SpaceShuttle
