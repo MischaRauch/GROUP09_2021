@@ -1,4 +1,3 @@
-
 import java.util.Arrays;
 
 import src.main.java.titan.Vector3dInterface;
@@ -82,7 +81,7 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
     // Instance field which will contain the states for each time step
     private StateInterface[] states;
 
-   // private final int SecondsInYear = 31536000;
+    // private final int SecondsInYear = 31536000;
     private final double SecondsInYear = (365.25*(24*60*60));
 
     private double smallestDistRocketTitan;
@@ -97,7 +96,8 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
         StateInterface y0 = new State(coordinates, velocities, 0);
         ODEFunctionInterface f = new ODEFunction();
         states = solve(f, y0, SecondsInYear, h); //31536000
-        trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(0, -60e3, 0), SecondsInYear, h);
+        //trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(0, -60e3, 0), SecondsInYear, h);
+        thrustTrajectory(new Vector3d(0, -6371e3, 0), new Vector3d(0, -60e3, 0), SecondsInYear, h);
     }
     public ODESolver(){}
 
@@ -234,6 +234,50 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
             states[i] = verletStep(f, t, states[i-1], h);
             State state = (State) states[i];
             probeCoordinates[i] = state.getCoordinates()[11];
+            double distRocketTitan = probeCoordinates[i].dist(state.getCoordinates()[8]);
+            if(distRocketTitan < smallestDistRocketTitan) {
+                smallestDistRocketTitan = distRocketTitan;
+            }
+        }
+
+        return probeCoordinates;
+    }
+
+    public Vector3dInterface[] thrustTrajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h){
+        Vector3dInterface[] probeCoordinates = new Vector3dInterface[(int) ((tf/h)+1)];
+        ODEFunctionInterface f = new ODEFunction();
+        SpaceShuttle s = new SpaceShuttle(7e4,7e4, p0, velocities[3].add(v0));
+        probeCoordinates[0] = p0;
+        coordinates[11] = coordinates[3].add(p0);
+        //initial thrust
+        s.calculateThrust(1);
+        velocities[11] = s.getVelocity();
+        states = new StateInterface[(int) ((tf/h)+1)];
+        states[0] = new State(coordinates, velocities, 0);
+        smallestDistRocketTitan = Double.MAX_VALUE;
+
+        int t = 0;
+
+        for(int i = 1; i < states.length; i++) {
+            t += h;
+            states[i] = verletStep(f, t, states[i-1], h);
+            State state = (State) states[i];
+            probeCoordinates[i] = state.getCoordinates()[11];
+            s.setVelocity(state.getVelocities()[11]);
+            //Second thrust
+            if(i == 10){
+                //System.out.println("The velocity before thrust is: "+((State) states[i]).getVelocities()[11]);
+                s.calculateThrust(0.7);
+                ((State) states[i]).getVelocities()[11] = s.getVelocity();
+                //System.out.println("The velocity after thrust is: "+((State) states[i]).getVelocities()[11]);
+            }
+            //Third thrust
+            if(i == 50){
+                //System.out.println("The velocity before thrust is: "+((State) states[i]).getVelocities()[11]);
+                s.calculateThrust(0.9);
+                ((State) states[i]).getVelocities()[11] = s.getVelocity();
+                //System.out.println("The velocity after thrust is: "+((State) states[i]).getVelocities()[11]);
+            }
             double distRocketTitan = probeCoordinates[i].dist(state.getCoordinates()[8]);
             if(distRocketTitan < smallestDistRocketTitan) {
                 smallestDistRocketTitan = distRocketTitan;
