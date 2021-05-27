@@ -7,22 +7,26 @@ public class SpaceShuttle{
     private final Vector3dInterface maxThrust = new Vector3d(15000,15000,15000);
     private double totalM;
     private boolean noMass;
+    private Vector3dInterface velocity;
+    private Vector3dInterface coordinate;
     //private double burnRate = 0.0000005;
     //private Vector3dInterface ve = new Vector3d(2e4,2e4,2e4); // effective exhaust velocity
     //private int stepsize;
     //private int secondsInYear = 31536000;
 
-    public SpaceShuttle(double massOfProbe, double initialFuelMass) {
+    public SpaceShuttle(double massOfProbe, double initialFuelMass, Vector3dInterface coordinate, Vector3dInterface velocity) {
         probeMass = massOfProbe;
         fuelMass = initialFuelMass;
         totalM = probeMass + fuelMass;
         noMass = false;
+        this.coordinate = coordinate;
+        this.velocity = velocity;
     }
 
     /**
      * Computes the acceleration for one step.
      */
-    public Vector3dInterface calculateThrust(Vector3dInterface direction, double percentage, Vector3dInterface previousVelocity){
+    public Vector3dInterface calculateThrust(double percentage){
         if(noMass) {
             System.out.println("The fuel has run out");
             return null;
@@ -31,7 +35,8 @@ public class SpaceShuttle{
         Vector3dInterface acceleration = thrust.mul(1/totalM);
         //System.out.println("The thrust is: "+ thrust);
         //System.out.println("The acceleration is: "+ acceleration);
-        Vector3dInterface newVelocity = previousVelocity.add(acceleration);
+        Vector3dInterface newVelocity = velocity.add(acceleration);
+        this.setVelocity(newVelocity);
         reduceMass(thrust, newVelocity);
         return acceleration;
     }
@@ -47,7 +52,7 @@ public class SpaceShuttle{
             noMass = true;
         }
         totalM = probeMass + fuelMass;
-        System.out.println("The total mass is: " + totalM);
+        //System.out.println("The total mass is: " + totalM);
     }
 
     public double getTotalMass(){
@@ -58,6 +63,21 @@ public class SpaceShuttle{
         return fuelMass;
     }
 
+    public Vector3dInterface getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector3dInterface velocity) {
+        this.velocity = velocity;
+    }
+
+    public Vector3dInterface getCoordinate() {
+        return coordinate;
+    }
+
+    public void setCoordinate(Vector3dInterface coordinate) {
+        this.coordinate = coordinate;
+    }
     /**
      * Computes the total mass of the shuttle (the mass of the probe + the mass of the fuel).
      *
