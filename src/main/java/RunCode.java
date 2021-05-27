@@ -11,13 +11,13 @@
 
 public class RunCode {
 
-    private static final double stepSize = 600;
+    private static final double stepSize = 100;
     //private static final double stepSize = (24*60*60);
 
     public static void main(String[] args) {
         ODESolver solver = new ODESolver(stepSize); // 6000
 
-        HillClimbing climber = new HillClimbing(solver, 365.25*(24*60*60),stepSize);
+        //HillClimbing climber = new HillClimbing(solver, 365.25*(24*60*60),stepSize);
 
         Frame frame = new Frame(solver.getStates());
     }

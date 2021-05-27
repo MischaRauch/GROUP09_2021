@@ -1,7 +1,6 @@
 
 
 import src.main.java.titan.Vector3dInterface;
-import src.main.java.Vector3d;
 import titan.ProbeSimulatorInterface;
 import titan.StateInterface;
 import titan.ODEFunctionInterface;

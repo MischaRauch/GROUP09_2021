@@ -4,7 +4,6 @@
  *
  * This class is an implementation of the Vector3dInterface, used to represent vectors.
  */
-package src.main.java;
 
 import src.main.java.titan.Vector3dInterface;
 import java.lang.Math;
@@ -129,6 +128,10 @@ public class Vector3d implements Vector3dInterface
   public double dist(Vector3dInterface other)
   {
     return Math.sqrt(Math.pow(other.getX() - x, 2) + Math.pow(other.getY() - y, 2) + Math.pow(other.getZ() - z, 2));
+  }
+
+  public Vector3dInterface distVector(Vector3dInterface other) {
+    return new Vector3d(x-other.getX(), y-other.getY(), z- other.getZ());
   }
 
   /**

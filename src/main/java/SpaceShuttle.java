@@ -1,5 +1,4 @@
 import src.main.java.titan.Vector3dInterface;
-import src.main.java.Vector3d;
 
 public class SpaceShuttle{
     private double fuelMass;

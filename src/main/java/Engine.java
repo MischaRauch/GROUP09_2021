@@ -1,4 +1,4 @@
-import titan.Vector3dInterface;
+import src.main.java.titan.Vector3dInterface;
 
 public class Engine{
     private double probeMass;

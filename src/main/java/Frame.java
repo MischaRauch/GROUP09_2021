@@ -162,7 +162,6 @@ public class Frame extends JFrame implements ActionListener {
         uranus.setSize(50724e5*scale);
         neptune.setSize(49224e5*scale);
 
-        // Repaint
         repaint();
     }
 }

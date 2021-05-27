@@ -4,8 +4,6 @@ import titan.ODEFunctionInterface;
 import titan.StateInterface;
 import src.main.java.titan.Vector3dInterface;
 
-import src.main.java.Vector3d;
-
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 
 /**

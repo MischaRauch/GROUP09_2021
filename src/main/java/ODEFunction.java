@@ -4,7 +4,6 @@ import titan.StateInterface;
 import titan.ODEFunctionInterface;
 import src.main.java.titan.Vector3dInterface;
 
-import src.main.java.Vector3d;
 /**
  * Class which is used to calculate the rate-of-change of a system
  */

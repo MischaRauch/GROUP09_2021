@@ -16,4 +16,12 @@ public class RocketState {
     public Vector3dInterface getV0() {
         return v0;
     }
+
+    @Override
+    public String toString() {
+        return "RocketState{" +
+                "p0=" + p0 +
+                ", v0=" + v0 +
+                '}';
+    }
 }
