@@ -63,6 +63,10 @@ public class SpaceShuttle{
         return velocity;
     }
 
+    public void setVelocity(Vector3dInterface velocity) {
+        this.velocity = velocity;
+    }
+
     public double getFuelMass() {
         return fuelMass;
     }
