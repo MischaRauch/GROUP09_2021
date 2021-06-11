@@ -1,35 +1,56 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Rate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GROUP09_2021</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Rate.java</span></div><h1>Rate.java</h1><pre class="source lang-java linenums">
-import src.main.java.titan.RateInterface;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Rate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GROUP09_2021</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Rate.java</span></div><h1>Rate.java</h1><pre class="source lang-java linenums">import src.main.java.titan.RateInterface;
 import src.main.java.titan.Vector3dInterface;
 
+/**
+ * Class which represents the rate-of-change of the system.
+ */
 public class Rate implements RateInterface {
 
+    // Stores the rate-of-change for each object.
     private final Vector3dInterface[] rates;
 
-<span class="fc" id="L9">    public Rate(Vector3dInterface[] rates) {</span>
-<span class="fc" id="L10">        this.rates = new Vector3dInterface[rates.length];</span>
-<span class="fc" id="L11">        System.arraycopy(rates, 0, this.rates, 0, rates.length);</span>
-<span class="fc" id="L12">    }</span>
+    /**
+     * Constructor, initialises the rates
+     * @param rates the rates to set
+     */
+<span class="nc" id="L16">    public Rate(Vector3dInterface[] rates) {</span>
+<span class="nc" id="L17">        this.rates = new Vector3dInterface[rates.length];</span>
+<span class="nc" id="L18">        System.arraycopy(rates, 0, this.rates, 0, rates.length);</span>
+<span class="nc" id="L19">    }</span>
 
+    /**
+     * {@return the rates-of-change stored inside this}
+     */
     public Vector3dInterface[] getRates() {
-<span class="fc" id="L15">        return rates;</span>
+<span class="nc" id="L25">        return rates;</span>
     }
 
+    /**
+     * Add another rate-of-change vector multiplied by a scalar to the rate-of-change stored inside this
+     * @param scalar    the scalar to multiply the other vector with
+     * @param other     the other vector to add once it has been multiplied by the scalar
+     * @return result of the addition/multiplication
+     */
     public Rate addMul(double scalar, Rate other) {
-<span class="fc" id="L19">        Vector3dInterface[] addRates = new Vector3dInterface[rates.length];</span>
-<span class="fc" id="L20">        Vector3dInterface[] otherRates = other.getRates();</span>
-<span class="fc bfc" id="L21" title="All 2 branches covered.">        for(int i = 0; i &lt; addRates.length; i ++) {</span>
-<span class="fc" id="L22">            addRates[i] = this.rates[i].add(otherRates[i].mul(scalar));</span>
+<span class="nc" id="L35">        Vector3dInterface[] addRates = new Vector3dInterface[rates.length];</span>
+<span class="nc" id="L36">        Vector3dInterface[] otherRates = other.getRates();</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        for(int i = 0; i &lt; addRates.length; i ++) {</span>
+<span class="nc" id="L38">            addRates[i] = this.rates[i].add(otherRates[i].mul(scalar));</span>
         }
-<span class="fc" id="L24">        return new Rate(addRates);</span>
+<span class="nc" id="L40">        return new Rate(addRates);</span>
     }
 
+    /**
+     * Multiplies the rates-of-change inside this by a scalar
+     * @param scalar the scalar to multiply by
+     * @return result of the multiplication
+     */
     public Rate mul(double scalar) {
-<span class="fc" id="L28">        Vector3dInterface[] mulRates = new Vector3dInterface[rates.length];</span>
-<span class="fc bfc" id="L29" title="All 2 branches covered.">        for(int i = 0; i &lt; mulRates.length; i ++) {</span>
-<span class="fc" id="L30">            mulRates[i] = this.rates[i].mul(scalar);</span>
+<span class="nc" id="L49">        Vector3dInterface[] mulRates = new Vector3dInterface[rates.length];</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        for(int i = 0; i &lt; mulRates.length; i ++) {</span>
+<span class="nc" id="L51">            mulRates[i] = this.rates[i].mul(scalar);</span>
         }
-<span class="fc" id="L32">        return new Rate(mulRates);</span>
+<span class="nc" id="L53">        return new Rate(mulRates);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

@@ -56,14 +56,11 @@ public class SpaceShuttle{
         System.out.println("Used mass: " + usedMass * secondsPreStep);
         fuelMass -= usedMass * secondsPreStep;
         return acceleration;
+
     }
 
     public Vector3dInterface getVelocity() {
         return velocity;
-    }
-
-    public void setVelocity(Vector3dInterface velocity) {
-        this.velocity = velocity;
     }
 
     public double getFuelMass() {
@@ -73,7 +70,7 @@ public class SpaceShuttle{
     public void setFuelMass(double fuelMass) {
         this.fuelMass = fuelMass;
     }
-    
+
     //first vector v1 be able to change direction a set number of degrees towards the second vector v2
     public Vector3dInterface rotation(Vector3dInterface v1, Vector3dInterface v2, double angle){
         Vector3dInterface c = ((Vector3d) v1).crossProduct(v2);

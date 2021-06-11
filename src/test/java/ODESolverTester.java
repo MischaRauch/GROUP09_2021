@@ -1,6 +1,5 @@
 //package titan;
 import src.main.java.titan.Vector3dInterface;
-import src.main.java.Vector3d;
 
 import titan.ProbeSimulatorInterface;
 import static org.junit.jupiter.api.Assertions.*;

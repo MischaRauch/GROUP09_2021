@@ -1,42 +1,14 @@
 titan/StateInterface.java
  titan.StateInterface
-titan/ProbeSimulatorInterface.java
- titan.ProbeSimulatorInterface
+HillClimbing.java
+ HillClimbing
 titan/RateInterface.java
  src.main.java.titan.RateInterface
 titan/Vector3dInterface.java
  src.main.java.titan.Vector3dInterface
-PlanetComponent.java
- PlanetComponent
-Engine.java
- Engine
-Rate.java
- Rate
-titan/ODESolverInterface.java
- titan.ODESolverInterface
-titan/ODEFunctionInterface.java
- titan.ODEFunctionInterface
 RocketState.java
  RocketState
-HillClimbing.java
- HillClimbing
-SpaceShuttle.java
- SpaceShuttle
-Vector3d.java
- Vector3d
 ODEFunction.java
  ODEFunction
-State.java
- State
-ProbeSimulator.java
- ProbeSimulator
-ODESolver.java
- ODESolver
-TrajectoryComponent.java
- TrajectoryComponent
-RunCode.java
- RunCode
-Frame.java
- Frame
- Frame$1
- Frame$2
+titan/ODEFunctionInterface.java
+ titan.ODEFunctionInterface

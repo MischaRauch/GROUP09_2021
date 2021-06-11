@@ -1,7 +1,6 @@
 
 import static org.junit.jupiter.api.Assertions.*;
 import src.main.java.titan.Vector3dInterface;
-import src.main.java.Vector3d;
 
 import org.junit.jupiter.api.Test;
 

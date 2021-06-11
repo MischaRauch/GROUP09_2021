@@ -1,150 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpaceShuttle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">GROUP09_2021</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">SpaceShuttle.java</span></div><h1>SpaceShuttle.java</h1><pre class="source lang-java linenums">import src.main.java.titan.Vector3dInterface;
-import src.main.java.Vector3d;
 
+/**
+ * This class represents the rockets engines and can be used for utilising the engines during steps of a simulation.
+ */
 public class SpaceShuttle{
     private double fuelMass;
-<span class="nc" id="L6">    private double burnRate = 0.0000005;</span>
     private double probeMass;
-<span class="nc" id="L8">    private Vector3dInterface ve = new Vector3d(2e4,2e4,2e4); // effective exhaust velocity</span>
-    private int stepsize;
-<span class="nc" id="L10">    private int secondsInYear = 31536000;</span>
-    private Vector3dInterface[] acceleration;
-    private double[] mass_flow; // mass flow rate
-    private Vector3dInterface[] thrust;
-    private Vector3dInterface maxThrust;
+<span class="nc" id="L9">    private final Vector3dInterface maxThrust = new Vector3d(15000,15000,15000);</span>
     private double totalM;
     private boolean noMass;
+    private Vector3dInterface velocity;
+    private Vector3dInterface coordinate;
 
-<span class="nc" id="L18">    public SpaceShuttle(double massOfProbe, double initialFuelMass, int chosenStepsize) {</span>
-<span class="nc" id="L19">        probeMass = massOfProbe;</span>
-<span class="nc" id="L20">        fuelMass = initialFuelMass;</span>
-<span class="nc" id="L21">        stepsize = chosenStepsize;</span>
-<span class="nc" id="L22">        mass_flow = new double[stepsize];</span>
-<span class="nc" id="L23">        totalM = totalMass(probeMass, fuelMass);</span>
-<span class="nc" id="L24">        noMass = false;</span>
-<span class="nc" id="L25">    }</span>
+<span class="nc" id="L15">    public SpaceShuttle(double massOfProbe, double initialFuelMass, Vector3dInterface coordinate, Vector3dInterface velocity) {</span>
+<span class="nc" id="L16">        probeMass = massOfProbe;</span>
+<span class="nc" id="L17">        fuelMass = initialFuelMass;</span>
+<span class="nc" id="L18">        totalM = probeMass + fuelMass;</span>
+<span class="nc" id="L19">        noMass = false;</span>
+<span class="nc" id="L20">        this.coordinate = coordinate;</span>
+<span class="nc" id="L21">        this.velocity = velocity;</span>
+<span class="nc" id="L22">        System.out.println(&quot;TotalMass Constructor: &quot;+totalM);</span>
+
+<span class="nc" id="L24">    }</span>
+
     /**
      * Computes the acceleration for one step.
      */
-    public Vector3dInterface calculateThrust(Vector3dInterface direction, double percentage, Vector3dInterface previousVelocity){
+    public Vector3dInterface calculateThrust(double percentage){
 <span class="nc bnc" id="L30" title="All 2 branches missed.">        if(noMass) {</span>
 <span class="nc" id="L31">            System.out.println(&quot;The fuel has run out&quot;);</span>
 <span class="nc" id="L32">            return null;</span>
         }
 <span class="nc" id="L34">        Vector3dInterface thrust = maxThrust.mul(percentage);</span>
-<span class="nc" id="L35">        Vector3dInterface acceleration = new Vector3d(thrust.getX() / totalM, thrust.getY() / totalM, thrust.getZ() / totalM);</span>
-<span class="nc" id="L36">        Vector3dInterface newVelocity = previousVelocity.add(acceleration);</span>
-<span class="nc" id="L37">        reduceMass(thrust,newVelocity);</span>
-<span class="nc" id="L38">        return acceleration;</span>
+<span class="nc" id="L35">        Vector3dInterface acceleration = thrust.mul(1/totalM);</span>
+<span class="nc" id="L36">        Vector3dInterface newVelocity = velocity.add(acceleration);</span>
+<span class="nc" id="L37">        this.setVelocity(newVelocity);</span>
+<span class="nc" id="L38">        System.out.println(&quot;Thrust: &quot;+thrust);</span>
+<span class="nc" id="L39">        System.out.println(&quot;Acceleration: &quot;+acceleration);</span>
+<span class="nc" id="L40">        System.out.println(&quot;newVelocity: &quot;+newVelocity);</span>
+<span class="nc" id="L41">        System.out.println(&quot;NEEW FUEL: &quot;+ this.getFuelMass());</span>
+<span class="nc" id="L42">        reduceMass(thrust, newVelocity);</span>
+<span class="nc" id="L43">        return acceleration;</span>
     }
+
     /**
      * Computes the used mass of the fuel by using the formula: m = F/V
      */
-    public void reduceMass(Vector3dInterface force,Vector3dInterface velocity){
-<span class="nc" id="L44">        double usedMass = force.norm()/velocity.norm();</span>
-<span class="nc" id="L45">        fuelMass = fuelMass - usedMass;</span>
-<span class="nc bnc" id="L46" title="All 4 branches missed.">        if(fuelMass==0 || fuelMass&lt;0){</span>
-<span class="nc" id="L47">            noMass = true;</span>
+    public void reduceMass(Vector3dInterface force, Vector3dInterface velocity){
+<span class="nc" id="L50">        System.out.println(&quot;Force Norm &quot;+force.norm());</span>
+<span class="nc" id="L51">        System.out.println(&quot;Velocity Norm &quot;+velocity.norm());</span>
+<span class="nc" id="L52">        double usedMass = force.norm() / velocity.norm();</span>
+<span class="nc" id="L53">        System.out.println(&quot;USED MASS &quot; +usedMass);</span>
+<span class="nc" id="L54">        fuelMass = fuelMass - usedMass;</span>
+<span class="nc" id="L55">        System.out.println(&quot;Fuel MASS: &quot;+fuelMass);</span>
+<span class="nc bnc" id="L56" title="All 4 branches missed.">        if(fuelMass==0 || fuelMass&lt;0){</span>
+<span class="nc" id="L57">            noMass = true;</span>
         }
-<span class="nc" id="L49">        totalM = totalM + fuelMass;</span>
+<span class="nc" id="L59">        totalM = probeMass + fuelMass;</span>
+<span class="nc" id="L60">        System.out.println(&quot;TotalMass: &quot;+totalM);</span>
+<span class="nc" id="L61">    }</span>
 
-        /**
-        fuelMass = fuelMass*Math.pow((1 - burnRate), 1);
-        if(fuelMass==0 || fuelMass&lt;0){
-            noMass = true;
-        }
-        totalM = probeMass + fuelMass;*/
-<span class="nc" id="L57">    }</span>
-
-    public double getTotalM(){
-<span class="nc" id="L60">        return totalM;</span>
-    }
-    /**
-     * Computes the total mass of the shuttle (the mass of the probe + the mass of the fuel).
-     */
-    public double totalMass(double massOfProbe, double massOfFuel) {
-<span class="nc" id="L66">        return massOfProbe + massOfFuel;</span>
+    public double getTotalMass(){
+<span class="nc" id="L64">        return totalM;</span>
     }
 
-    /** Computes the mass flow rate (ṁ) using the formulas:
-        m(t) = M + m * (1 - burnRate)^t; ṁ = dm/dt = m * (-1) * (1 - burnRate)^t * ln((1 - burnRate))
-     *
-     */
-    public double[] massFlowRate(double fuelMass, double burnRate, int secondsInYear) {
-
-<span class="nc" id="L75">        double[] ṁ = new double[stepsize];</span>
-
-<span class="nc bnc" id="L77" title="All 2 branches missed.">        for(int i = 0; i&lt;stepsize; i++) {</span>
-<span class="nc" id="L78">            ṁ[i] = fuelMass * (-1) * Math.pow((1 - burnRate), secondsInYear) * Math.log((1 - burnRate));</span>
-            //System.out.println(ṁ[i]);
-<span class="nc" id="L80">            fuelMass = fuelMass * (1 - burnRate);</span>
-        }
-
-<span class="nc" id="L83">        return ṁ;</span>
+    public double getFuelMass(){
+<span class="nc" id="L68">        return fuelMass;</span>
     }
 
-    /**
-     * Computes the thrust of the probe by using the formula t = ve * ṁ.
-     */
-    public Vector3dInterface[] calculateF() {
-
-<span class="nc" id="L91">        double[] ṁ = massFlowRate(fuelMass, burnRate, secondsInYear);</span>
-<span class="nc" id="L92">        thrust = new Vector3dInterface[stepsize];</span>
-
-<span class="nc bnc" id="L94" title="All 2 branches missed.">        for(int i = 0; i&lt;ṁ.length; i++) {</span>
-<span class="nc" id="L95">        	thrust[i] = ve.mul(ṁ[i]);</span>
-        }
-
-<span class="nc" id="L98">        return thrust;</span>
-
+    public Vector3dInterface getVelocity() {
+<span class="nc" id="L72">        return velocity;</span>
     }
 
-    /**
-     * Computes the accelerations.
-     */
-    public Vector3dInterface[] calculateAccelerations() {
+    public void setVelocity(Vector3dInterface velocity) {
+<span class="nc" id="L76">        this.velocity = velocity;</span>
+<span class="nc" id="L77">    }</span>
 
-<span class="nc" id="L107">       	calculateF();</span>
-<span class="nc" id="L108">        Vector3dInterface[] a  = new Vector3dInterface[thrust.length];</span>
-<span class="nc" id="L109">        double totalMass = totalMass(probeMass, fuelMass);</span>
-
-<span class="nc bnc" id="L111" title="All 2 branches missed.">        for(int i = 0; i&lt;a.length; i++) {</span>
-<span class="nc" id="L112">            a[i] = new Vector3d(thrust[i].getX()/totalMass, thrust[i].getY()/totalMass, thrust[i].getZ()/totalMass);</span>
-<span class="nc" id="L113"> 			totalMass = probeMass + fuelMass*Math.pow((1 - burnRate), i+1);</span>
- 			//System.out.println(a[i]);
-        }
-
-<span class="nc" id="L117">        return a;</span>
+    public Vector3dInterface getCoordinate() {
+<span class="nc" id="L80">        return coordinate;</span>
     }
 
-    /**
-     * Computes the thrust by using the formula Ma = F.
-     */
-    /*public Vector3dInterface[] computeThrust() {
-
-        fuelMass = fuelMass * (1 - burnRate); //notice that fuelMass will change at each step.
-        double allMass = probeMass + fuelMass;
-        thrust = new Vector3dInterface[acceleration.length];
-
-        for(int i = 0; i&lt;acceleration.length; i++) {
-        thrust[i] = acceleration[i].mul(allMass);
-        //System.out.println(thrust[i].toString());
-        }
-
-        return thrust;
-    }*/
-
-    /**
-     * Gets the acceleration from each step's calculations.
-     */
-    public Vector3dInterface[] setA(Rate a) {
-<span class="nc" id="L141">        acceleration = a.getRates();</span>
-<span class="nc" id="L142">        return acceleration;</span>
-    }
-
-    public Vector3dInterface[] getThrust() {
-<span class="nc" id="L146">        return thrust;</span>
-    }
-     
+    public void setCoordinate(Vector3dInterface coordinate) {
+<span class="nc" id="L84">        this.coordinate = coordinate;</span>
+<span class="nc" id="L85">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
