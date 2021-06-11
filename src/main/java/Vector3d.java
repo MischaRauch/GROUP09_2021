@@ -119,4 +119,13 @@ public class Vector3d implements Vector3dInterface
     return "(" + x + "," + y + "," + z + ")";
   }
 
+  public Vector3dInterface normalize(){
+    Vector3dInterface v = this.mul(1 / this.norm());
+    return v;
+  }
+
+  //cross product formula
+  public Vector3dInterface crossProduct(Vector3dInterface v) {
+    return new Vector3d(getY() * v.getZ() - getZ() * v.getY(), getZ() * v.getX() - getX() * v.getZ(), getX() * v.getY() - getY() * v.getX());
+}
 }
