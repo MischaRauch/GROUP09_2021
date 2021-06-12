@@ -4,84 +4,84 @@
  * This class represents the rockets engines and can be used for utilising the engines during steps of a simulation.
  */
 public class SpaceShuttle{
+<span class="nc" id="L7">    private final double maxThrust = 3e7;</span>
+<span class="nc" id="L8">    private final int secondsPreStep = 100;</span>
+    //private double vE = 2e4;
     private double fuelMass;
     private double probeMass;
-<span class="nc" id="L9">    private final Vector3dInterface maxThrust = new Vector3d(15000,15000,15000);</span>
-    private double totalM;
-    private boolean noMass;
     private Vector3dInterface velocity;
     private Vector3dInterface coordinate;
+    private Vector3dInterface direction;
 
-<span class="nc" id="L15">    public SpaceShuttle(double massOfProbe, double initialFuelMass, Vector3dInterface coordinate, Vector3dInterface velocity) {</span>
-<span class="nc" id="L16">        probeMass = massOfProbe;</span>
-<span class="nc" id="L17">        fuelMass = initialFuelMass;</span>
-<span class="nc" id="L18">        totalM = probeMass + fuelMass;</span>
-<span class="nc" id="L19">        noMass = false;</span>
+<span class="nc" id="L16">    public SpaceShuttle(double massOfProbe, double initialFuelMass, Vector3dInterface coordinate, Vector3dInterface velocity) {</span>
+<span class="nc" id="L17">        this.fuelMass = initialFuelMass;</span>
+<span class="nc" id="L18">        this.probeMass = massOfProbe;</span>
+<span class="nc" id="L19">        this.velocity = velocity;</span>
 <span class="nc" id="L20">        this.coordinate = coordinate;</span>
-<span class="nc" id="L21">        this.velocity = velocity;</span>
-<span class="nc" id="L22">        System.out.println(&quot;TotalMass Constructor: &quot;+totalM);</span>
-
-<span class="nc" id="L24">    }</span>
+<span class="nc" id="L21">        direction = ((Vector3d) velocity).normalize();</span>
+<span class="nc" id="L22">    }</span>
 
     /**
      * Computes the acceleration for one step.
      */
     public Vector3dInterface calculateThrust(double percentage){
-<span class="nc bnc" id="L30" title="All 2 branches missed.">        if(noMass) {</span>
-<span class="nc" id="L31">            System.out.println(&quot;The fuel has run out&quot;);</span>
-<span class="nc" id="L32">            return null;</span>
-        }
-<span class="nc" id="L34">        Vector3dInterface thrust = maxThrust.mul(percentage);</span>
-<span class="nc" id="L35">        Vector3dInterface acceleration = thrust.mul(1/totalM);</span>
-<span class="nc" id="L36">        Vector3dInterface newVelocity = velocity.add(acceleration);</span>
-<span class="nc" id="L37">        this.setVelocity(newVelocity);</span>
-<span class="nc" id="L38">        System.out.println(&quot;Thrust: &quot;+thrust);</span>
-<span class="nc" id="L39">        System.out.println(&quot;Acceleration: &quot;+acceleration);</span>
-<span class="nc" id="L40">        System.out.println(&quot;newVelocity: &quot;+newVelocity);</span>
-<span class="nc" id="L41">        System.out.println(&quot;NEEW FUEL: &quot;+ this.getFuelMass());</span>
-<span class="nc" id="L42">        reduceMass(thrust, newVelocity);</span>
-<span class="nc" id="L43">        return acceleration;</span>
+<span class="nc" id="L28">        double thrust = maxThrust * percentage;</span>
+<span class="nc" id="L29">        double totalMass = fuelMass + probeMass;</span>
+<span class="nc" id="L30">        direction = ((Vector3d) velocity).normalize();</span>
+        //System.out.println(&quot;the force is: &quot;+thrust);
+        //System.out.println(&quot;the total mass: &quot; + totalMass);
+<span class="nc" id="L33">        Vector3dInterface acceleration = direction.mul(thrust / totalMass);</span>
+        //System.out.println(&quot;The acceleration is :&quot; + acceleration);
+<span class="nc" id="L35">        Vector3dInterface newVelocity = getVelocity().add(acceleration);</span>
+        //System.out.println(&quot;The velocity is :&quot; + newVelocity.norm());
+<span class="nc" id="L37">        setVelocity(newVelocity);</span>
+<span class="nc" id="L38">        double usedMass = thrust / newVelocity.norm();</span>
+        //System.out.println(&quot;Used mass: &quot; + usedMass * secondsPreStep);
+<span class="nc" id="L40">        fuelMass -= usedMass * secondsPreStep;</span>
+<span class="nc" id="L41">        return acceleration;</span>
     }
 
-    /**
-     * Computes the used mass of the fuel by using the formula: m = F/V
-     */
-    public void reduceMass(Vector3dInterface force, Vector3dInterface velocity){
-<span class="nc" id="L50">        System.out.println(&quot;Force Norm &quot;+force.norm());</span>
-<span class="nc" id="L51">        System.out.println(&quot;Velocity Norm &quot;+velocity.norm());</span>
-<span class="nc" id="L52">        double usedMass = force.norm() / velocity.norm();</span>
-<span class="nc" id="L53">        System.out.println(&quot;USED MASS &quot; +usedMass);</span>
-<span class="nc" id="L54">        fuelMass = fuelMass - usedMass;</span>
-<span class="nc" id="L55">        System.out.println(&quot;Fuel MASS: &quot;+fuelMass);</span>
-<span class="nc bnc" id="L56" title="All 4 branches missed.">        if(fuelMass==0 || fuelMass&lt;0){</span>
-<span class="nc" id="L57">            noMass = true;</span>
-        }
-<span class="nc" id="L59">        totalM = probeMass + fuelMass;</span>
-<span class="nc" id="L60">        System.out.println(&quot;TotalMass: &quot;+totalM);</span>
-<span class="nc" id="L61">    }</span>
+    public Vector3dInterface calculateThrustWithRotate(double percentage, Vector3dInterface v, double angle){
+<span class="nc" id="L45">        double thrust = maxThrust * percentage;</span>
+<span class="nc" id="L46">        double totalMass = fuelMass + probeMass;</span>
+        //System.out.println(&quot;the force is: &quot;+thrust);
+        //System.out.println(&quot;the total mass: &quot; + totalMass);
+<span class="nc" id="L49">        Vector3dInterface acceleration = direction.mul(thrust / totalMass);</span>
+<span class="nc" id="L50">        acceleration = rotation(acceleration, v, angle);</span>
+<span class="nc" id="L51">        System.out.println(&quot;The acceleration is :&quot; + acceleration);</span>
+<span class="nc" id="L52">        Vector3dInterface newVelocity = getVelocity().add(acceleration);</span>
+<span class="nc" id="L53">        System.out.println(&quot;The velocity is :&quot; + newVelocity.norm());</span>
+<span class="nc" id="L54">        setVelocity(newVelocity);</span>
+<span class="nc" id="L55">        double usedMass = thrust / newVelocity.norm();</span>
+<span class="nc" id="L56">        System.out.println(&quot;Used mass: &quot; + usedMass * secondsPreStep);</span>
+<span class="nc" id="L57">        fuelMass -= usedMass * secondsPreStep;</span>
+<span class="nc" id="L58">        return acceleration;</span>
 
-    public double getTotalMass(){
-<span class="nc" id="L64">        return totalM;</span>
-    }
-
-    public double getFuelMass(){
-<span class="nc" id="L68">        return fuelMass;</span>
     }
 
     public Vector3dInterface getVelocity() {
-<span class="nc" id="L72">        return velocity;</span>
+<span class="nc" id="L63">        return velocity;</span>
     }
 
     public void setVelocity(Vector3dInterface velocity) {
-<span class="nc" id="L76">        this.velocity = velocity;</span>
-<span class="nc" id="L77">    }</span>
+<span class="nc" id="L67">        this.velocity = velocity;</span>
+<span class="nc" id="L68">    }</span>
 
-    public Vector3dInterface getCoordinate() {
-<span class="nc" id="L80">        return coordinate;</span>
+    public double getFuelMass() {
+<span class="nc" id="L71">        return fuelMass;</span>
     }
 
-    public void setCoordinate(Vector3dInterface coordinate) {
-<span class="nc" id="L84">        this.coordinate = coordinate;</span>
-<span class="nc" id="L85">    }</span>
+    public void setFuelMass(double fuelMass) {
+<span class="nc" id="L75">        this.fuelMass = fuelMass;</span>
+<span class="nc" id="L76">    }</span>
+
+    //first vector v1 be able to change direction a set number of degrees towards the second vector v2
+    public Vector3dInterface rotation(Vector3dInterface v1, Vector3dInterface v2, double angle){
+<span class="nc" id="L80">        Vector3dInterface c = ((Vector3d) v1).crossProduct(v2);</span>
+<span class="nc" id="L81">        c = ((Vector3d) c).normalize();</span>
+<span class="nc" id="L82">        Vector3dInterface f = ((Vector3d) c).crossProduct(v1);</span>
+<span class="nc" id="L83">        Vector3dInterface x = v1.mul(Math.cos(Math.toRadians(angle))).add(f.mul(Math.sin(Math.toRadians(angle))));</span>
+<span class="nc" id="L84">        return x;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

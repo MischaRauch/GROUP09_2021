@@ -9,7 +9,7 @@ class FallingTester {
 
     @Test void simulate5mFall () {
         double altitude = simulateFall(0.01, 2.7196, new Vector3d(0,5,0), new Vector3d(0,0,0));
-        assertEquals(0, altitude);
+        assertEquals(0, altitude, ACCURACY);
     }
 
     @Test void simulate15kmFall () {

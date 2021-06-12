@@ -1,6 +1,8 @@
-Vector3dTest.java
- Vector3dTest
+FallingTester.java
+ FallingTester
 ProbeSimulatorTest.java
  ProbeSimulatorTest
 ODESolverTester.java
  ODESolverTester
+Vector3dTest.java
+ Vector3dTest

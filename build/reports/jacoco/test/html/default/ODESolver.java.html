@@ -55,8 +55,7 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
 <span class="nc" id="L55">    private final Vector3dInterface titanV = new Vector3d(3.056877965721629e+03, 6.125612956428791e+03, -9.523587380845593e+02);</span>
 <span class="nc" id="L56">    private final Vector3dInterface uranusV = new Vector3d(-4.059468635313243e+03, 5.187467354884825e+03, 7.182516236837899e+01);</span>
 <span class="nc" id="L57">    private final Vector3dInterface neptuneV = new Vector3d(1.068410720964204e+03, 5.354959501569486e+03, -1.343918199987533e+02);</span>
-<span class="nc" id="L58">    private Vector3dInterface probeV = new Vector3d(0, 0, 0);</span>
-    //private Vector3dInterface probeV = new Vector3d(5.427193405797901e+03, -2.931056622265021e+04-30e3, 6.575428158157592e-01);
+<span class="nc" id="L58">    private Vector3dInterface probeV = new Vector3d(5.427193405797901e+03, -2.931056622265021e+04-30e3, 6.575428158157592e-01);</span>
 
     /*
     // Starting velocities for all the planets - NASA HORIZON VALUES
@@ -75,14 +74,14 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
     */
 
     // Array containing the starting coordinates for all planets
-<span class="nc" id="L78">    private Vector3dInterface[] coordinates = {sunC, mercuryC, venusC, earthC, moonC, marsC, jupiterC, saturnC, titanC, uranusC, neptuneC, probeC};</span>
+<span class="nc" id="L77">    private Vector3dInterface[] coordinates = {sunC, mercuryC, venusC, earthC, moonC, marsC, jupiterC, saturnC, titanC, uranusC, neptuneC, probeC};</span>
     // Array containing the starting velocities for all planets
-<span class="nc" id="L80">    private Vector3dInterface[] velocities = {sunV, mercuryV, venusV, earthV, moonV, marsV, jupiterV, saturnV, titanV, uranusV, neptuneV, probeV};</span>
+<span class="nc" id="L79">    private Vector3dInterface[] velocities = {sunV, mercuryV, venusV, earthV, moonV, marsV, jupiterV, saturnV, titanV, uranusV, neptuneV, probeV};</span>
     // Instance field which will contain the states for each time step
     private StateInterface[] states;
 
-<span class="nc" id="L84">    private final double SecondsInYear = (365.25*(24*60*60));</span>
-<span class="nc" id="L85">    private final double SecondsInTwoYear = (730.5*(24*60*60));</span>
+<span class="nc" id="L83">    private final double SecondsInYear = (365.25*(24*60*60));</span>
+    //private final double SecondsInTwoYear = (730.5*(24*60*60));
 
 
     // This field keeps track of the smallest distance between the probe/rocket and titan during each simulation
@@ -94,21 +93,21 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
      *
      * @param   h the size of step to be taken
      */
-<span class="nc" id="L97">    public ODESolver(double h) {</span>
-<span class="nc" id="L98">        StateInterface y0 = new State(coordinates, velocities, 0);</span>
-<span class="nc" id="L99">        ODEFunctionInterface f = new ODEFunction();</span>
+<span class="nc" id="L96">    public ODESolver(double h) {</span>
+<span class="nc" id="L97">        StateInterface y0 = new State(coordinates, velocities, 0);</span>
+<span class="nc" id="L98">        ODEFunctionInterface f = new ODEFunction();</span>
         // states = solve(f, y0, SecondsInYear, h);
-        //trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(29062.557220458984,-40935.659408569336,-546.1549758911133), SecondsInTwoYear, h);
-<span class="nc" id="L102">        thrustTrajectory(new Vector3d(0, -6371e3, 0), new Vector3d(0, -60e3, 0), SecondsInYear, h);</span>
-<span class="nc" id="L103">    }</span>
+<span class="nc" id="L100">        trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(29062.557220458984,-40935.659408569336,-546.1549758911133), SecondsInYear, h);</span>
+        //thrustTrajectory(new Vector3d(0, -6371e3, 0), new Vector3d(0, -60e3, 0), SecondsInYear, h);
+<span class="nc" id="L102">    }</span>
 
-<span class="nc" id="L105">    public ODESolver(){}</span>
+<span class="nc" id="L104">    public ODESolver(){}</span>
 
     /**
      * {@return the smallest distance between the probe/rocket and Titan for the last performed simulation}
      */
     public double getSmallestDistRocketTitan() {
-<span class="nc" id="L111">        return smallestDistRocketTitan;</span>
+<span class="nc" id="L110">        return smallestDistRocketTitan;</span>
     }
 
     /**
@@ -116,18 +115,18 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
      * @return  the states instance field containing the states for each time step
      */
     public StateInterface[] getStates() {
-<span class="nc" id="L119">        return states;</span>
+<span class="nc" id="L118">        return states;</span>
     }
     /**
      * Getter method
      * @return  the inital coordinates of each planet
      */
-<span class="nc" id="L125">    public Vector3dInterface[] getCoordinates() {return coordinates;}</span>
+<span class="nc" id="L124">    public Vector3dInterface[] getCoordinates() {return coordinates;}</span>
     /**
      * Getter method
      * @return  the inital velocities of each planet
      */
-<span class="nc" id="L130">    public Vector3dInterface[] getVelocities() {return velocities;}</span>
+<span class="nc" id="L129">    public Vector3dInterface[] getVelocities() {return velocities;}</span>
 
     /**
      * Solve the differential equation by taking multiple steps.
@@ -139,7 +138,7 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
      */
     @Override
     public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double[] ts) {
-<span class="nc" id="L142">        return new StateInterface[0];</span>
+<span class="nc" id="L141">        return new StateInterface[0];</span>
     }
 
     /**
@@ -155,23 +154,23 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
     @Override
     public StateInterface[] solve(ODEFunctionInterface f, StateInterface y0, double tf, double h) {
 
-<span class="nc" id="L158">        long start_time = System.nanoTime();</span>
+<span class="nc" id="L157">        long start_time = System.nanoTime();</span>
 
-<span class="nc" id="L160">        int t = 0;</span>
+<span class="nc" id="L159">        int t = 0;</span>
 
-<span class="nc" id="L162">        StateInterface[] states = new StateInterface[(int) ((tf/h)+2)];</span>
-<span class="nc" id="L163">        states[0] = y0;</span>
+<span class="nc" id="L161">        StateInterface[] states = new StateInterface[(int) ((tf/h)+2)];</span>
+<span class="nc" id="L162">        states[0] = y0;</span>
 
-<span class="nc bnc" id="L165" title="All 2 branches missed.">        for(int i = 1; i &lt; states.length; i++) {</span>
-<span class="nc" id="L166">            t += h;</span>
-<span class="nc" id="L167">            states[i] = step(f, t, states[i-1], h);</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        for(int i = 1; i &lt; states.length; i++) {</span>
+<span class="nc" id="L165">            t += h;</span>
+<span class="nc" id="L166">            states[i] = step(f, t, states[i-1], h);</span>
         }
 
-<span class="nc" id="L170">        long end_time = System.nanoTime();</span>
+<span class="nc" id="L169">        long end_time = System.nanoTime();</span>
 
-<span class="nc" id="L172">        System.out.println(((end_time - start_time) / 1e6) + &quot; ms.&quot;);</span>
+<span class="nc" id="L171">        System.out.println(((end_time - start_time) / 1e6) + &quot; ms.&quot;);</span>
 
-<span class="nc" id="L174">        return states;</span>
+<span class="nc" id="L173">        return states;</span>
     }
 
     /**
@@ -185,8 +184,8 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
      */
     @Override
     public StateInterface step(ODEFunctionInterface f, double t, StateInterface y, double h) {
-<span class="nc" id="L188">        RateInterface r = (Rate) f.call(t, y);</span>
-<span class="nc" id="L189">        return y.addMul(h, r);</span>
+<span class="nc" id="L187">        RateInterface r = (Rate) f.call(t, y);</span>
+<span class="nc" id="L188">        return y.addMul(h, r);</span>
     }
 
     /**
@@ -200,14 +199,14 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
      */
     public StateInterface RKstep(ODEFunctionInterface f, double t, StateInterface y, double h) {
         // Creates rate objects for each k of the RK method
-<span class="nc" id="L203">        Rate ki1 = (Rate) f.call(t, y);</span>
-<span class="nc" id="L204">        Rate ki2 = (Rate) f.call(t + 0.5*h, y.addMul(h*0.5, ki1));</span>
-<span class="nc" id="L205">        Rate ki3 = (Rate) f.call(t + 0.5*h, y.addMul(h*0.5, ki2));</span>
-<span class="nc" id="L206">        Rate ki4 = (Rate) f.call(t + h, y.addMul(h, ki3));</span>
+<span class="nc" id="L202">        Rate ki1 = (Rate) f.call(t, y);</span>
+<span class="nc" id="L203">        Rate ki2 = (Rate) f.call(t + 0.5*h, y.addMul(h*0.5, ki1));</span>
+<span class="nc" id="L204">        Rate ki3 = (Rate) f.call(t + 0.5*h, y.addMul(h*0.5, ki2));</span>
+<span class="nc" id="L205">        Rate ki4 = (Rate) f.call(t + h, y.addMul(h, ki3));</span>
 
         // Combines the ki's
-<span class="nc" id="L209">        RateInterface kitot = (ki1.addMul(2, ki2).addMul(2, ki3).addMul(1, ki4)).mul(1.0/6.0);</span>
-<span class="nc" id="L210">        return y.addMul(h, kitot);</span>
+<span class="nc" id="L208">        RateInterface kitot = (ki1.addMul(2, ki2).addMul(2, ki3).addMul(1, ki4)).mul(1.0/6.0);</span>
+<span class="nc" id="L209">        return y.addMul(h, kitot);</span>
     }
 
     /**
@@ -220,15 +219,15 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
      * @return the new state after taking one step
      */
     public StateInterface verletStep(ODEFunctionInterface f, double t, StateInterface y, double h) {
-<span class="nc" id="L223">        Vector3dInterface[] accelerations = ((ODEFunction) f).callA(t,y);</span>
-<span class="nc" id="L224">        State state = (State) y;</span>
+<span class="nc" id="L222">        Vector3dInterface[] accelerations = ((ODEFunction) f).callA(t,y);</span>
+<span class="nc" id="L223">        State state = (State) y;</span>
 
-<span class="nc" id="L226">        return state.addMulVerlet(h, accelerations);</span>
+<span class="nc" id="L225">        return state.addMulVerlet(h, accelerations);</span>
     }
 
     @Override
     public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double[] ts) {
-<span class="nc" id="L231">        return new Vector3dInterface[0];</span>
+<span class="nc" id="L230">        return new Vector3dInterface[0];</span>
     }
 
     /**
@@ -244,31 +243,31 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
      */
     @Override
     public Vector3dInterface[] trajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h) {
-<span class="nc" id="L247">        Vector3dInterface[] probeCoordinates = new Vector3dInterface[(int) ((tf/h)+1)];</span>
-<span class="nc" id="L248">        ODEFunctionInterface f = new ODEFunction();</span>
-<span class="nc" id="L249">        coordinates[11] = coordinates[3].add(p0);</span>
-<span class="nc" id="L250">        velocities[11] = velocities[3].add(v0);</span>
-<span class="nc" id="L251">        probeCoordinates[0] = coordinates[11];</span>
-<span class="nc" id="L252">        states = new StateInterface[(int) ((tf/h)+1)];</span>
-<span class="nc" id="L253">        states[0] = new State(coordinates, velocities, 0);</span>
-<span class="nc" id="L254">        smallestDistRocketTitan = Double.MAX_VALUE;</span>
+<span class="nc" id="L246">        Vector3dInterface[] probeCoordinates = new Vector3dInterface[(int) ((tf/h)+1)];</span>
+<span class="nc" id="L247">        ODEFunctionInterface f = new ODEFunction();</span>
+<span class="nc" id="L248">        coordinates[11] = coordinates[3].add(p0);</span>
+<span class="nc" id="L249">        velocities[11] = velocities[3].add(v0);</span>
+<span class="nc" id="L250">        probeCoordinates[0] = coordinates[11];</span>
+<span class="nc" id="L251">        states = new StateInterface[(int) ((tf/h)+1)];</span>
+<span class="nc" id="L252">        states[0] = new State(coordinates, velocities, 0);</span>
+<span class="nc" id="L253">        smallestDistRocketTitan = Double.MAX_VALUE;</span>
 
-<span class="nc" id="L256">        int t = 0;</span>
+<span class="nc" id="L255">        int t = 0;</span>
 
-<span class="nc bnc" id="L258" title="All 2 branches missed.">        for(int i = 1; i &lt; states.length; i++) {</span>
-<span class="nc" id="L259">            t += h;</span>
-<span class="nc" id="L260">            states[i] = verletStep(f, t, states[i-1], h);</span>
-<span class="nc" id="L261">            State state = (State) states[i];</span>
-<span class="nc" id="L262">            probeCoordinates[i] = state.getCoordinates()[11];</span>
-<span class="nc" id="L263">            double distRocketTitan = state.getCoordinates()[11].dist(state.getCoordinates()[8]);</span>
-<span class="nc bnc" id="L264" title="All 2 branches missed.">            if(distRocketTitan &lt; smallestDistRocketTitan) {</span>
-<span class="nc" id="L265">                smallestDistRocketTitan = distRocketTitan;</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">        for(int i = 1; i &lt; states.length; i++) {</span>
+<span class="nc" id="L258">            t += h;</span>
+<span class="nc" id="L259">            states[i] = verletStep(f, t, states[i-1], h);</span>
+<span class="nc" id="L260">            State state = (State) states[i];</span>
+<span class="nc" id="L261">            probeCoordinates[i] = state.getCoordinates()[11];</span>
+<span class="nc" id="L262">            double distRocketTitan = state.getCoordinates()[11].dist(state.getCoordinates()[8]);</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">            if(distRocketTitan &lt; smallestDistRocketTitan) {</span>
+<span class="nc" id="L264">                smallestDistRocketTitan = distRocketTitan;</span>
             }
         }
 
-<span class="nc" id="L269">        System.out.println(&quot;Smallest distance between the rocket and Titan: &quot; + smallestDistRocketTitan + &quot; meters.&quot;);</span>
+<span class="nc" id="L268">        System.out.println(&quot;Smallest distance between the rocket and Titan: &quot; + smallestDistRocketTitan + &quot; meters.&quot;);</span>
 
-<span class="nc" id="L271">        return probeCoordinates;</span>
+<span class="nc" id="L270">        return probeCoordinates;</span>
     }
 
     /**
@@ -284,53 +283,47 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
      *          taken relative to the Solar System barycentre
      */
     public Vector3dInterface[] thrustTrajectory(Vector3dInterface p0, Vector3dInterface v0, double tf, double h){
-<span class="nc" id="L287">        Vector3dInterface[] probeCoordinates = new Vector3dInterface[(int) ((tf/h)+1)];</span>
-<span class="nc" id="L288">        ODEFunctionInterface f = new ODEFunction();</span>
-<span class="nc" id="L289">        SpaceShuttle s = new SpaceShuttle(7e4, 7e4, p0, new Vector3d(0,0,0));</span>
-        //SpaceShuttle s = new SpaceShuttle(7e4,7e4, p0, velocities[3].add(v0));
-<span class="nc" id="L291">        probeCoordinates[0] = p0;</span>
-<span class="nc" id="L292">        coordinates[11] = coordinates[3].add(p0);</span>
+<span class="nc" id="L286">        Vector3dInterface[] probeCoordinates = new Vector3dInterface[(int) ((tf/h)+1)];</span>
+<span class="nc" id="L287">        ODEFunctionInterface f = new ODEFunction();</span>
+<span class="nc" id="L288">        SpaceShuttle s = new SpaceShuttle(7e4,7e4, p0, velocities[3].add(v0));</span>
+<span class="nc" id="L289">        probeCoordinates[0] = p0;</span>
+<span class="nc" id="L290">        coordinates[11] = coordinates[3].add(p0);</span>
         //initial thrust
-<span class="nc" id="L294">        System.out.println(&quot;FUEL 2: &quot;+s.getFuelMass());</span>
-<span class="nc" id="L295">        s.calculateThrust(0.1);</span>
-<span class="nc" id="L296">        velocities[11] = s.getVelocity();</span>
-<span class="nc" id="L297">        states = new StateInterface[(int) ((tf/h)+1)];</span>
-<span class="nc" id="L298">        states[0] = new State(coordinates, velocities, 0);</span>
-<span class="nc" id="L299">        smallestDistRocketTitan = Double.MAX_VALUE;</span>
+<span class="nc" id="L292">        s.calculateThrust(1);</span>
+<span class="nc" id="L293">        velocities[11] = s.getVelocity();</span>
+<span class="nc" id="L294">        states = new StateInterface[(int) ((tf/h)+1)];</span>
+<span class="nc" id="L295">        states[0] = new State(coordinates, velocities, 0);</span>
+<span class="nc" id="L296">        smallestDistRocketTitan = Double.MAX_VALUE;</span>
 
-<span class="nc" id="L301">        int t = 0;</span>
-<span class="nc" id="L302">        System.out.println(&quot;FUEL: &quot;+s.getFuelMass());</span>
-<span class="nc bnc" id="L303" title="All 2 branches missed.">        for(int i = 1; i &lt; states.length; i++) {</span>
-<span class="nc" id="L304">            t += h;</span>
-<span class="nc" id="L305">            states[i] = verletStep(f, t, states[i-1], h);</span>
-<span class="nc" id="L306">            State state = (State) states[i];</span>
-<span class="nc" id="L307">            probeCoordinates[i] = state.getCoordinates()[11];</span>
-<span class="nc" id="L308">            s.setVelocity(state.getVelocities()[11]);</span>
+<span class="nc" id="L298">        int t = 0;</span>
+
+<span class="nc bnc" id="L300" title="All 2 branches missed.">        for(int i = 1; i &lt; states.length; i++) {</span>
+<span class="nc" id="L301">            t += h;</span>
+<span class="nc" id="L302">            states[i] = verletStep(f, t, states[i-1], h);</span>
+<span class="nc" id="L303">            State state = (State) states[i];</span>
+<span class="nc" id="L304">            probeCoordinates[i] = state.getCoordinates()[11];</span>
+<span class="nc" id="L305">            s.setVelocity(state.getVelocities()[11]);</span>
             //Second thrust
-            //if(i == 10){
-<span class="nc bnc" id="L311" title="All 2 branches missed.">            while (i &lt; 50) {</span>
-<span class="nc" id="L312">                System.out.println(i);</span>
-<span class="nc" id="L313">                System.out.println(&quot;FUEL loop: &quot;+s.getFuelMass());</span>
-<span class="nc" id="L314">                System.out.println(&quot;The velocity before thrust is: &quot;+((State) states[i]).getVelocities()[11]);</span>
-<span class="nc" id="L315">                s.calculateThrust(0.7);</span>
-<span class="nc" id="L316">                ((State) states[i]).getVelocities()[11] = s.getVelocity();</span>
-<span class="nc" id="L317">                System.out.println(&quot;The velocity after thrust is: &quot;+((State) states[i]).getVelocities()[11]);</span>
-                break;
+<span class="nc bnc" id="L307" title="All 2 branches missed.">            if(i == 10){</span>
+                //System.out.println(&quot;The velocity before thrust is: &quot;+((State) states[i]).getVelocities()[11]);
+<span class="nc" id="L309">                s.calculateThrust(0.7);</span>
+<span class="nc" id="L310">                ((State) states[i]).getVelocities()[11] = s.getVelocity();</span>
+                //System.out.println(&quot;The velocity after thrust is: &quot;+((State) states[i]).getVelocities()[11]);
             }
             //Third thrust
-           /* if(i == 50){
-                System.out.println(&quot;The velocity before thrust is: &quot;+((State) states[i]).getVelocities()[11]);
-                s.calculateThrust(0.9);
-                ((State) states[i]).getVelocities()[11] = s.getVelocity();
-                System.out.println(&quot;The velocity after thrust is: &quot;+((State) states[i]).getVelocities()[11]);
-            } */
-<span class="nc" id="L327">            double distRocketTitan = probeCoordinates[i].dist(state.getCoordinates()[8]);</span>
-<span class="nc bnc" id="L328" title="All 2 branches missed.">            if(distRocketTitan &lt; smallestDistRocketTitan) {</span>
-<span class="nc" id="L329">                smallestDistRocketTitan = distRocketTitan;</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">            if(i == 50){</span>
+                //System.out.println(&quot;The velocity before thrust is: &quot;+((State) states[i]).getVelocities()[11]);
+<span class="nc" id="L316">                s.calculateThrust(0.9);</span>
+<span class="nc" id="L317">                ((State) states[i]).getVelocities()[11] = s.getVelocity();</span>
+                //System.out.println(&quot;The velocity after thrust is: &quot;+((State) states[i]).getVelocities()[11]);
+            }
+<span class="nc" id="L320">            double distRocketTitan = probeCoordinates[i].dist(state.getCoordinates()[8]);</span>
+<span class="nc bnc" id="L321" title="All 2 branches missed.">            if(distRocketTitan &lt; smallestDistRocketTitan) {</span>
+<span class="nc" id="L322">                smallestDistRocketTitan = distRocketTitan;</span>
             }
         }
 
-<span class="nc" id="L333">        return probeCoordinates;</span>
+<span class="nc" id="L326">        return probeCoordinates;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>
