@@ -30,10 +30,6 @@ public class HillClimbing {
         RocketState bestState = startState;
         double curDist = Double.MAX_VALUE;
 
-        ArrayList<Double> bestDistances = new ArrayList<Double>();
-
-        int randomAttemptCount;
-        boolean foundBetterState = true;
         int totCount = 0;
 
         double value = 30000;
@@ -77,7 +73,6 @@ public class HillClimbing {
 
 
                 if(!increase) {
-                    bestDistances.add(curDist);
                     System.out.println("Found new best distance: " + curDist);
                     System.out.println("Related state: " + bestState);
                 }

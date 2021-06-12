@@ -4,6 +4,8 @@ import titan.ODEFunctionInterface;
 import titan.StateInterface;
 import src.main.java.titan.Vector3dInterface;
 
+import java.util.Arrays;
+
 /**
  * Class which represents the state of a system. Contains the coordinates and velocities of all objects in the system.
  */
@@ -177,5 +179,12 @@ public class State implements StateInterface {
             newCoordinates[i] = tmp.add(tmp2);
         }
        return new State(newCoordinates, coordinates, velocities, this.time+step);
+    }
+
+    @Override
+    public String toString() {
+        return "State{" +
+                "coordinates=" + Arrays.toString(coordinates) +
+                '}';
     }
 }

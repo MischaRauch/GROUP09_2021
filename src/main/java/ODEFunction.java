@@ -88,6 +88,10 @@ public class ODEFunction implements ODEFunctionInterface {
         return new Rate(rates);
     }
 
+    public double simpleCall(double t, double y) {
+        return t*y;
+    }
+
     /**
      * Call method which calculates the acceleration of all bodies.
      *
