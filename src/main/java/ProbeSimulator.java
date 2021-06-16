@@ -62,7 +62,7 @@ public class ProbeSimulator implements ProbeSimulatorInterface {
             //for each step perform the chossen step and set the value
             t += h;
             //step = Eulers; RKstep = Runge-Kutte; verletStep = Verlet solver
-            states[i] = ode.RKstep(f, t, states[i-1], h);
+            states[i] = ode.verletStep(f, t, states[i-1], h);
             State state = (State) states[i];
             probeCoordinates[i] = state.getCoordinates()[11];
         }

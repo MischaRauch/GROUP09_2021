@@ -1,16 +1,17 @@
-<<<<<<< Updated upstream
 HillClimbing.java
  HillClimbing
-TrajectoryComponent.java
- TrajectoryComponent
+LandingComponent.java
+ LandingComponent
 titan/Vector3dInterface.java
  src.main.java.titan.Vector3dInterface
+State.java
+ State
+ODETest.java
+ ODETest
+TrajectoryComponent.java
+ TrajectoryComponent
 Engine.java
  Engine
-RunCode.java
- RunCode
-WindModel.java
- WindModel
 RocketState.java
  RocketState
 titan/ProbeSimulatorInterface.java
@@ -19,29 +20,10 @@ Frame.java
  Frame
  Frame$1
  Frame$2
-=======
-titan/StateInterface.java
- titan.StateInterface
-HillClimbing.java
- HillClimbing
-titan/RateInterface.java
- src.main.java.titan.RateInterface
-titan/Vector3dInterface.java
- src.main.java.titan.Vector3dInterface
-PlanetComponent.java
- PlanetComponent
-ProbeSimulator.java
- ProbeSimulator
-ODEFunction.java
- ODEFunction
-titan/ODESolverInterface.java
- titan.ODESolverInterface
->>>>>>> Stashed changes
 titan/ODEFunctionInterface.java
  titan.ODEFunctionInterface
 Vector3d.java
  Vector3d
-<<<<<<< Updated upstream
 titan/StateInterface.java
  titan.StateInterface
 titan/RateInterface.java
@@ -58,39 +40,16 @@ ODEFunction.java
  ODEFunction
 titan/ODESolverInterface.java
  titan.ODESolverInterface
-=======
->>>>>>> Stashed changes
 ODESolver.java
  ODESolver
 SpaceShuttle.java
  SpaceShuttle
 Rate.java
  Rate
-<<<<<<< Updated upstream
-State.java
- State
-LandingComponent.java
- LandingComponent
+RunCode.java
+ RunCode
+WindModel.java
+ WindModel
 LandingViewer.java
  LandingViewer
  LandingViewer$1AnimationListener
-=======
-RocketState.java
- RocketState
-State.java
- State
-titan/ProbeSimulatorInterface.java
- titan.ProbeSimulatorInterface
-Frame.java
- Frame
- Frame$1
- Frame$2
-Engine.java
- Engine
-TrajectoryComponent.java
- TrajectoryComponent
-RunCode.java
- RunCode
-ODETest.java
- ODETest
->>>>>>> Stashed changes

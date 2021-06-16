@@ -88,6 +88,10 @@ public class ODEFunction implements ODEFunctionInterface {
 <span class="nc" id="L88">        return new Rate(rates);</span>
     }
 
+    public double simpleCall(double t, double y) {
+<span class="nc" id="L92">        return t*y;</span>
+    }
+
     /**
      * Call method which calculates the acceleration of all bodies.
      *
@@ -96,13 +100,13 @@ public class ODEFunction implements ODEFunctionInterface {
      * @return  The acceleration over the time-step.
      */
     public Vector3dInterface[] callA(double t, StateInterface y) {
-<span class="nc" id="L99">        State state = (State) y;</span>
-<span class="nc" id="L100">        rates = new Vector3dInterface[state.getCoordinates().length];</span>
+<span class="nc" id="L103">        State state = (State) y;</span>
+<span class="nc" id="L104">        rates = new Vector3dInterface[state.getCoordinates().length];</span>
 
-<span class="nc" id="L102">        Vector3dInterface[] forces = calculateF(state.getCoordinates(), state.masses);</span>
-<span class="nc" id="L103">        Vector3dInterface[] accelerations = calculateAccelerations(forces, state.masses);</span>
+<span class="nc" id="L106">        Vector3dInterface[] forces = calculateF(state.getCoordinates(), state.masses);</span>
+<span class="nc" id="L107">        Vector3dInterface[] accelerations = calculateAccelerations(forces, state.masses);</span>
 
-<span class="nc" id="L105">        return accelerations;</span>
+<span class="nc" id="L109">        return accelerations;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

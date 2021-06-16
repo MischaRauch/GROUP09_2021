@@ -15,15 +15,19 @@
     //private static final double stepSize = (24*60*60);
 
     public static void main(String[] args) {
+
+<span class="nc" id="L19">        ODETest test = new ODETest(0.5);</span>
         //ODESolver solver = new ODESolver(stepSize); // 6000
 
         // The line below can be used for running/testing the hill climbing algorithm
         //HillClimbing climber = new HillClimbing(solver, 365.25*(24*60*60),stepSize);
 
         //Frame frame = new Frame(solver.getStates());
-<span class="nc" id="L24">        WindModel wM = new WindModel();</span>
-<span class="nc" id="L25">        wM.calculateFall(0.1,471.1, new Vector3d(0,150000,0), new Vector3d(0,0,0));</span>
-<span class="nc" id="L26">    }</span>
+
+<span class="nc" id="L27">        WindModel wM = new WindModel();</span>
+<span class="nc" id="L28">        wM.calculateFall(0.1,471.1, new Vector3d(0,150000,0), new Vector3d(0,0,0));</span>
+
+<span class="nc" id="L30">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

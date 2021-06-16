@@ -61,13 +61,6 @@ public class LandingComponent extends JComponent {
 			yPos =  screenSize.height *2.5/4.0 - (states[index].getCoordinates().getY())/1000;
 			index = index + 1;
 		}
-
-		if (index >= states.length) {
-			System.out.println("Done");
-			System.out.println(states[index-1].getCoordinates().getY());
-			System.out.println(states[index-2].getCoordinates().getY());
-		}
-
 	}
 
 }

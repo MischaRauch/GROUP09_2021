@@ -11,9 +11,21 @@ public class WindModel {
     private int windMax40kmTo3km = 2;
     private int eastWind = -1;
     private int westWind = 1;
-    private int windMax = 80;
+    private int windMax = 70;
     private int windMin = 30;
 
+    static boolean check = true;
+
+    //thought about splitting the progress up into different parts - to complicated for now
+    /*
+    public SingleState[] performFullFalling(double h, double tf, Vector3d x0, Vector3d v0) {
+        SingleState[] states = calculateFall(h,tf,x0,v0);
+        SingleState[] newStates = addThruster(states,h,tf);
+        return states;
+    }
+    /*
+
+     */
     /**
      * Function which returns the positions after each step (h) for the timespan of tf
      * @param h - the timestep
@@ -38,24 +50,34 @@ public class WindModel {
             double initAlitude = initalPosition.getY();
             double newAlitude = initAlitude-((Math.pow(step,2)*g)*0.5);
             Vector3dInterface finalPositon = tmpVelocity.add(new Vector3d(states[i-1].getCoordinates().getX(),newAlitude,0));
+
             //before storing the new position apply some wind
             double windForce = applyWind(finalPositon);
             //System.out.println("before: "+finalPositon.getX());
             finalPositon.setX(finalPositon.getX()+windForce);
             //System.out.println("after: "+finalPositon.getX());
 
+            //take thruster into account
+            double newY = applyThruster(finalPositon.getY(), h, step);
+            //System.out.println("NEW Y: "+newY);
+            finalPositon.setY(finalPositon.getY()+newY);
+
             //correct trajectory with feedback controler
+            if ((i % 20) == 0) {
+                //double correction = correctTrajectory(finalPositon.getX(), states[0].getCoordinates().getX());
+                double correction = correctTrajectory(finalPositon.getX(), initalPosition.getX());
+                finalPositon.setX(finalPositon.getX()+correction);
+            }
 
             states[i] = new SingleState(finalPositon,newVelocity,step);
             step+=h;
-            //System.out.println("Velocity: "+states[i].getVelocity());
-            // System.out.println("VECTOR ARRAY: "+finalPositon.getY());
         }
         System.out.println("States prev prev: "+states[states.length-2].getCoordinates().getY());
         System.out.println("States prev: "+states[states.length-1].getCoordinates().getY());
         System.out.println("States change of x: "+states[states.length-1].getCoordinates().getX());
         System.out.println("States change of x in km: "+states[states.length-1].getCoordinates().getX()/1000);
         System.out.println("Velocity 1: "+states[2].getVelocity());
+        System.out.println("Velocity last: "+states[states.length-1].getVelocity());
         return states;
     }
 
@@ -87,6 +109,61 @@ public class WindModel {
             //System.out.println("Change: "+changeOfPosition);
         }
         return changeOfPosition;
+    }
+
+    public double correctTrajectory(double xPos, double initalPosition) {
+        double adjustment = 0;
+        //calculate error term
+        double eror = initalPosition - xPos;
+        System.out.println("Error: "+eror);
+        double stepSize = 0.1;
+
+        if (eror > 0) {
+            adjustment = -1*(eror*stepSize); //20 m/s
+        }
+        else if (eror < 0) {
+            adjustment = (eror*stepSize); //20 m/s
+        }
+        return adjustment;
+    }
+
+    /*
+    public SingleState[] addThruster(SingleState[] currentStates, double h, double tf) {
+        SingleState[] newPositions = new SingleState[currentStates.length];
+        //calculate the ammount of position change based on the stepsize
+        double changePerSecond = 3;
+        changePerSecond = changePerSecond*h;
+        for (int i = 0; i < currentStates.length; i++) {
+            if (currentStates[i].getCoordinates().getY() < (60000)) {
+                //change position
+                double prevPosition = currentStates[i-1].getCoordinates().getY();
+                currentStates[i].getCoordinates().setY(prevPosition+changePerSecond);
+                System.out.println("Pos Y:"+ prevPosition+changePerSecond);
+            }
+        }
+        return newPositions;
+    }
+    */
+
+    public double applyThruster(double yPosition, double h, double step) {
+        double finalChange = 0;
+
+        if (yPosition < (60000)) {
+            double changePerSecond = 2;
+            changePerSecond = changePerSecond * h;
+            double changeWithStep = changePerSecond*step;
+            finalChange = yPosition + changeWithStep;
+            //System.out.println("NEW Y: "+finalChange);
+            if (check) {
+                //System.out.println("Y POS "+yPosition);
+                System.out.println("Change "+changePerSecond);
+                System.out.println("BEFORE CHANGE: "+yPosition);
+                System.out.println("AFTER CHANGE: "+finalChange);
+                //check = false;
+            }
+            //System.out.println("Pos Y:"+ finalChange);
+        }
+        return finalChange;
     }
 
 
