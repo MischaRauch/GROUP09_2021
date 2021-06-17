@@ -14,7 +14,8 @@ public class WindModel {
     private int windMax = 70;
     private int windMin = 30;
 
-    static boolean check = true;
+    boolean thrusterCheck = false;
+    private double thrusterChange = 0;
 
     //thought about splitting the progress up into different parts - to complicated for now
     /*
@@ -58,17 +59,19 @@ public class WindModel {
             //System.out.println("after: "+finalPositon.getX());
 
             //take thruster into account
-            double newY = applyThruster(finalPositon.getY(), h, step);
-            //System.out.println("NEW Y: "+newY);
+            double newY = applyThruster(finalPositon.getY(), h);
+            //System.out.println("ADDED Y"+newY);
             finalPositon.setY(finalPositon.getY()+newY);
+
+
 
             //correct trajectory with feedback controler
             if ((i % 20) == 0) {
                 //double correction = correctTrajectory(finalPositon.getX(), states[0].getCoordinates().getX());
-                double correction = correctTrajectory(finalPositon.getX(), initalPosition.getX());
-                finalPositon.setX(finalPositon.getX()+correction);
+                //double correction = correctTrajectory(finalPositon.getX(), initalPosition.getX());
+                //finalPositon.setX(finalPositon.getX()+correction);
             }
-
+            System.out.println("POSITION: "+finalPositon.getY());
             states[i] = new SingleState(finalPositon,newVelocity,step);
             step+=h;
         }
@@ -145,23 +148,25 @@ public class WindModel {
     }
     */
 
-    public double applyThruster(double yPosition, double h, double step) {
+    /**
+     * Method to start the engines to slow down the falling process
+     * @param yPosition - position of the landing module
+     * @param h - stepSize to calculate the change per step size in meters
+     * @return - the change of meters which have to be added to the inital position
+     */
+    public double applyThruster(double yPosition, double h) {
         double finalChange = 0;
 
-        if (yPosition < (60000)) {
-            double changePerSecond = 2;
+        if(yPosition < (60000)) {
+            thrusterCheck = true;
+        }
+        if (thrusterCheck) {
+           //Thruster power in meters per second
+            double changePerSecond = 999;
+            //calculate the change in meters per second depening on h (stepsize)
             changePerSecond = changePerSecond * h;
-            double changeWithStep = changePerSecond*step;
-            finalChange = yPosition + changeWithStep;
-            //System.out.println("NEW Y: "+finalChange);
-            if (check) {
-                //System.out.println("Y POS "+yPosition);
-                System.out.println("Change "+changePerSecond);
-                System.out.println("BEFORE CHANGE: "+yPosition);
-                System.out.println("AFTER CHANGE: "+finalChange);
-                //check = false;
-            }
-            //System.out.println("Pos Y:"+ finalChange);
+            finalChange = changePerSecond * thrusterChange;
+            thrusterChange += h;
         }
         return finalChange;
     }
