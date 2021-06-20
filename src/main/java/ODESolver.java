@@ -99,14 +99,7 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
     public ODESolver(double h) {
         StateInterface y0 = new State(coordinates, velocities, 0);
         ODEFunctionInterface f = new ODEFunction();
-        //states = solve(f, y0, SecondsInYear, h);
         //trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(29062.557220458984,-40935.659408569336,-546.1549758911133), SecondsInYear, h);
-        //stateClosestToTitan = (State) states[227539];
-        //statesYearOne = states;
-        //trajectory(new Vector3d(8.12300223421109E11,-1.2533483211800303E12,-1.0025476743448586E10), new Vector3d(-18749.995976686478,44954.149425029755,102.96821594238281), 2*SecondsInYear, h);
-        //states = solve(f, stateClosestToTitan, 2*SecondsInYear, h);
-        //RocketState s0 = new RocketState(new Vector3d(8.12300223421109E11,-1.2533483211800303E12,-1.0025476743448586E10), new Vector3d(100000,-20000,0));
-        //states = solveProbe(f, stateClosestToTitan, 2*SecondsInYear, h, s0);
 
         // Full journey with Runge-Kutta
         trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(29312.83187866211,-40961.14158630371,-600.2779006958008), SecondsInYear, h); // Distance of 195203.67319908465 meters to Titan
@@ -338,29 +331,6 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
 
         return probeCoordinates;
     }
-
-    /*
-    smallestDistRocketEarth = Double.MAX_VALUE;
-        Vector3dInterface coordSmallestDistance = new Vector3d(-1,-1,-1);
-
-        int t = 0;
-
-        for(int i = 1; i < states.length; i++) {
-            t += h;
-            states[i] = verletStep(f, t, states[i-1], h);
-            State state = (State) states[i];
-            probeCoordinates[i] = state.getCoordinates()[11];
-            double distRocketEarth = state.getCoordinates()[11].dist(state.getCoordinates()[3]);
-            if(distRocketEarth < smallestDistRocketEarth) {
-                smallestDistRocketEarth = distRocketEarth;
-                coordSmallestDistance = state.getCoordinates()[11];
-            }
-        }
-
-        //System.out.println("Smallest distance between the rocket and Earth coordinates: " + coordSmallestDistance + " meters.");
-        //System.out.println("Smallest distance between the rocket and Earth: " + smallestDistRocketEarth + " meters.");
-
-     */
 
     /**
      * Simulate the solar system with steps of an equal size.
