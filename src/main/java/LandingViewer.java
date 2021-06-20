@@ -20,7 +20,7 @@ public class LandingViewer {
 		frame.add(component);
 
 		WindModel wM = new WindModel();
-        SingleState[] states = wM.calculateFall(0.1, 471.1, new Vector3d((screenSize.width/2.0 - 32.5) * 265,150000,0), new Vector3d(0,0,0));
+		SingleState[] states = wM.calculateFall(0.1, 476.1, new Vector3d((screenSize.width/2.0 - 32.5) * 25,150000,0), new Vector3d(0,0,0));
 
 		// AnimationListener Listener
 		class AnimationListener implements ActionListener {

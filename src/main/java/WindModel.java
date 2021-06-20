@@ -3,12 +3,14 @@ import src.main.java.titan.Vector3dInterface;
 public class WindModel {
 
     //private final double g = 9.807;
-    //private final double g = 10;
     private final double g = 1.352;
 
     private int windMax120kmTo100km = 120;
+    private int maxAppliedWindOverIntervall120To100 = 7344*2;
     private int windMax60kmTo40km = 20;
+    private int maxAppliedWindOverIntervall60To40 = 572;
     private int windMax40kmTo3km = 2;
+    private int maxAppliedWindOverIntervall40To3 = 126;
     private int eastWind = -1;
     private int westWind = 1;
     private int windMax = 70;
@@ -16,6 +18,7 @@ public class WindModel {
 
     boolean thrusterCheck = false;
     private double thrusterChange = 0;
+
 
     //thought about splitting the progress up into different parts - to complicated for now
     /*
@@ -36,15 +39,14 @@ public class WindModel {
     public SingleState[] calculateFall(double h, double tf, Vector3d x0, Vector3d v0) {
         SingleState[] states = new SingleState[(int) ((tf/h))];
         double step = h;
-        System.out.println("States Length: "+states.length);
         Vector3dInterface initalVelocity = v0;
         Vector3dInterface initalPosition = x0;
         states[0] = new SingleState(x0, v0, step);
         step += h;
-        System.out.println(x0.getY());
+
         for (int i = 1; i < states.length; i++) {
             //calculate new Velocity
-            Vector3dInterface newVelocity = initalVelocity.add(new Vector3d(0, g*step,0));
+            Vector3dInterface newVelocity = initalVelocity.add(new Vector3d(states[i-1].getVelocity().getX(), g*step,0));
             //calculate new position - altitude
             double tmp = initalVelocity.getY()*step;
             Vector3dInterface tmpVelocity = new Vector3d(initalVelocity.getX(), tmp, initalVelocity.getZ());
@@ -53,7 +55,8 @@ public class WindModel {
             Vector3dInterface finalPositon = tmpVelocity.add(new Vector3d(states[i-1].getCoordinates().getX(),newAlitude,0));
 
             //before storing the new position apply some wind
-            double windForce = applyWind(finalPositon);
+            double windForce = applyWind(finalPositon, h);
+            //System.out.println("WIND FORCE: "+windForce);
             //System.out.println("before: "+finalPositon.getX());
             finalPositon.setX(finalPositon.getX()+windForce);
             //System.out.println("after: "+finalPositon.getX());
@@ -65,13 +68,14 @@ public class WindModel {
 
 
 
-            //correct trajectory with feedback controler
+            //correct trajectory with feedback controller
             if ((i % 20) == 0) {
-                //double correction = correctTrajectory(finalPositon.getX(), states[0].getCoordinates().getX());
-                //double correction = correctTrajectory(finalPositon.getX(), initalPosition.getX());
-                //finalPositon.setX(finalPositon.getX()+correction);
+                //double correction = feedbackController(finalPositon.getX(), initalPosition.getX(), finalPositon.getY(), h);
+                //double correction = simpleFeedbackController(finalPositon.getX(), initalPosition.getX());
+                double correction = openLoopController(finalPositon.getY());
+                finalPositon.setX(finalPositon.getX()+correction);
             }
-            System.out.println("POSITION: "+finalPositon.getY());
+
             states[i] = new SingleState(finalPositon,newVelocity,step);
             step+=h;
         }
@@ -89,12 +93,10 @@ public class WindModel {
      * @param currentPosition - the altitude in meters
      * @return a double value representing the wind strength
      */
-    public double applyWind(Vector3dInterface currentPosition  ) {
+    public double applyWind(Vector3dInterface currentPosition, double h  ) {
         double strength = Math.random()*(windMax-windMin+1)+windMin;
         strength = strength/100;
-        //System.out.println(strength);
         double changeOfPosition = 0;
-        //System.out.println("POSITION "+currentPosition.getY());
         //check which altitude we have and calculate wind Strength
         if (120000 >= currentPosition.getY() && currentPosition.getY() >= 100000) {
             changeOfPosition = strength*windMax120kmTo100km;
@@ -108,26 +110,89 @@ public class WindModel {
             changeOfPosition = strength*windMax40kmTo3km;
             changeOfPosition = changeOfPosition*westWind;
         }
-        if (changeOfPosition != 0) {
-            //System.out.println("Change: "+changeOfPosition);
-        }
+        changeOfPosition = changeOfPosition*h;
         return changeOfPosition;
     }
 
-    public double correctTrajectory(double xPos, double initalPosition) {
+    /**
+     * Feedback Controller which calculates the thrust to perform a change of x
+     * @param xPos - the current x position
+     * @param initalPosition - the desired x position
+     * @param yPos - the altitude of the object
+     * @param h - the stepsize of the calculation
+     * @return - the value to perform a change of x
+     */
+    public double feedbackController(double xPos, double initalPosition, double yPos, double h) {
+        double adjustment = 0;
+
+        //calculate error term
+        double changePerSecond = 0;
+        double error = initalPosition - xPos;
+        double stepSize = 0.03;
+
+        if(error != 0) {
+            //normalize values
+            if (120000 >= yPos && yPos >= 100000) {
+                error = ( error/maxAppliedWindOverIntervall120To100);
+            }
+            else if (60000 >= yPos && yPos >= 40000) {
+                error = ( error/maxAppliedWindOverIntervall60To40);
+            }
+            else if (40000 > yPos && yPos > 3000) {
+                error = ( error/maxAppliedWindOverIntervall40To3);
+            }
+            //else other values
+            else {
+                error = 0.8;
+            }
+            LandingThrust l = new LandingThrust(4e3);
+            l.calculateThrust(error);
+            changePerSecond = l.getVelocity();
+            changePerSecond = changePerSecond * stepSize;
+        }
+
+        adjustment = changePerSecond*h;
+
+        return adjustment;
+    }
+
+    /**
+     * Feedback Controller that calculates an error (representing the off between desired and actual position) and performs a change of x
+     * @param xPos - the current x position
+     * @param initalPosition - the desired position to land
+     * @return - a value to change the position of the landing module
+     */
+    public double simpleFeedbackController(double xPos, double initalPosition) {
         double adjustment = 0;
         //calculate error term
         double eror = initalPosition - xPos;
         System.out.println("Error: "+eror);
         double stepSize = 0.1;
 
-        if (eror > 0) {
-            adjustment = -1*(eror*stepSize); //20 m/s
-        }
-        else if (eror < 0) {
-            adjustment = (eror*stepSize); //20 m/s
-        }
+        adjustment = (eror*stepSize); //20 m/s
+
         return adjustment;
+    }
+
+    /**
+     * Simple Open loop controller that applies a change of x depending on the altitude
+     * @param yPosition - the altitude of the object
+     * @return - a change of x to be performed
+     */
+    public double openLoopController(double yPosition) {
+        double change = 0;
+
+        if (120000 >= yPosition && yPosition >= 100000) {
+            change = -200;
+        }
+        else if (60000 >= yPosition && yPosition >= 40000) {
+            change = 100;
+        }
+        else if (40000 > yPosition && yPosition > 3000) {
+            change = -2;
+        }
+
+        return change;
     }
 
     /*
@@ -161,8 +226,12 @@ public class WindModel {
             thrusterCheck = true;
         }
         if (thrusterCheck) {
-           //Thruster power in meters per second
-            double changePerSecond = 999;
+            //Thruster power in meters per second
+            //double changePerSecond = 999;
+            LandingThrust l = new LandingThrust(4e3);
+            l.calculateThrust(0.1);
+            //double changePerSecond = 999;
+            double changePerSecond = l.getVelocity();
             //calculate the change in meters per second depening on h (stepsize)
             changePerSecond = changePerSecond * h;
             finalChange = changePerSecond * thrusterChange;
