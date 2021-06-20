@@ -53,6 +53,10 @@ public class State implements StateInterface {
         this.time = time;
     }
 
+    public void setProbeVelocity(Vector3dInterface v) {
+        this.velocities[11] = v;
+    }
+
     /**
      * Getter method
      * @return an array containing the coordinate vectors of each object in the system at time this.time
@@ -66,7 +70,7 @@ public class State implements StateInterface {
      * @return an array containing the velocity vectors of each object in the system at time this.time
      */
     public Vector3dInterface[] getVelocities() {
-        return coordinates;
+        return velocities;
     }
 
     /**

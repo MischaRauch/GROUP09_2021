@@ -17,15 +17,15 @@ public class RunCode {
     public static void main(String[] args) {
 
         //ODETest test = new ODETest(0.5);
-        //ODESolver solver = new ODESolver(stepSize); // 6000
+        ODESolver solver = new ODESolver(stepSize); // 6000
 
         // The line below can be used for running/testing the hill climbing algorithm
-        //HillClimbing climber = new HillClimbing(solver, 365.25*(24*60*60),stepSize);
+        //HillClimbing climber = new HillClimbing(solver, 1.5*(365.25*(24*60*60)), 1.5*stepSize);
 
-        //Frame frame = new Frame(solver.getStates());
+        Frame frame = new Frame(solver.getStates());
 
-        WindModel wM = new WindModel();
-        wM.calculateFall(0.1,471.1, new Vector3d(0,150000,0), new Vector3d(0,0,0));
+        //WindModel wM = new WindModel();
+        //wM.calculateFall(0.1,471.1, new Vector3d(0,150000,0), new Vector3d(0,0,0));
         //wM.performFullFalling(0.1,471.1, new Vector3d(0,150000,0), new Vector3d(0,0,0));
     }
 
