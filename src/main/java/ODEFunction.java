@@ -57,7 +57,7 @@ public class ODEFunction implements ODEFunctionInterface {
      * @param masses    masses of all bodies
      * @return array containing the accelerations on all bodies
      */
-    public Vector3dInterface[] calculateAccelerations(Vector3dInterface[] forces, double[] masses) {
+    public Vector3dInterface[] calculateA(Vector3dInterface[] forces, double[] masses) {
         Vector3dInterface[] accelerations = new Vector3dInterface[forces.length];
         for(int i = 0; i < accelerations.length; i++) {
             accelerations[i] = new Vector3d(forces[i].getX()/masses[i], forces[i].getY()/masses[i], forces[i].getZ()/masses[i]);
@@ -79,7 +79,7 @@ public class ODEFunction implements ODEFunctionInterface {
         rates = new Vector3dInterface[state.getCoordinates().length];
 
         Vector3dInterface[] forces = calculateF(state.getCoordinates(), state.masses);
-        Vector3dInterface[] accelerations = calculateAccelerations(forces, state.masses);
+        Vector3dInterface[] accelerations = calculateA(forces, state.masses);
 
         for(int i = 0; i < rates.length; i++) {
             rates[i] = accelerations[i].mul(step);
@@ -104,7 +104,7 @@ public class ODEFunction implements ODEFunctionInterface {
         rates = new Vector3dInterface[state.getCoordinates().length];
 
         Vector3dInterface[] forces = calculateF(state.getCoordinates(), state.masses);
-        Vector3dInterface[] accelerations = calculateAccelerations(forces, state.masses);
+        Vector3dInterface[] accelerations = calculateA(forces, state.masses);
 
         return accelerations;
     }
