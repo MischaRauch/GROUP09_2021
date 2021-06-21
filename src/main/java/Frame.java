@@ -32,7 +32,7 @@ public class Frame extends JFrame implements ActionListener {
     private final PlanetComponent neptune;
     private final PlanetComponent probe;
 
-    private final State[] states; // Array containing all the states
+    private State[] states; // Array containing all the states
 
     // Instance fields for scale and offset
     public static double scale = 2.5e-10;
@@ -102,6 +102,17 @@ public class Frame extends JFrame implements ActionListener {
             }
         });
         lPane.add(zoomOutButton);
+        JButton exitButton = new JButton("Main menu");
+        exitButton.setBounds(1300,740,100,30);
+        exitButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                Frame.this.dispose();
+                SelectionMenu.returnToFrame();
+            }
+        });
+        lPane.add(exitButton);
 
         State state = (State) this.states[stepCount];
         Vector3dInterface[] coordinates = state.getCoordinates();
@@ -167,39 +178,42 @@ public class Frame extends JFrame implements ActionListener {
         stepCount += frameSkip;
 
         // If end of calculations has been reached, reset animation
-        if(stepCount > states.length-1) {
+        if(stepCount >= states.length-1) {
             stepCount = 0;
+            timer.stop();
+            dispose();
         }
+        else{
+            State state = (State) states[stepCount];
+            Vector3dInterface[] coordinates = state.getCoordinates();
 
-        State state = (State) states[stepCount];
-        Vector3dInterface[] coordinates = state.getCoordinates();
+            sun.setCoordinates(coordinates[0].mul(scale).getX()+xOffset, coordinates[0].mul(scale).getY()+yOffset);
+            mercury.setCoordinates(coordinates[1].mul(scale).getX()+xOffset, coordinates[1].mul(scale).getY()+yOffset);
+            venus.setCoordinates(coordinates[2].mul(scale).getX()+xOffset, coordinates[2].mul(scale).getY()+yOffset);
+            earth.setCoordinates(coordinates[3].mul(scale).getX()+xOffset, coordinates[3].mul(scale).getY()+yOffset);
+            moon.setCoordinates(coordinates[4].mul(scale).getX()+xOffset, coordinates[4].mul(scale).getY()+yOffset);
+            mars.setCoordinates(coordinates[5].mul(scale).getX()+xOffset, coordinates[5].mul(scale).getY()+yOffset);
+            jupiter.setCoordinates(coordinates[6].mul(scale).getX()+xOffset, coordinates[6].mul(scale).getY()+yOffset);
+            saturn.setCoordinates(coordinates[7].mul(scale).getX()+xOffset, coordinates[7].mul(scale).getY()+yOffset);
+            titan.setCoordinates(coordinates[8].mul(scale).getX()+xOffset, coordinates[8].mul(scale).getY()+yOffset);
+            uranus.setCoordinates(coordinates[9].mul(scale).getX()+xOffset, coordinates[9].mul(scale).getY()+yOffset);
+            neptune.setCoordinates(coordinates[10].mul(scale).getX()+xOffset, coordinates[10].mul(scale).getY()+yOffset);
+            probe.setCoordinates(coordinates[11].mul(scale).getX()+xOffset, coordinates[11].mul(scale).getY()+yOffset);
 
-        sun.setCoordinates(coordinates[0].mul(scale).getX()+xOffset, coordinates[0].mul(scale).getY()+yOffset);
-        mercury.setCoordinates(coordinates[1].mul(scale).getX()+xOffset, coordinates[1].mul(scale).getY()+yOffset);
-        venus.setCoordinates(coordinates[2].mul(scale).getX()+xOffset, coordinates[2].mul(scale).getY()+yOffset);
-        earth.setCoordinates(coordinates[3].mul(scale).getX()+xOffset, coordinates[3].mul(scale).getY()+yOffset);
-        moon.setCoordinates(coordinates[4].mul(scale).getX()+xOffset, coordinates[4].mul(scale).getY()+yOffset);
-        mars.setCoordinates(coordinates[5].mul(scale).getX()+xOffset, coordinates[5].mul(scale).getY()+yOffset);
-        jupiter.setCoordinates(coordinates[6].mul(scale).getX()+xOffset, coordinates[6].mul(scale).getY()+yOffset);
-        saturn.setCoordinates(coordinates[7].mul(scale).getX()+xOffset, coordinates[7].mul(scale).getY()+yOffset);
-        titan.setCoordinates(coordinates[8].mul(scale).getX()+xOffset, coordinates[8].mul(scale).getY()+yOffset);
-        uranus.setCoordinates(coordinates[9].mul(scale).getX()+xOffset, coordinates[9].mul(scale).getY()+yOffset);
-        neptune.setCoordinates(coordinates[10].mul(scale).getX()+xOffset, coordinates[10].mul(scale).getY()+yOffset);
-        probe.setCoordinates(coordinates[11].mul(scale).getX()+xOffset, coordinates[11].mul(scale).getY()+yOffset);
+            // If the scale has changed due to zooming scale the size of the planets
+            sun.setSize(696342e5*scale);
+            mercury.setSize(4879.4e5*scale);
+            venus.setSize(12104e5*scale);
+            earth.setSize(12742e5*scale);
+            moon.setSize(3474.2e5*scale);
+            mars.setSize(6679e5*scale);
+            jupiter.setSize(139820e5*scale);
+            saturn.setSize(116460e5*scale);
+            titan.setSize(5149.5e5*scale);
+            uranus.setSize(50724e5*scale);
+            neptune.setSize(49224e5*scale);
 
-        // If the scale has changed due to zooming scale the size of the planets
-        sun.setSize(696342e5*scale);
-        mercury.setSize(4879.4e5*scale);
-        venus.setSize(12104e5*scale);
-        earth.setSize(12742e5*scale);
-        moon.setSize(3474.2e5*scale);
-        mars.setSize(6679e5*scale);
-        jupiter.setSize(139820e5*scale);
-        saturn.setSize(116460e5*scale);
-        titan.setSize(5149.5e5*scale);
-        uranus.setSize(50724e5*scale);
-        neptune.setSize(49224e5*scale);
-
-        repaint();
+            repaint();
+        }
     }
 }

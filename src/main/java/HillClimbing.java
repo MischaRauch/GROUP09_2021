@@ -18,8 +18,8 @@ public class HillClimbing {
      * @param h         the step size to use in each simulation
      */
     public HillClimbing(ODESolver solver, double tf, double h) {
-        //RocketState finalState = hillClimb(solver, startState, tf, h);
-        Vector3dInterface finalVelocity = hillClimbReturn(solver, tf, h);
+        RocketState finalState = hillClimb(solver, startState, tf, h);
+        //Vector3dInterface finalVelocity = hillClimbReturn(solver, tf, h);
     }
 
 

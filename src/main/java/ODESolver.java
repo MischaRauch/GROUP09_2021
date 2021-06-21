@@ -78,8 +78,8 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
     // Array containing the starting velocities for all planets
     private Vector3dInterface[] velocities = {sunV, mercuryV, venusV, earthV, moonV, marsV, jupiterV, saturnV, titanV, uranusV, neptuneV, probeV};
     // Instance field which will contain the states for each time step
-    private StateInterface[] states;
-    private StateInterface[] statesYearOne;
+    private static StateInterface[] states;
+    private StateInterface[] statesYearOne = new StateInterface[226643];
     private State stateClosestToTitan;
 
     private final double SecondsInYear = (365.25*(24*60*60));
@@ -89,6 +89,7 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
     // This field keeps track of the smallest distance between the probe/rocket and titan during each simulation
     private double smallestDistRocketTitan;
     private double smallestDistRocketEarth;
+    private double h;
 
     /**
      * Constructor for the ODESolver class. Creates starting state and sets states instance field using
@@ -101,15 +102,27 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
         ODEFunctionInterface f = new ODEFunction();
         //trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(29062.557220458984,-40935.659408569336,-546.1549758911133), SecondsInYear, h);
 
+        this.h = h;
         // Full journey with Runge-Kutta
         trajectory(new Vector3d(0, -6371e3, 0), new Vector3d(29312.83187866211,-40961.14158630371,-600.2779006958008), SecondsInYear, h); // Distance of 195203.67319908465 meters to Titan
         stateClosestToTitan = (State) states[226643];
-        System.out.println(stateClosestToTitan.getVelocities()[11].norm());
-        statesYearOne = states;
+        System.arraycopy(states, 0, statesYearOne, 0, 226643);
         states = solveProbe(f, stateClosestToTitan, 1.5*SecondsInYear, h*1.5, new Vector3d(-30000.03755092621,32829.99515533447,3914.1851663589478));
     }
 
     public ODESolver(){}
+
+    public StateInterface[] getStatesSim1() {
+        return statesYearOne;
+    }
+
+    public StateInterface[] getStatesSim2() {
+        return states;
+    }
+
+    public StateInterface[] getStatesYearOne() {
+        return statesYearOne;
+    }
 
     public State getStateClosestToTitan() {
         return stateClosestToTitan;
@@ -133,7 +146,7 @@ public class ODESolver implements ODESolverInterface, ProbeSimulatorInterface {
      * Getter method
      * @return  the states instance field containing the states for each time step
      */
-    public StateInterface[] getStates() {
+    public static StateInterface[] getStates() {
         return states;
     }
     /**

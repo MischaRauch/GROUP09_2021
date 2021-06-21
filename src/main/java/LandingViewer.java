@@ -2,6 +2,8 @@ import javax.swing.JFrame;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.Timer;
 
 public class LandingViewer extends JFrame{
@@ -11,7 +13,7 @@ public class LandingViewer extends JFrame{
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setSize(screenSize.width, screenSize.height);
 		this.setTitle("Landing on Titan");
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		//Creates the component of the LandingComponent class and adds it to the frame.
 		LandingComponent component = new LandingComponent();
@@ -27,6 +29,13 @@ public class LandingViewer extends JFrame{
 				repaint();
 			}
 		}
+
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent evt) {
+				LandingViewer.this.dispose();
+				SelectionMenu.returnToFrame();
+			}
+		});
 
 		// Timer for the CheckboxListener
 		AnimationListener animationListener = new AnimationListener();

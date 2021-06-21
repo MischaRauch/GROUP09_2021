@@ -24,10 +24,12 @@ public class LandingComponent extends JComponent {
 	 Paints the background, the surface of Titan and the landing module.
 	 */
 	public void paintComponent(Graphics g) {
-
-		// Recovers Graphics 2D.
 		Graphics2D g2 = (Graphics2D) g;
+		draw(g2);
+	}
 
+	public void draw(Graphics2D g2)
+	{
 		// Creates a rectangle that represents the background, sets the paint color to black and fills it.
 		Rectangle2D.Double background = new Rectangle2D.Double(0, 0, screenSize.width, screenSize.height);
 		g2.setPaint(Color.BLACK);
@@ -52,14 +54,13 @@ public class LandingComponent extends JComponent {
 		g2.setPaint(Color.RED);
 		g2.setStroke(new BasicStroke(5));
 		g2.draw(perfectLanding);
-
 	}
 
 	/**
 	 Changes the top left coordinates of the body of the landing module to simulate the actual movement of the latter.
 	 At each execution, it takes the next SingleState object of the states array and gets the x and y positions of its coordinates Vector3d object.
 	 */
-	public void moveComponent(/*double y*/ SingleState[] states) {
+	public boolean moveComponent(/*double y*/ SingleState[] states) {
 
 		if (index < states.length) {
 			//	xPos = states[index].getCoordinates().getX()/265.0;
@@ -67,6 +68,7 @@ public class LandingComponent extends JComponent {
 			yPos = (screenSize.height * 8.0/10.0) - 60 - states[index].getCoordinates().getY()/265.0;
 			index = index + 1;
 		}
+		return true;
 	}
 
 }
