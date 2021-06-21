@@ -41,6 +41,7 @@ public class Frame extends JFrame implements ActionListener {
     private boolean scaleChanged = false;
     private JButton zoomInButton;
     private JButton zoomOutButton;
+    private JButton exitButton;
 
     // Array containing the colors for each planet
     private final Color[] colors = {new Color(232, 138, 37), new Color(112, 109, 107), new Color(196, 165, 143),
@@ -102,7 +103,7 @@ public class Frame extends JFrame implements ActionListener {
             }
         });
         lPane.add(zoomOutButton);
-        JButton exitButton = new JButton("Main menu");
+        exitButton = new JButton("Main menu");
         exitButton.setBounds(1300,740,100,30);
         exitButton.addActionListener(new ActionListener()
         {
@@ -171,6 +172,7 @@ public class Frame extends JFrame implements ActionListener {
             lPane.add(probe);
             lPane.add(zoomOutButton);
             lPane.add(zoomInButton);
+            lPane.add(exitButton);
             scaleChanged = false;
         }
 
