@@ -15,6 +15,7 @@ public class WindModel {
     private int westWind = 1;
     private int windMax = 70;
     private int windMin = 30;
+    private boolean DEBUG = false;
 
     boolean thrusterCheck = false;
     private double thrusterChange = 0;
@@ -79,12 +80,14 @@ public class WindModel {
             states[i] = new SingleState(finalPositon,newVelocity,step);
             step+=h;
         }
-        System.out.println("States prev prev: "+states[states.length-2].getCoordinates().getY());
-        System.out.println("States prev: "+states[states.length-1].getCoordinates().getY());
-        System.out.println("States change of x: "+states[states.length-1].getCoordinates().getX());
-        System.out.println("States change of x in km: "+states[states.length-1].getCoordinates().getX()/1000);
-        System.out.println("Velocity 1: "+states[2].getVelocity());
-        System.out.println("Velocity last: "+states[states.length-1].getVelocity());
+        if (DEBUG) {
+            System.out.println("States prev prev: "+states[states.length-2].getCoordinates().getY());
+            System.out.println("States prev: "+states[states.length-1].getCoordinates().getY());
+            System.out.println("States change of x: "+states[states.length-1].getCoordinates().getX());
+            System.out.println("States change of x in km: "+states[states.length-1].getCoordinates().getX()/1000);
+            System.out.println("Velocity 1: "+states[2].getVelocity());
+            System.out.println("Velocity last: "+states[states.length-1].getVelocity());
+        }
         return states;
     }
 
@@ -166,7 +169,6 @@ public class WindModel {
         double adjustment = 0;
         //calculate error term
         double eror = initalPosition - xPos;
-        System.out.println("Error: "+eror);
         double stepSize = 0.1;
 
         adjustment = (eror*stepSize); //20 m/s
