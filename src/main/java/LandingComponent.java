@@ -15,7 +15,7 @@ public class LandingComponent extends JComponent {
 	// The initial top left coordinates of the body of the landing module.
 	// These coordinates are the same as the ones computed after the first run of the moveComponent method (so they are the actual coordinates of the landing module at "state 0").
 	double xPos = screenSize.width/2.0 - 32.5;
-	double yPos = (screenSize.height * 8.0/10.0) - 60 - 150000/25;
+	double yPos = (screenSize.height * 8.0/10.0) - 60 - 150000/265.0;
 
 	// The index used in the moveComponent method to go over every SingleState object of the states array.
 	int index = 0;
@@ -63,7 +63,7 @@ public class LandingComponent extends JComponent {
 
 		if (index < states.length) {
 			//	xPos = states[index].getCoordinates().getX()/265.0;
-			xPos = states[index].getCoordinates().getX()/25;
+			xPos = states[index].getCoordinates().getX()/25.0;
 			yPos = (screenSize.height * 8.0/10.0) - 60 - states[index].getCoordinates().getY()/265.0;
 			index = index + 1;
 		}
