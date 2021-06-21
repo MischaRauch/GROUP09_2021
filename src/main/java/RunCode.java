@@ -25,7 +25,7 @@ public class RunCode {
 
         //Frame frame = new Frame(solver.getStates());
 
-        // The line below can be used for running/testing the hill climbing algorithm
+            // The line below can be used for running/testing the hill climbing algorithm
         //HillClimbing climber = new HillClimbing(solver, 1.5*(365.25*(24*60*60)), 1.5*stepSize);
 
         //LandingViewer landingViewer = new LandingViewer();

@@ -70,9 +70,9 @@ public class WindModel {
 
             //correct trajectory with feedback controller
             if ((i % 20) == 0) {
-                //double correction = feedbackController(finalPositon.getX(), initalPosition.getX(), finalPositon.getY(), h);
+                double correction = feedbackController(finalPositon.getX(), initalPosition.getX(), finalPositon.getY(), h);
                 //double correction = simpleFeedbackController(finalPositon.getX(), initalPosition.getX());
-                double correction = openLoopController(finalPositon.getY());
+                //double correction = openLoopController(finalPositon.getY());
                 finalPositon.setX(finalPositon.getX()+correction);
             }
 
