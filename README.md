@@ -6,6 +6,7 @@ This repository contains the code and resources for a project that simulates the
 ## Essay:
 For a detailed understanding of the research and methodologies employed in this project, you can refer to the [essay](https://drive.google.com/file/d/1y7BIBSG4WtQyYZoj5-BSQKy1smeobIVy/view?usp=share_link).
 
+## Running the code
 To run the simulation open the GROUP09_2021 inside an IDE, trust the Gradle project and run RunCode.java or use the jar file.
 
   - RunCode.java is located inside GROUP09_2021/src/main/java/RunCode.java
